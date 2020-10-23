@@ -13,6 +13,9 @@ pandas = "*"
 requests = "*"
 PyMySQL = "*"
 Flask-Cors ="*"
+pymongo ="*"
+urllib3 ="*"
+bson ="*"
 
 [dev-packages]
 
