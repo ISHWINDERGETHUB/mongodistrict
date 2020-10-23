@@ -13,6 +13,7 @@ from flask import Flask,json, request, jsonify
 from flask_cors import CORS
 app= Flask(__name__)
 CORS(app)
+
 @app.route('/mongo/<district>')   
 def mongo_spider(district):
     username = urllib.parse.quote_plus('admin')
@@ -117,7 +118,6 @@ def mongo_spider(district):
             if m['target']==n['source']:
                 res_list.append(n)
     temp={"nodes":links0,"links":res_list,"attributes":links}
-
     return(json.dumps(temp))
 
 @app.route('/card/<district>')
