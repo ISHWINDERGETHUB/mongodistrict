@@ -15,7 +15,7 @@ PyMySQL = "*"
 Flask-Cors ="*"
 pymongo ="*"
 urllib3 ="*"
-bson ="*"
+bson==0.5.6
 
 [dev-packages]
 
