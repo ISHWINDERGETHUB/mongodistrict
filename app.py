@@ -351,7 +351,7 @@ def table_fkj(m):
     {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
     {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
-    {"$project":{"_id":0,"USER_ID":"$USER_ID._id","practice_date":"$MODIFIED_DATE"}}
+    {"$project":{"_id":0,"USER_ID":"$USER_ID._id","practice_date":{ "$dateToString": {"format": "%Y-%m-%d", "date": "$MODIFIED_DATE"} }}}
 
     ])
     df3= DataFrame(list(collection2)).fillna(0)
@@ -404,7 +404,7 @@ def table_fhj(m):
     {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
     {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
-    {"$project":{"_id":0,"USER_ID":"$USER_ID._id","practice_date":"$MODIFIED_DATE"}}
+    {"$project":{"_id":0,"USER_ID":"$USER_ID._id","practice_date":{ "$dateToString": {"format": "%Y-%m-%d", "date": "$MODIFIED_DATE"} }}}
 
     ])
     df3= DataFrame(list(collection2)).fillna(0)
