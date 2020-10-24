@@ -472,5 +472,81 @@ def table_fxs(m):
     temp={"data":export}
     return(json.dumps(temp))
 
+
+@app.route('/distable/<m>/parents')
+def table_fks(m):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    collection = db.user_master.aggregate([
+    {"$match":{"schoolId":{"$exists":1}}},
+    {"$match":
+        {"$and":[
+        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+             {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+
+    ])
+    df1= DataFrame(list(collection)).fillna(0)
+    school_list=df1["ID"].tolist()
+    collection4 = db.user_master.aggregate([
+        {'$match':{'$and':[{'schoolId._id':
+        {"$in":school_list}},
+                           {'CREATED_DATE':{"$gt":datetime.datetime(2020,3,17)}},
+    ]}},
+         {"$match":
+    {"$or":[{"ROLE_ID.ROLE_NAME":{"$regex":"present",'$options':'i'}
+             }]}},
+    {"$match":
+        {"$and":[ 
+        {'IS_DISABLED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$project":{"USER_ID":"$_id","CREATED_DATE":{ "$dateToString": {"format": "%Y-%m-%d %H:%M:%S", "date": "$CREATED_DATE"} },"ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+
+    ])
+
+    df4= DataFrame(list(collection4)).fillna(0)
+    user_list=df4["USER_ID"].tolist()
+    collection2 = db.audio_track_master.aggregate([
+    {"$match":{"USER_ID._id":{
+                        "$in":user_list
+
+                    }    ,"USER_ID.schoolId":{"$exists":1}}},
+    {"$match":
+        {"$and":[
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'MODIFIED_DATE':{"$gt":datetime.datetime(2019,7,31)}},
+    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$project":{"_id":0,"USER_ID":"$USER_ID._id","practice_date":{ "$dateToString": {"format": "%Y-%m-%d %H:%M:%S", "date": "$MODIFIED_DATE"} }}}
+
+    ])
+    df3= DataFrame(list(collection2)).fillna(0)
+    final=pd.merge(df4, df3, on='USER_ID',how='left').fillna(0)
+    export=final[["USER_NAME","email_id","school_name","CREATED_DATE","practice_date"]].values.tolist()
+    temp={"data":export}
+    return(json.dumps(temp))
+
 if __name__== "__main__":
      app.run()
