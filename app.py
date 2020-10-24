@@ -329,7 +329,7 @@ def table_fkj(m):
              {'EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
-    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
+    {"$project":{"USER_ID":"$_id","CREATED_DATE":{ "$dateToString": {"format": "%Y-%m-%d %H:%M:%S", "date": "$CREATED_DATE"} },"ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
 
     ])
@@ -357,7 +357,7 @@ def table_fkj(m):
     df3= DataFrame(list(collection2)).fillna(0)
     final=pd.merge(df1, df3, on='USER_ID',how='left').fillna(0)
     final1=final[final["practice_date"]== 0 ]
-    export=final1[["USER_NAME","email_id","school_name","practice_date"]].values.tolist()
+    export=final1[["USER_NAME","email_id","school_name","CREATED_DATE","practice_date"]].values.tolist()
     temp={"data":export}
     return(json.dumps(temp))
 
@@ -382,7 +382,7 @@ def table_fhj(m):
     {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
-    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
+    {"$project":{"USER_ID":"$_id","CREATED_DATE":{ "$dateToString": {"format": "%Y-%m-%d %H:%M:%S", "date": "$CREATED_DATE"} },"ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
 
     ])
@@ -413,7 +413,7 @@ def table_fhj(m):
     df6=final1.groupby(['USER_ID'])['practice_date'].max().reset_index()
     df6=df6[df6["practice_date"]<"2020-08-01"]
     user_detail=pd.merge(df6, final1, on='USER_ID',how='left').fillna(0)
-    export=user_detail[["USER_NAME","email_id","school_name","practice_date_y"]].values.tolist()
+    export=user_detail[["USER_NAME","email_id","school_name","CREATED_DATE","practice_date_y"]].values.tolist()
     temp={"data":export}
     return(json.dumps(temp))
 
@@ -437,7 +437,7 @@ def table_fxs(m):
     {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
-    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
+    {"$project":{"USER_ID":"$_id","CREATED_DATE":{ "$dateToString": {"format": "%Y-%m-%d %H:%M:%S", "date": "$CREATED_DATE"} },"ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
 
     ])
@@ -468,7 +468,7 @@ def table_fxs(m):
     df6=final1.groupby(['USER_ID'])['practice_date'].max().reset_index()
     df6=df6[df6["practice_date"]>"2020-07-31"]
     user_detail=pd.merge(df6, final1, on='USER_ID',how='left').fillna(0)
-    export=user_detail[["USER_NAME","email_id","school_name","practice_date_y"]].values.tolist()
+    export=user_detail[["USER_NAME","email_id","school_name","CREATED_DATE","practice_date_y"]].values.tolist()
     temp={"data":export}
     return(json.dumps(temp))
 
