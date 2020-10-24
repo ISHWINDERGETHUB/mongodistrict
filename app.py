@@ -410,6 +410,7 @@ def table_fhj(m):
     df3= DataFrame(list(collection2)).fillna(0)
     final=pd.merge(df1, df3, on='USER_ID',how='left').fillna(0)
     final1=final[final["practice_date"]!= 0]
+    df6=final1.groupby(['USER_ID']).agg({'practice_date': np.max})
     df7=df6[df6["practice_date"]<"2020-08-01"]
     user_detail=pd.merge(df7, final1, on='USER_ID',how='left').fillna(0)
     export=user_detail[["USER_NAME","email_id","school_name","practice_date_y"]].values.tolist()
