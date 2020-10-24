@@ -311,8 +311,8 @@ def tech_dash_count(district):
 @app.route('/distable/<m>/dormant')
 def table_fkj(m):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
     db=client.compass
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
@@ -365,8 +365,8 @@ def table_fkj(m):
 @app.route('/distable/<m>/lsy')
 def table_fhj(m):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
     db=client.compass
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
@@ -409,9 +409,10 @@ def table_fhj(m):
     ])
     df3= DataFrame(list(collection2)).fillna(0)
     final=pd.merge(df1, df3, on='USER_ID',how='left').fillna(0)
-    final1=final[final["practice_date"]!= 0]
-    df7=final1[final1["practice_date"]<"2020-08-01"]
-    user_detail=pd.merge(df7, final1, on='USER_ID',how='left').fillna(0)
+    final1=final[final["practice_date"]!= 0 ]
+    df6=final1.groupby(['USER_ID'])['practice_date'].max().reset_index()
+    df6=df6[df6["practice_date"]<"2020-08-01"]
+    user_detail=pd.merge(df6, final1, on='USER_ID',how='left').fillna(0)
     export=user_detail[["USER_NAME","email_id","school_name","practice_date_y"]].values.tolist()
     temp={"data":export}
     return(json.dumps(temp))
