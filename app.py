@@ -707,5 +707,196 @@ def table_fks(m):
     temp={"data":export}
     return(json.dumps(temp))
 
+@app.route('/schoolsearch/<name>')
+def school_search_mongo1(name):
+    name1=name.replace("%20"," ")
+    print(name1,"hola")
+    from bson.regex import Regex
+    from pymongo import MongoClient
+    from flask import Flask,json
+    import urllib 
+    import pandas as pd
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    client = MongoClient(mongo_uri)
+    # client = MongoClient("mongodb://host:port/")
+    database = client["compass"]
+    collection = database["user_master"]
+    # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com
+    query = {}
+    query["schoolId.NAME"] = name1
+    #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
+    query["USER_NAME"] = {
+        u"$not": Regex(u".*TEST.*", "i")
+    }
+    query["IS_BLOCKED"] = {
+        u"$ne": u"Y"
+    }
+    query["IS_DISABLED"] = {
+        u"$ne": u"Y"
+    }
+    query["INCOMPLETE_SIGNUP"] = {
+        u"$ne": u"Y"
+    }
+    query["DEVICE_USED"] = Regex(u".*webapp.*", "i")
+    projection = {}
+    projection["USER_ID.USER_ID"] = 1.0
+    projection["EMAIL_ID"] = 1.0
+    projection["CREATED_DATE"] = 1.0
+    projection["USER_NAME"] = 1.0
+    projection["IS_ADMIN"] = 1.0
+    projection["schoolId.ADDRESS"] = 1.0
+    projection["schoolId.CITY"] = 1.0
+    projection["schoolId.STATE"] = 1.0
+    projection["schoolId.COUNTRY"] = 1.0
+    projection["schoolId.NAME"] = 1.0
+    cursor = collection.find(query, projection = projection)
+    dfum=(list(cursor))
+    dfum=pd.json_normalize(dfum, max_level=1)
+    schoolname=dfum["schoolId.NAME"][0]
+    country=dfum["schoolId.COUNTRY"][0]
+    city=dfum["schoolId.CITY"][0]
+    state=dfum["schoolId.STATE"][0]
+    address=dfum["schoolId.ADDRESS"][0]
+    admin1=dfum[dfum['IS_ADMIN']=='Y']
+    admin2=admin1['USER_NAME']
+    admin3=list(admin2)
+    admin=admin3[0]
+    adminemail1=admin1['EMAIL_ID']
+    admine=list(adminemail1)
+    # adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
+    adminemail=admine[0]
+    print(adminemail)
+    email=list(dfum['EMAIL_ID'])
+    print(email)
+    totaluser=len(email)
+    collection = database["audio_track_master"]
+#     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+    pipeline = [
+        {
+            u"$match": {
+                u"USER_ID.EMAIL_ID": {
+                    u"$in": email
+                }
+            }
+        }, 
+        {
+            u"$group": {
+                u"_id": {
+                    u"USER_ID\u1390_id": u"$USER_ID._id"
+                },
+                u"MAX(MODIFIED_DATE)": {
+                    u"$max": u"$MODIFIED_DATE"
+                },
+                u"COUNT(USER_ID\u1390_id)": {
+                    u"$sum": 1
+                }
+            }
+        }, 
+        {
+            u"$project": {
+                u"USER_ID._id": u"$_id.USER_ID\u1390_id",
+                u"MAX(MODIFIED_DATE)": u"$MAX(MODIFIED_DATE)",
+                u"COUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
+                u"_id": 0
+            }
+        }
+    ]
+    cursor = collection.aggregate(
+        pipeline, 
+        allowDiskUse = True
+    )
+    dfatd=list(cursor)
+    dfatd=pd.json_normalize(dfatd, max_level=1)
+    print(dfatd)
+    collection = database["subscription_master"]
+    # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+    pipeline = [
+        {
+            u"$match": {
+                u"USER_ID.EMAIL_ID": {
+                    u"$in": email
+                }
+            }
+        }, 
+        {
+            u"$group": {
+                u"_id": {
+                    u"USER_ID\u1390_id": u"$USER_ID._id"
+                },
+                u"MAX(SUBSCRIPTION_EXPIRE_DATE)": {
+                    u"$max": u"$SUBSCRIPTION_EXPIRE_DATE"
+                }
+            }
+        }, 
+        {
+            u"$project": {
+                u"MAX(SUBSCRIPTION_EXPIRE_DATE)": u"$MAX(SUBSCRIPTION_EXPIRE_DATE)",
+                u"USER_ID._id": u"$_id.USER_ID\u1390_id",
+                u"_id": 0
+            }
+        }
+    ]
+    cursor = collection.aggregate(
+        pipeline, 
+        allowDiskUse = True
+    )
+    dfsbm=list(cursor)
+    dfsbm=pd.json_normalize(dfsbm, max_level=1)
+    print(dfatd,"atd")
+    
+    try:
+        dffinal=pd.merge(dfum,dfatd,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+        dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+    except:
+        dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
+        dfum['COUNT(USER_ID᎐_id)']=0
+        dffinal=dfum
+        dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+        
+        
+        
+#     schoolname=dfum["schoolId.NAME"][0]
+    country=dfum["schoolId.COUNTRY"][0]
+    city=dfum["schoolId.CITY"][0]
+    state=dfum["schoolId.STATE"][0]
+    address=dfum["schoolId.ADDRESS"][0]
+#     admin=[dfum['USER_NAME'][dfum['IS_ADMIN']=='Y']][0]
+#     admin=admin[0]
+#     adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
+#     adminemail=adminemail[0]
+    email=list(dfum['EMAIL_ID'])
+    totaluser=len(email)
+    dffinalnew['MAX(MODIFIED_DATE)'].fillna("NO PRACTICE", inplace=True)
+    dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)'].fillna(" ", inplace=True)
+    dffinalnew['COUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
+    pracsum=sum(list(dffinalnew['COUNT(USER_ID᎐_id)']))
+    dffinalnew.fillna(value=pd.np.nan, inplace=True)
+    MAX=[]
+    for i in dffinalnew['MAX(MODIFIED_DATE)']:
+        if  i != 'NO PRACTICE' :
+            MAX.append(i.strftime("%d %b %Y "))
+        else:
+            MAX.append("NO PRACTICE")
+    SUBSCRIPTION_EXPIRE_DATE=[]
+    for i in dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)']:
+        if  i != ' ' :
+            SUBSCRIPTION_EXPIRE_DATE.append(i.strftime("%d %b %Y "))
+        else:
+            SUBSCRIPTION_EXPIRE_DATE.append(" ")        
+    CREATED_DATE=[]
+    for i in dffinalnew['CREATED_DATE']:
+        if  i != ' ' :
+            CREATED_DATE.append(i.strftime("%d %b %Y "))
+        else: 
+            CREATED_DATE.append(" ")
+    data=[]
+    for T,k,l,m,o,p in zip(dffinalnew['USER_NAME'].tolist(),dffinalnew['EMAIL_ID'].tolist(),CREATED_DATE,MAX,SUBSCRIPTION_EXPIRE_DATE,dffinalnew['COUNT(USER_ID᎐_id)'].tolist()):
+        #print(p,q,r)
+        data.append([T,k,l,m,o,p])
+    temp={"data":data,"school_practice_count":str(pracsum),"school_name":name,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"user_count":totaluser}
+#     ,"school_practice_count":str(card_detail['school_practice_count1'][0])
+#     temp={"data":data}
+    return json.dumps(temp)
+
 if __name__== "__main__":
      app.run()
