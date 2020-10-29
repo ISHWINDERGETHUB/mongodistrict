@@ -256,57 +256,61 @@ def tech_dash_count(district):
 
     ])
     df1= DataFrame(list(collection)).fillna(0)
-    user_list=df1["USER_ID"].tolist()
-    school_list=df1["ID"].tolist()
-    school_count = df1.groupby('school_name')["school_name"].nunique()
-    user_count=df1.groupby('USER_ID')["USER_ID"].nunique()
-    collection3 = db.audio_track_master.aggregate(
-    [{'$match':{'$and':[{'USER_ID.schoolId._id':
-        {"$in":school_list}},
-    ]}},
-    {"$match":
-        {"$and":[
-        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-    {"$match":
-    {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}},
-    {'$group':{'_id':"null",
+    if df1.empty:
+        temp={"school_count":0,"user_count":0,"MINDFUL_MINUTES":0,"parent_count":0}
+        return(json.dumps(temp))
+    else:
+        user_list=df1["USER_ID"].tolist()
+        school_list=df1["ID"].tolist()
+        school_count = df1.groupby('school_name')["school_name"].nunique()
+        user_count=df1.groupby('USER_ID')["USER_ID"].nunique()
+        collection3 = db.audio_track_master.aggregate(
+        [{'$match':{'$and':[{'USER_ID.schoolId._id':
+            {"$in":school_list}},
+        ]}},
+        {"$match":
+            {"$and":[
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+        {"$match":
+        {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}},
+        {'$group':{'_id':"null",
 
-        'MINDFUL_MINUTES':{'$sum':{'$round':
-            [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
+            'MINDFUL_MINUTES':{'$sum':{'$round':
+                [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
 
 
 
-        }},  {"$project":{"_id":0,"MINDFUL_MINUTES":1}}
-    ])
-    df3= DataFrame(list(collection3)).fillna(0)
-    mindful_minutes=int(df3["MINDFUL_MINUTES"])
-    collection4 = db.user_master.aggregate([
-        {'$match':{'$and':[{'schoolId._id':
-        {"$in":school_list}},
-                           {'CREATED_DATE':{"$gt":datetime.datetime(2020,3,17)}},
-    ]}},
-         {"$match":
-    {"$or":[{"ROLE_ID.ROLE_NAME":{"$regex":"present",'$options':'i'}
-             }]}},
-    {"$match":
-        {"$and":[ 
-        {'IS_DISABLED':{"$ne":'Y'}}, 
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-    {"$match":
-    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
-    ,
-    {"$project":{"USER_ID":"$_id","CREATED_DATE":1}}
+            }},  {"$project":{"_id":0,"MINDFUL_MINUTES":1}}
+        ])
+        df3= DataFrame(list(collection3)).fillna(0)
+        mindful_minutes=int(df3["MINDFUL_MINUTES"])
+        collection4 = db.user_master.aggregate([
+            {'$match':{'$and':[{'schoolId._id':
+            {"$in":school_list}},
+                               {'CREATED_DATE':{"$gt":datetime.datetime(2020,3,17)}},
+        ]}},
+             {"$match":
+        {"$or":[{"ROLE_ID.ROLE_NAME":{"$regex":"present",'$options':'i'}
+                 }]}},
+        {"$match":
+            {"$and":[ 
+            {'IS_DISABLED':{"$ne":'Y'}}, 
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+        {"$match":
+        {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+        {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+        ,
+        {"$project":{"USER_ID":"$_id","CREATED_DATE":1}}
 
-    ])
-    df4= DataFrame(list(collection4)).fillna(0)
-    parent_count=df4["USER_ID"].count()
-    temp={"school_count":int(school_count.count()),"user_count":int(user_count.count()),"mindful_minutes":int(mindful_minutes),"parent_count":int(parent_count)}
-    return(json.dumps(temp))
+        ])
+        df4= DataFrame(list(collection4)).fillna(0)
+        parent_count=df4["USER_ID"].count()
+        temp={"school_count":int(school_count.count()),"user_count":int(user_count.count()),"mindful_minutes":int(mindful_minutes),"parent_count":int(parent_count)}
+        return(json.dumps(temp))
 
 @app.route('/practice/distable/<m>/dormant')
 def table_fkj(m):
