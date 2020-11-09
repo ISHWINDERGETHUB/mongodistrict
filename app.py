@@ -432,7 +432,7 @@ def table_fio(m):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+        {"DISTRICT_ID._id":ObjectId(""+m+"")},
              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
@@ -567,7 +567,7 @@ def table_fkho(m):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+        {"DISTRICT_ID._id":ObjectId(""+m+"")},
              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
@@ -646,7 +646,7 @@ def table_fks(m):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+        {"DISTRICT_ID._id":ObjectId(""+m+"")},
              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
