@@ -806,6 +806,8 @@ def table_fkjhs(m):
     finaldata=finalmerge[["UMSCHOOLID","UMUSER_ID","UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
+    finaldata["UMSCHOOLID"] = finaldata['UMSCHOOLID'].astype('str')
+    finaldata["UMUSER_ID"] = finaldata['UMUSER_ID'].astype('str')
     schoolcount = len(set(schoolid))
     temp={"data":finaldata.values.tolist()}
     return(json.dumps(temp))
