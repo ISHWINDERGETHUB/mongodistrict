@@ -807,7 +807,106 @@ def table_fkjhs(m):
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
     schoolcount = len(set(schoolid))
-    temp={"table":finaldata.values.tolist(),"scount":schoolcount}
+    temp={"data":finaldata.values.tolist()}
+    return(json.dumps(temp))
+
+@app.route('/all/distable/<m>/all/scount')
+def table_fkjhs(m):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    collection = db.user_master
+    query=[{'$match':{'$and':[{
+    "DISTRICT_ID._id": {
+    "$in":[ObjectId(""+m+"")]
+    }   
+    },
+    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}},
+    #   {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #   {'DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+    #   {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'IS_ADMIN':'Y'}
+    ]
+    }},
+    {"$project":{"_id":0,
+    'UMUSER_ID':'$_id',"USER_NAME":'$USER_NAME',
+    "UMEMAIL":'$EMAIL_ID',  
+    "CREATED_DATE":'$CREATED_DATE',
+    "UMSCHOOLID":'$schoolId._id',
+                 "UMSCHOOLNAME":'$schoolId.NAME',
+                 "CITY":'$schoolId.CITY',
+                 "STATE":'$schoolId.STATE',
+                 "COUNTRY":'$schoolId.COUNTRY',
+                }},
+    ]
+    merge1=list(collection.aggregate(query))
+    overallum=pd.DataFrame(merge1)
+    #     
+    overallum["CREATED_DATE"]=overallum["CREATED_DATE"].dt.strftime('%d %b %Y')
+    email=list(overallum["UMUSER_ID"])
+    schoolid=list(overallum["UMSCHOOLID"])
+    #     overallum.to_csv("lifetimecheck.csv")
+
+    ################################sub_master################################
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    # db.subscription_master.ensureIndex("USER_ID._id", 1) 
+    collection = db.subscription_master
+    qr=[
+    {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
+    #                        {'PLAN_ID.PLAN_NAME':"Cloud"},
+
+
+                      ]}},
+    {"$project":{"_id":0,
+    'SMUSER_ID':'$USER_ID._id',
+    "SMEMAIL":'$USER_ID.EMAIL_ID',
+    "PLANID":"$PLAN_ID.PLAN_NAME",
+    "comment":"$COMMENT_BY_DS_TEAM",
+    "RENEWAL_DATE":"$SUBSCRIPTION_EXPIRE_DATE",
+    }},]
+    merge=list(collection.aggregate(qr))
+    overall=pd.DataFrame(merge)
+    overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
+    mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
+    db=client.compass
+    collection = db.audio_track_master
+    qra=[
+    {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
+    ]}},
+    {'$group':{'_id':'$USER_ID.schoolId._id', 
+    'atdLastpractice':{'$max':'$MODIFIED_DATE'},
+    'atdPracticecount':{'$sum':1},
+    'atdTotal_Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}}]
+    merge11=list(collection.aggregate(qra))
+    atd=pd.DataFrame(merge11)
+    atd["atdLastpractice"]=atd["atdLastpractice"].dt.strftime('%d %b %Y')
+    finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
+    finalmerge['atdLastpractice'].fillna("NO PRACTICE", inplace=True)
+    finalmerge['atdPracticecount'].fillna(0, inplace=True)
+    finalmerge.fillna("NO INFO AVAILABLE", inplace=True)
+    finaldata=finalmerge[["UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
+    schoolcount = len(set(schoolid))
+    temp={"data":finaldata.values.tolist()}
     return(json.dumps(temp))
 
 @app.route('/schoolsearch/<name>')
