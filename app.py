@@ -803,7 +803,7 @@ def table_fkjhs(m):
     finalmerge['atdLastpractice'].fillna("NO PRACTICE", inplace=True)
     finalmerge['atdPracticecount'].fillna(0, inplace=True)
     finalmerge.fillna("NO INFO AVAILABLE", inplace=True)
-    finaldata=finalmerge[["UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+    finaldata=finalmerge[["UMSCHOOLID","UMUSER_ID","UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
     schoolcount = len(set(schoolid))
@@ -902,7 +902,7 @@ def table_fkhgjhs(m):
     finalmerge['atdLastpractice'].fillna("NO PRACTICE", inplace=True)
     finalmerge['atdPracticecount'].fillna(0, inplace=True)
     finalmerge.fillna("NO INFO AVAILABLE", inplace=True)
-    finaldata=finalmerge[["UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+    finaldata=finalmerge[["UMSCHOOLID","UMUSER_ID","UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
     schoolcount = len(set(schoolid))
