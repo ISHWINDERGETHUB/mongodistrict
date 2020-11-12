@@ -811,7 +811,7 @@ def table_fkjhs(m):
     return(json.dumps(temp))
 
 @app.route('/all/distable/<m>/all/scount')
-def table_fkjhs(m):
+def table_fkhgjhs(m):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
