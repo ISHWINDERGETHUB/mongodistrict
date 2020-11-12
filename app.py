@@ -906,7 +906,7 @@ def table_fkhgjhs(m):
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
     schoolcount = len(set(schoolid))
-    temp={"data":finaldata.values.tolist()}
+    temp={"data":schoolcount}
     return(json.dumps(temp))
 
 @app.route('/schoolsearch/<name>')
