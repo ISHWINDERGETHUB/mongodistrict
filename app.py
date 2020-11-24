@@ -1190,6 +1190,7 @@ def portal_api(inputid):
     mmm=str(round(sum(atd["atdTotal_Mindful_Minutes"])))
     finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
     finaldata=finalmerge[["UMSCHOOLID","UMSCHOOLNAME","UMUSER_ID","ROLE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].fillna(0)
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
     usercount=0
