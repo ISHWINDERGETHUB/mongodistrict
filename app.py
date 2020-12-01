@@ -1206,15 +1206,19 @@ def portal_api(inputid):
     finaldata=finaldata[finaldata["ROLE"]=='user']
     xxx=finaldata[["UMSCHOOLID","UMSCHOOLNAME","RENEWAL_DATE"]]
     xxx['year'] = pd.DatetimeIndex(xxx['RENEWAL_DATE']).year
+#     print(xxx)
     xxx['is_paid'] = np.where(xxx['year']>2020,"Y", "N")
-    yyy=xxx[["UMSCHOOLID","UMSCHOOLNAME","is_paid"]]
+    sorted_df = xxx.sort_values(by=['is_paid'], ascending=False)
+    yyy=sorted_df[["UMSCHOOLID","UMSCHOOLNAME","is_paid"]]
     cvb=yyy.drop_duplicates(subset="UMSCHOOLID", keep='first', inplace=False)
+    totschnew=len(cvb[cvb["is_paid"]=="Y"])
+#     print(totschnew,"totalschool")
     data2=[]
     cvb.reset_index(inplace = True)
     cvb["UMSCHOOLID"] = cvb["UMSCHOOLID"].astype('str')
     for i in range(len(cvb)):
         data2.append({"school_id":cvb["UMSCHOOLID"][i],"school_name":cvb["UMSCHOOLNAME"][i],"is_paid":cvb["is_paid"][i]})
-    finaldata={"data":data2,"total_school":total_school,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
+    finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
     return json.dumps(finaldata)
 
 if __name__== "__main__":
