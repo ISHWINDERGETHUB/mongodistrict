@@ -16,6 +16,7 @@ Flask-Cors ="*"
 pymongo ="*"
 urllib3 ="*"
 bson ="*"
+plotly ="*"
 
 [dev-packages]
 
