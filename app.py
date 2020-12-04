@@ -7,6 +7,7 @@ from datetime import timedelta
 import time
 import datetime
 from pandas import DataFrame
+import plotly.express as px
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import Flask,json, request, jsonify
@@ -1220,6 +1221,14 @@ def portal_api(inputid):
         data2.append({"school_id":cvb["UMSCHOOLID"][i],"school_name":cvb["UMSCHOOLNAME"][i],"is_paid":cvb["is_paid"][i]})
     finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
     return json.dumps(finaldata)
+
+@app.route('/bubble')
+def bubblee():
+    df2=pd.read_csv("bubbledata124.csv")
+    fig = px.scatter(df2.query("year==2007"), x="user enagement", y="family engagement",
+            size="overall practice", color="school count",
+                     hover_name="DISTRICT NAME", log_x=True, size_max=60)
+    return(fig.show())
 
 if __name__== "__main__":
      app.run()
