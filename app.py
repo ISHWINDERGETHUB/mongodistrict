@@ -1231,7 +1231,7 @@ def bubblee():
 
     # convert it to JSON
     fig_json = fig.to_json()
-    return json.dumps(fig_json)
+    return (fig_json)
 
 if __name__== "__main__":
      app.run()
