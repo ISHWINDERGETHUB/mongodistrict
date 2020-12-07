@@ -1227,7 +1227,7 @@ def bubblee():
     df2=pd.read_csv("bubbledata124.csv")
     fig = px.scatter(df2.query("YEAR==2007"), x="USER ENGAGEMENT", y="FAMILY ENGAGEMENT",
             size="OVERALL PRACTICE", color="SCHOOL COUNT",title="DATA IN CSY",
-                     hover_name="DISTRICT NAME", log_x=True, size_max=60, width=1400, height=600)
+                     hover_name="DISTRICT NAME", log_x=True, size_max=60, width=1300, height=600)
     fig.update_layout(
     title={'font': {
     'family': 'Montserrat',
