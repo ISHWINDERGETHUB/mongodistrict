@@ -1232,13 +1232,13 @@ def bubblee():
     title={'font': {
     'family': 'Montserrat',
     'size': 18,
-    'color': '#00000'
-  },
-        'text': "DATA IN CSY",
-        'y':0.9,
-        'x':0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'})
+    'color': '#7f7f7f'
+    },
+    'text': "DATA IN CSY",
+    'y':0.9,
+    'x':0.5,
+    'xanchor': 'center',
+    'yanchor': 'top'})
 
     # convert it to JSON
     fig_json = fig.to_json()
