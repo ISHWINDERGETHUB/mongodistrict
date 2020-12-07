@@ -1224,7 +1224,6 @@ def portal_api(inputid):
 
 @app.route('/bubble')
 def bubblee():
-    def bubblee():
     df2=pd.read_csv("bubbledata124.csv")
     fig = px.scatter(df2.query("YEAR==2007"), x="USER ENGAGEMENT", y="FAMILY ENGAGEMENT",
             size="OVERALL PRACTICE", color="SCHOOL COUNT",title="DATA IN CSY",
