@@ -1224,11 +1224,15 @@ def portal_api(inputid):
 
 @app.route('/bubble')
 def bubblee():
-    df2=pd.read_csv("\bubbledata124.csv")
-    fig = px.scatter(df2.query("year==2007"), x="user enagement", y="family engagement",
-            size="overall practice", color="school count",
+    def bubblee():
+    df2=pd.read_csv("bubbledata124.csv")
+    fig = px.scatter(df2.query("YEAR==2007"), x="USER ENGAGEMENT", y="FAMILY ENGAGEMENT",
+            size="OVERALL PRACTICE", color="SCHOOL COUNT",title="DATA IN CSY",
                      hover_name="DISTRICT NAME", log_x=True, size_max=60)
-    return(fig.show())
+
+    # convert it to JSON
+    fig_json = fig.to_json()
+    return json.dumps(fig_json)
 
 if __name__== "__main__":
      app.run()
