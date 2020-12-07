@@ -1232,7 +1232,7 @@ def bubblee():
     title={'font': {
     'family': 'Montserrat',
     'size': 18,
-    'color': '#7f7f7f'
+    'color': '#00000'
     },
     'text': "DATA IN CSY",
     'y':0.9,
