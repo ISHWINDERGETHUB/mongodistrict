@@ -1227,7 +1227,14 @@ def bubblee():
     df2=pd.read_csv("bubbledata124.csv")
     fig = px.scatter(df2.query("YEAR==2007"), x="USER ENGAGEMENT", y="FAMILY ENGAGEMENT",
             size="OVERALL PRACTICE", color="SCHOOL COUNT",title="DATA IN CSY",
-                     hover_name="DISTRICT NAME", log_x=True, size_max=60)
+                     hover_name="DISTRICT NAME", log_x=True, size_max=60, width=1000, height=500)
+    fig.update_layout(
+    title={
+        'text': "DATA IN CSY",
+        'y':0.9,
+        'x':0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'})
 
     # convert it to JSON
     fig_json = fig.to_json()
