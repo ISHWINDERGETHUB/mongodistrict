@@ -1215,6 +1215,7 @@ def portal_api(inputid):
     totschnew=len(cvb[cvb["is_paid"]=="Y"])
 #     print(totschnew,"totalschool")
     data2=[]
+    cvb = cvb.sort_values(by=['UMSCHOOLNAME'], ascending=True)
     cvb.reset_index(inplace = True)
     cvb["UMSCHOOLID"] = cvb["UMSCHOOLID"].astype('str')
     for i in range(len(cvb)):
