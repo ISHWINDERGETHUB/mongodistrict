@@ -1254,7 +1254,7 @@ def test_portal_api(inputid):
     collection = db.user_master
     from bson.objectid import ObjectId
     query=[{'$match':{'$and':[{
-    "DISTRICT_ID._id":ObjectId("5fd35de0bc25bd02793325d5")   
+    "DISTRICT_ID._id":ObjectId(""+inputid+"")   
     },
 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
