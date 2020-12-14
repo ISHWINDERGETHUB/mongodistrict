@@ -1246,7 +1246,7 @@ def bubblee():
     return (fig_json)
 
 @app.route('/test_portal_api/<inputid>')
-def test_portal_api(inputid):    
+def test_portal_api(inputid):  
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('test!_2o20')
     client = MongoClient("mongodb://%s:%s@52.37.152.224:27017/" % (username, password))
@@ -1254,7 +1254,7 @@ def test_portal_api(inputid):
     collection = db.user_master
     from bson.objectid import ObjectId
     query=[{'$match':{'$and':[{
-    "DISTRICT_ID._id":ObjectId(""+inputid+"")   
+    "DISTRICT_ID._id":ObjectId(""+inputid+"")    
     },
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'IS_DISABLED':{"$ne":'Y'}},
