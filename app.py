@@ -1254,12 +1254,14 @@ def test_portal_api(inputid):
     collection = db.user_master
     from bson.objectid import ObjectId
     query=[{'$match':{'$and':[{
-    "DISTRICT_ID._id":ObjectId(""+inputid+"")   
+    "DISTRICT_ID._id":ObjectId("5fd35de0bc25bd02793325d5")   
     },
+
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}},
     {'IS_PORTAL':'Y'},
+
     ]
     }},
     {"$project":{"_id":0,
@@ -1275,11 +1277,11 @@ def test_portal_api(inputid):
     "$in":lifetimelist
     }   
     },
-  
+
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}},
-  
+
     ]
     }},
     {"$project":{"_id":0,
@@ -1318,40 +1320,73 @@ def test_portal_api(inputid):
     'atdPracticecount':{'$sum':1},
     'atdTotal_Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}}]
     merge110=list(collection.aggregate(qra))
-    atd=pd.DataFrame(merge110)
-    mmm=str(round(sum(atd["atdTotal_Mindful_Minutes"])))
-    finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
-    finaldata=finalmerge[["UMSCHOOLID","UMSCHOOLNAME","UMUSER_ID","ROLE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
-    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].fillna(0)
-    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
-    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
-    usercount=0
-    try:
-        usercount=len(finaldata[finaldata["ROLE"]=='user'])
-    except:
-        pass
-    familycount=0
-    try:
-        familycount=len(finaldata[finaldata["ROLE"]=='PRESENT'])
-    except:
-        pass
-    finaldata=finaldata[finaldata["ROLE"]=='user']
-    xxx=finaldata[["UMSCHOOLID","UMSCHOOLNAME","RENEWAL_DATE"]]
-    xxx['year'] = pd.DatetimeIndex(xxx['RENEWAL_DATE']).year
-#     print(xxx)
-    xxx['is_paid'] = np.where(xxx['year']>2020,"Y", "N")
-    sorted_df = xxx.sort_values(by=['is_paid'], ascending=False)
-    yyy=sorted_df[["UMSCHOOLID","UMSCHOOLNAME","is_paid"]]
-    cvb=yyy.drop_duplicates(subset="UMSCHOOLID", keep='first', inplace=False)
-    totschnew=len(cvb[cvb["is_paid"]=="Y"])
-#     print(totschnew,"totalschool")
-    data2=[]
-    cvb = cvb.sort_values(by=['UMSCHOOLNAME'], ascending=True)
-    cvb.reset_index(inplace = True)
-    cvb["UMSCHOOLID"] = cvb["UMSCHOOLID"].astype('str')
-    for i in range(len(cvb)):
-        data2.append({"school_id":cvb["UMSCHOOLID"][i],"school_name":cvb["UMSCHOOLNAME"][i],"is_paid":cvb["is_paid"][i]})
-    finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
+    atd=pd.DataFrame(merge110).fillna(0, inplace=True)
+    if atd.empty:
+        atd=0
+        mmm=str(atd)
+        finalmerge=mergeddf
+        finaldata=finalmerge[["UMSCHOOLID","UMSCHOOLNAME","UMUSER_ID","ROLE","RENEWAL_DATE"]]
+        usercount=0
+        try:
+            usercount=len(finaldata[finaldata["ROLE"]=='user'])
+        except:
+            pass
+        familycount=0
+        try:
+            familycount=len(finaldata[finaldata["ROLE"]=='PRESENT'])
+        except:
+            pass
+        finaldata=finaldata[finaldata["ROLE"]=='user']
+        xxx=finaldata[["UMSCHOOLID","UMSCHOOLNAME","RENEWAL_DATE"]]
+        xxx['year'] = pd.DatetimeIndex(xxx['RENEWAL_DATE']).year
+        #     print(xxx)
+        xxx['is_paid'] = np.where(xxx['year']>2020,"Y", "N")
+        sorted_df = xxx.sort_values(by=['is_paid'], ascending=False)
+        yyy=sorted_df[["UMSCHOOLID","UMSCHOOLNAME","is_paid"]]
+        cvb=yyy.drop_duplicates(subset="UMSCHOOLID", keep='first', inplace=False)
+        totschnew=len(cvb[cvb["is_paid"]=="Y"])
+        #     print(totschnew,"totalschool")
+        data2=[]
+        cvb = cvb.sort_values(by=['UMSCHOOLNAME'], ascending=True)
+        cvb.reset_index(inplace = True)
+        cvb["UMSCHOOLID"] = cvb["UMSCHOOLID"].astype('str')
+        for i in range(len(cvb)):
+            data2.append({"school_id":cvb["UMSCHOOLID"][i],"school_name":cvb["UMSCHOOLNAME"][i],"is_paid":cvb["is_paid"][i]})
+        finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
+    else:
+        mmm=str(round(sum(atd["atdTotal_Mindful_Minutes"])))
+        finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
+        finaldata=finalmerge[["UMSCHOOLID","UMSCHOOLNAME","UMUSER_ID","ROLE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+        finaldata["atdPracticecount"] = finaldata['atdPracticecount'].fillna(0)
+        finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
+        finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
+        usercount=0
+        try:
+            usercount=len(finaldata[finaldata["ROLE"]=='user'])
+        except:
+            pass
+        familycount=0
+        try:
+            familycount=len(finaldata[finaldata["ROLE"]=='PRESENT'])
+        except:
+            pass
+        finaldata=finaldata[finaldata["ROLE"]=='user']
+        xxx=finaldata[["UMSCHOOLID","UMSCHOOLNAME","RENEWAL_DATE"]]
+        xxx['year'] = pd.DatetimeIndex(xxx['RENEWAL_DATE']).year
+        #     print(xxx)
+        xxx['is_paid'] = np.where(xxx['year']>2020,"Y", "N")
+        sorted_df = xxx.sort_values(by=['is_paid'], ascending=False)
+        yyy=sorted_df[["UMSCHOOLID","UMSCHOOLNAME","is_paid"]]
+        cvb=yyy.drop_duplicates(subset="UMSCHOOLID", keep='first', inplace=False)
+        totschnew=len(cvb[cvb["is_paid"]=="Y"])
+        #     print(totschnew,"totalschool")
+        data2=[]
+        cvb = cvb.sort_values(by=['UMSCHOOLNAME'], ascending=True)
+        cvb.reset_index(inplace = True)
+        cvb["UMSCHOOLID"] = cvb["UMSCHOOLID"].astype('str')
+        for i in range(len(cvb)):
+            data2.append({"school_id":cvb["UMSCHOOLID"][i],"school_name":cvb["UMSCHOOLNAME"][i],"is_paid":cvb["is_paid"][i]})
+        finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
     return json.dumps(finaldata)
 
 if __name__== "__main__":
