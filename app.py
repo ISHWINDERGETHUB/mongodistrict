@@ -1319,7 +1319,7 @@ def test_portal_api(inputid):
     'atdPracticecount':{'$sum':1},
     'atdTotal_Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}}]
     merge110=list(collection.aggregate(qra))
-    atd=pd.DataFrame(merge110).fillna(0, inplace=True)
+    atd=pd.DataFrame(merge110)
     if atd.empty:
         atd=0
         mmm=str(atd)
