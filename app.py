@@ -1256,7 +1256,6 @@ def test_portal_api(inputid):
     query=[{'$match':{'$and':[{
     "DISTRICT_ID._id":ObjectId(""+inputid+"")   
     },
-
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}},
