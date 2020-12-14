@@ -1256,15 +1256,10 @@ def test_portal_api(inputid):
     query=[{'$match':{'$and':[{
     "DISTRICT_ID._id":ObjectId(""+inputid+"")   
     },
-    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}},
     {'IS_PORTAL':'Y'},
-   {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
     ]
     }},
     {"$project":{"_id":0,
@@ -1280,13 +1275,11 @@ def test_portal_api(inputid):
     "$in":lifetimelist
     }   
     },
-    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+  
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}},
-    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+  
     ]
     }},
     {"$project":{"_id":0,
@@ -1314,13 +1307,10 @@ def test_portal_api(inputid):
     db=client.compass
     collection = db.audio_track_master
     qra=[
-    {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {"$match":{'$and':[
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
     {'USER_ID.schoolId._id':{'$in':schoolid}},
     ]}},
     {'$group':{'_id':'$USER_ID.schoolId._id', 
