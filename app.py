@@ -1245,5 +1245,124 @@ def bubblee():
     fig_json = fig.to_json()
     return (fig_json)
 
+@app.route('/test_portal_api/<inputid>')
+def test_portal_api(inputid):    
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('test!_2o20')
+    client = MongoClient("mongodb://%s:%s@52.37.152.224:27017/" % (username, password))
+    db=client.compass
+    collection = db.user_master
+    from bson.objectid import ObjectId
+    query=[{'$match':{'$and':[{
+    "DISTRICT_ID._id":ObjectId(""+inputid+"")   
+    },
+    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}},
+    {'IS_PORTAL':'Y'},
+   {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    ]
+    }},
+    {"$project":{"_id":0,
+    "UMSCHOOLID":'$schoolId._id',}},
+    ]
+    merge11=list(collection.aggregate(query))
+    overallum11=pd.DataFrame(merge11)
+    lifetimelist=list(set(overallum11["UMSCHOOLID"]))
+    total_school=len(lifetimelist)
+    collection = db.user_master
+    query=[{'$match':{'$and':[{
+    "schoolId._id": {
+    "$in":lifetimelist
+    }   
+    },
+    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}},
+    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    ]
+    }},
+    {"$project":{"_id":0,
+    'ROLE':'$ROLE_ID.ROLE_NAME',
+    'UMUSER_ID':'$_id',"USER_NAME":'$USER_NAME',
+    "UMSCHOOLID":'$schoolId._id',
+                 "UMSCHOOLNAME":'$schoolId.NAME',
+                }},
+    ]
+    merge1=list(collection.aggregate(query))
+    overallum=pd.DataFrame(merge1)
+    email=list(overallum["UMUSER_ID"])
+    schoolid=list(overallum["UMSCHOOLID"])
+    ################################sub_master################################
+    collection = db.subscription_master
+    qr=[
+    {"$match":{"$and":[{'USER_ID._id':{"$in":email}},]}},
+    {"$project":{"_id":0,
+    'SMUSER_ID':'$USER_ID._id',
+    "RENEWAL_DATE":"$SUBSCRIPTION_EXPIRE_DATE",
+    }},]
+    merge=list(collection.aggregate(qr))
+    overall=pd.DataFrame(merge)
+    mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
+    db=client.compass
+    collection = db.audio_track_master
+    qra=[
+    {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
+    ]}},
+    {'$group':{'_id':'$USER_ID.schoolId._id', 
+    'atdLastpractice':{'$max':'$MODIFIED_DATE'},
+    'atdPracticecount':{'$sum':1},
+    'atdTotal_Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}}]
+    merge110=list(collection.aggregate(qra))
+    atd=pd.DataFrame(merge110)
+    mmm=str(round(sum(atd["atdTotal_Mindful_Minutes"])))
+    finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
+    finaldata=finalmerge[["UMSCHOOLID","UMSCHOOLNAME","UMUSER_ID","ROLE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].fillna(0)
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
+    usercount=0
+    try:
+        usercount=len(finaldata[finaldata["ROLE"]=='user'])
+    except:
+        pass
+    familycount=0
+    try:
+        familycount=len(finaldata[finaldata["ROLE"]=='PRESENT'])
+    except:
+        pass
+    finaldata=finaldata[finaldata["ROLE"]=='user']
+    xxx=finaldata[["UMSCHOOLID","UMSCHOOLNAME","RENEWAL_DATE"]]
+    xxx['year'] = pd.DatetimeIndex(xxx['RENEWAL_DATE']).year
+#     print(xxx)
+    xxx['is_paid'] = np.where(xxx['year']>2020,"Y", "N")
+    sorted_df = xxx.sort_values(by=['is_paid'], ascending=False)
+    yyy=sorted_df[["UMSCHOOLID","UMSCHOOLNAME","is_paid"]]
+    cvb=yyy.drop_duplicates(subset="UMSCHOOLID", keep='first', inplace=False)
+    totschnew=len(cvb[cvb["is_paid"]=="Y"])
+#     print(totschnew,"totalschool")
+    data2=[]
+    cvb = cvb.sort_values(by=['UMSCHOOLNAME'], ascending=True)
+    cvb.reset_index(inplace = True)
+    cvb["UMSCHOOLID"] = cvb["UMSCHOOLID"].astype('str')
+    for i in range(len(cvb)):
+        data2.append({"school_id":cvb["UMSCHOOLID"][i],"school_name":cvb["UMSCHOOLNAME"][i],"is_paid":cvb["is_paid"][i]})
+    finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
+    return json.dumps(finaldata)
+
 if __name__== "__main__":
      app.run()
