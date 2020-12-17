@@ -25,7 +25,8 @@ def mongo_spider(district):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId(""+district+"")},
+            {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
+        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb471")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
      {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -131,18 +132,20 @@ def card(district):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-         {"DISTRICT_ID._id":ObjectId(""+district+"")},
+            {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
+        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb471")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
      {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
     {"$match":
     {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
     {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",
-                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}         
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+            
     ])
     df1= DataFrame(list(collection)).fillna(0)
     user_list=df1["USER_ID"].tolist()
