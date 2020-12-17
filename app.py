@@ -26,7 +26,7 @@ def mongo_spider(district):
     {"$match":
         {"$and":[
             {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb471")},
+        {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
      {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -133,7 +133,7 @@ def card(district):
     {"$match":
         {"$and":[
             {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb471")},
+        {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
      {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
