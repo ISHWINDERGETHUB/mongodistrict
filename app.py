@@ -1409,7 +1409,7 @@ def realtimeusercount():
               {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
               {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-              {'MODIFIED_DATE': {'$gte': datetime.utcnow()-timedelta(seconds=60)}}
+              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
               ]}},
            {'$group':
            {'_id':'$USER_ID._id',
