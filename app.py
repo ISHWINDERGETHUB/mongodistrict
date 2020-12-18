@@ -1391,5 +1391,37 @@ def test_portal_api(inputid):
         finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
     return json.dumps(finaldata)
 
+@app.route('/rtusercount')
+def realtimeusercount():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    query4=[{"$match":{
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+              {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+              {'MODIFIED_DATE': {'$gte': datetime.utcnow()-timedelta(seconds=60)}}
+              ]}},
+           {'$group':
+           {'_id':'$USER_ID._id',
+               'State':{'$first':'$USER_ID.schoolId.STATE'},
+               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+               }}
+           ]
+    realtime=list(collection.aggregate(query4))
+    realtimeuserpractising=pd.DataFrame(realtime)
+    temp={'userpracticing':len(realtimeuserpractising)}
+    return json.dumps(temp)
+
+
 if __name__== "__main__":
      app.run()
