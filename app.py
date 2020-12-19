@@ -1453,7 +1453,7 @@ def realtimemaprcount():
     if realtimeuserpractising.empty:
         df = pd.DataFrame(columns=['State', 'STATE_SHOT', '_id'])
         for i in range(1):
-            df.loc[i] = ['florida'] +['FL'] + [0]
+            df.loc[i] = ['none'] +['none'] + [0]
             df1=df[["State","_id","STATE_SHOT"]]
             links0 =df1.rename(columns={'STATE_SHOT' : 'code', '_id' : 'value','State':'name'}).to_dict('r')
     else:
