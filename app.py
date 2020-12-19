@@ -1451,7 +1451,7 @@ def realtimemaprcount():
     realtime=list(collection.aggregate(query4))
     realtimeuserpractising=pd.DataFrame(realtime)
     if realtimeuserpractising.empty:
-        df = pd.DataFrame(columns=['State', 'STATE_SHOT',,'text','_id'])
+        df = pd.DataFrame(columns=['State', 'STATE_SHOT','text','_id'])
         for i in range(1):
             df.loc[i] = ['none'] +['none'] +['NO USER PRACTICING NOW']+ [0]
             df1=df[["State","_id","STATE_SHOT",'text']]
