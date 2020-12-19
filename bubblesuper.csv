@@ -1,0 +1,408 @@
+,DISTRICT NAME,MONTH,USER ENGAGEMENT,FAMILY ENGAGEMENT,SCHOOL COUNT,PRACTICE
+0,Paradise Unified School District,1,0.0,0.0,5,46.0
+1,Paradise Unified School District,2,4.0,0.0,5,46.0
+2,Paradise Unified School District,3,4.0,50.0,5,46.0
+3,Paradise Unified School District,4,0.0,0.0,5,46.0
+4,Paradise Unified School District,5,0.0,0.0,5,46.0
+5,Paradise Unified School District,6,0.0,0.0,5,46.0
+6,Paradise Unified School District,7,0.0,0.0,5,46.0
+7,Paradise Unified School District,8,0.0,0.0,5,46.0
+8,Paradise Unified School District,9,0.0,0.0,5,46.0
+9,Paradise Unified School District,10,0.0,0.0,5,46.0
+10,Paradise Unified School District,11,0.0,0.0,5,46.0
+11,Paradise Unified School District,12,4.0,0.0,5,46.0
+12,Early learning Sarasota,1,0.0,0.0,22,455.0
+13,Early learning Sarasota,2,0.0,0.0,22,455.0
+14,Early learning Sarasota,3,0.0,0.0,22,455.0
+15,Early learning Sarasota,4,0.0,0.0,22,455.0
+16,Early learning Sarasota,5,0.0,0.0,22,455.0
+17,Early learning Sarasota,6,0.0,0.0,22,455.0
+18,Early learning Sarasota,7,0.0,0.0,22,455.0
+19,Early learning Sarasota,8,0.0,0.0,22,455.0
+20,Early learning Sarasota,9,0.0,0.0,22,455.0
+21,Early learning Sarasota,10,52.0,0.0,22,455.0
+22,Early learning Sarasota,11,35.0,50.0,22,455.0
+23,Early learning Sarasota,12,39.0,0.0,22,455.0
+24,Racine Unified Schools,1,49.0,0.0,29,66167.0
+25,Racine Unified Schools,2,50.0,0.0,29,66167.0
+26,Racine Unified Schools,3,43.0,50.0,29,66167.0
+27,Racine Unified Schools,4,2.0,50.0,29,66167.0
+28,Racine Unified Schools,5,1.0,24.0,29,66167.0
+29,Racine Unified Schools,6,0.0,4.0,29,66167.0
+30,Racine Unified Schools,7,1.0,7.0,29,66167.0
+31,Racine Unified Schools,8,7.0,3.0,29,66167.0
+32,Racine Unified Schools,9,24.0,0.0,29,66167.0
+33,Racine Unified Schools,10,30.0,0.0,29,66167.0
+34,Racine Unified Schools,11,28.0,0.0,29,66167.0
+35,Racine Unified Schools,12,26.0,0.0,29,66167.0
+36,Wayne Metro,1,17.0,0.0,21,431.0
+37,Wayne Metro,2,33.0,0.0,21,431.0
+38,Wayne Metro,3,0.0,0.0,21,431.0
+39,Wayne Metro,4,43.0,0.0,21,431.0
+40,Wayne Metro,5,14.0,0.0,21,431.0
+41,Wayne Metro,6,0.0,0.0,21,431.0
+42,Wayne Metro,7,14.0,0.0,21,431.0
+43,Wayne Metro,8,14.0,0.0,21,431.0
+44,Wayne Metro,9,24.0,0.0,21,431.0
+45,Wayne Metro,10,42.0,0.0,21,431.0
+46,Wayne Metro,11,33.0,0.0,21,431.0
+47,Wayne Metro,12,26.0,0.0,21,431.0
+48,Goleta District,1,15.0,0.0,9,6860.0
+49,Goleta District,2,17.0,0.0,9,6860.0
+50,Goleta District,3,27.0,12.0,9,6860.0
+51,Goleta District,4,16.0,34.0,9,6860.0
+52,Goleta District,5,5.0,16.0,9,6860.0
+53,Goleta District,6,2.0,3.0,9,6860.0
+54,Goleta District,7,0.0,0.0,9,6860.0
+55,Goleta District,8,1.0,0.0,9,6860.0
+56,Goleta District,9,3.0,20.0,9,6860.0
+57,Goleta District,10,4.0,7.0,9,6860.0
+58,Goleta District,11,3.0,0.0,9,6860.0
+59,Goleta District,12,4.0,2.0,9,6860.0
+60,La Joya School District,1,0.0,0.0,34,2864.0
+61,La Joya School District,2,25.0,0.0,34,2864.0
+62,La Joya School District,3,29.0,0.0,34,2864.0
+63,La Joya School District,4,6.0,0.0,34,2864.0
+64,La Joya School District,5,12.0,0.0,34,2864.0
+65,La Joya School District,6,34.0,100.0,34,2864.0
+66,La Joya School District,7,14.0,100.0,34,2864.0
+67,La Joya School District,8,18.0,0.0,34,2864.0
+68,La Joya School District,9,28.0,0.0,34,2864.0
+69,La Joya School District,10,23.0,20.0,34,2864.0
+70,La Joya School District,11,17.0,0.0,34,2864.0
+71,La Joya School District,12,13.0,12.0,34,2864.0
+72,Broward County Public Schools,1,3.0,0.0,229,10585.0
+73,Broward County Public Schools,2,3.0,0.0,229,10585.0
+74,Broward County Public Schools,3,3.0,27.0,229,10585.0
+75,Broward County Public Schools,4,2.0,36.0,229,10585.0
+76,Broward County Public Schools,5,0.0,19.0,229,10585.0
+77,Broward County Public Schools,6,0.0,4.0,229,10585.0
+78,Broward County Public Schools,7,0.0,2.0,229,10585.0
+79,Broward County Public Schools,8,6.0,5.0,229,10585.0
+80,Broward County Public Schools,9,3.0,0.0,229,10585.0
+81,Broward County Public Schools,10,3.0,2.0,229,10585.0
+82,Broward County Public Schools,11,4.0,1.0,229,10585.0
+83,Broward County Public Schools,12,3.0,1.0,229,10585.0
+84,Community Consolidated School District 89,1,4.0,0.0,5,234.0
+85,Community Consolidated School District 89,2,5.0,0.0,5,234.0
+86,Community Consolidated School District 89,3,4.0,inf,5,234.0
+87,Community Consolidated School District 89,4,0.0,0.0,5,234.0
+88,Community Consolidated School District 89,5,0.0,0.0,5,234.0
+89,Community Consolidated School District 89,6,0.0,0.0,5,234.0
+90,Community Consolidated School District 89,7,0.0,0.0,5,234.0
+91,Community Consolidated School District 89,8,0.0,0.0,5,234.0
+92,Community Consolidated School District 89,9,0.0,0.0,5,234.0
+93,Community Consolidated School District 89,10,2.0,0.0,5,234.0
+94,Community Consolidated School District 89,11,0.0,0.0,5,234.0
+95,Community Consolidated School District 89,12,1.0,0.0,5,234.0
+96,Agawam School district,1,19.0,0.0,8,4024.0
+97,Agawam School district,2,18.0,0.0,8,4024.0
+98,Agawam School district,3,14.0,11.0,8,4024.0
+99,Agawam School district,4,1.0,17.0,8,4024.0
+100,Agawam School district,5,1.0,8.0,8,4024.0
+101,Agawam School district,6,0.0,0.0,8,4024.0
+102,Agawam School district,7,0.0,0.0,8,4024.0
+103,Agawam School district,8,0.0,0.0,8,4024.0
+104,Agawam School district,9,18.0,25.0,8,4024.0
+105,Agawam School district,10,11.0,7.0,8,4024.0
+106,Agawam School district,11,10.0,0.0,8,4024.0
+107,Agawam School district,12,11.0,0.0,8,4024.0
+108,Mt. Lebanon School District,1,4.0,0.0,8,449.0
+109,Mt. Lebanon School District,2,6.0,0.0,8,449.0
+110,Mt. Lebanon School District,3,4.0,50.0,8,449.0
+111,Mt. Lebanon School District,4,2.0,16.0,8,449.0
+112,Mt. Lebanon School District,5,0.0,15.0,8,449.0
+113,Mt. Lebanon School District,6,0.0,15.0,8,449.0
+114,Mt. Lebanon School District,7,0.0,10.0,8,449.0
+115,Mt. Lebanon School District,8,1.0,5.0,8,449.0
+116,Mt. Lebanon School District,9,1.0,0.0,8,449.0
+117,Mt. Lebanon School District,10,1.0,0.0,8,449.0
+118,Mt. Lebanon School District,11,1.0,0.0,8,449.0
+119,Mt. Lebanon School District,12,1.0,0.0,8,449.0
+120,NYC - Queens South,1,47.0,0.0,149,1523.0
+121,NYC - Queens South,2,49.0,0.0,149,1523.0
+122,NYC - Queens South,3,44.0,33.0,149,1523.0
+123,NYC - Queens South,4,2.0,46.0,149,1523.0
+124,NYC - Queens South,5,0.0,23.0,149,1523.0
+125,NYC - Queens South,6,0.0,8.0,149,1523.0
+126,NYC - Queens South,7,0.0,7.0,149,1523.0
+127,NYC - Queens South,8,0.0,0.0,149,1523.0
+128,NYC - Queens South,9,7.0,0.0,149,1523.0
+129,NYC - Queens South,10,5.0,7.0,149,1523.0
+130,NYC - Queens South,11,3.0,0.0,149,1523.0
+131,NYC - Queens South,12,2.0,0.0,149,1523.0
+132,Clarksville-Montgomery County School System,1,15.0,0.0,37,25612.0
+133,Clarksville-Montgomery County School System,2,15.0,0.0,37,25612.0
+134,Clarksville-Montgomery County School System,3,12.0,22.0,37,25612.0
+135,Clarksville-Montgomery County School System,4,0.0,20.0,37,25612.0
+136,Clarksville-Montgomery County School System,5,0.0,inf,37,25612.0
+137,Clarksville-Montgomery County School System,6,0.0,8.0,37,25612.0
+138,Clarksville-Montgomery County School System,7,0.0,0.0,37,25612.0
+139,Clarksville-Montgomery County School System,8,1.0,8.0,37,25612.0
+140,Clarksville-Montgomery County School System,9,11.0,7.0,37,25612.0
+141,Clarksville-Montgomery County School System,10,9.0,12.0,37,25612.0
+142,Clarksville-Montgomery County School System,11,7.0,2.0,37,25612.0
+143,Clarksville-Montgomery County School System,12,6.0,0.0,37,25612.0
+144,Krum Independent School District,1,0.0,0.0,2,1217.0
+145,Krum Independent School District,2,81.0,0.0,2,1217.0
+146,Krum Independent School District,3,89.0,50.0,2,1217.0
+147,Krum Independent School District,4,0.0,38.0,2,1217.0
+148,Krum Independent School District,5,0.0,8.0,2,1217.0
+149,Krum Independent School District,6,0.0,0.0,2,1217.0
+150,Krum Independent School District,7,0.0,0.0,2,1217.0
+151,Krum Independent School District,8,50.0,0.0,2,1217.0
+152,Krum Independent School District,9,100.0,0.0,2,1217.0
+153,Krum Independent School District,10,79.0,12.0,2,1217.0
+154,Krum Independent School District,11,48.0,0.0,2,1217.0
+155,Krum Independent School District,12,36.0,0.0,2,1217.0
+156,Youngstown,1,3.0,0.0,15,6067.0
+157,Youngstown,2,6.0,0.0,15,6067.0
+158,Youngstown,3,16.0,0.0,15,6067.0
+159,Youngstown,4,2.0,26.0,15,6067.0
+160,Youngstown,5,1.0,13.0,15,6067.0
+161,Youngstown,6,0.0,0.0,15,6067.0
+162,Youngstown,7,0.0,0.0,15,6067.0
+163,Youngstown,8,3.0,8.0,15,6067.0
+164,Youngstown,9,17.0,0.0,15,6067.0
+165,Youngstown,10,13.0,6.0,15,6067.0
+166,Youngstown,11,9.0,0.0,15,6067.0
+167,Youngstown,12,8.0,0.0,15,6067.0
+168,Springfield Public Schools,1,0.0,0.0,64,29.0
+169,Springfield Public Schools,2,0.0,0.0,64,29.0
+170,Springfield Public Schools,3,0.0,0.0,64,29.0
+171,Springfield Public Schools,4,0.0,0.0,64,29.0
+172,Springfield Public Schools,5,0.0,0.0,64,29.0
+173,Springfield Public Schools,6,0.0,0.0,64,29.0
+174,Springfield Public Schools,7,0.0,0.0,64,29.0
+175,Springfield Public Schools,8,0.0,0.0,64,29.0
+176,Springfield Public Schools,9,0.0,0.0,64,29.0
+177,Springfield Public Schools,10,0.0,0.0,64,29.0
+178,Springfield Public Schools,11,0.0,0.0,64,29.0
+179,Springfield Public Schools,12,0.0,0.0,64,29.0
+180,Belleville School District,1,0.0,0.0,7,3464.0
+181,Belleville School District,2,0.0,0.0,7,3464.0
+182,Belleville School District,3,0.0,0.0,7,3464.0
+183,Belleville School District,4,0.0,0.0,7,3464.0
+184,Belleville School District,5,0.0,0.0,7,3464.0
+185,Belleville School District,6,0.0,0.0,7,3464.0
+186,Belleville School District,7,0.0,0.0,7,3464.0
+187,Belleville School District,8,0.0,0.0,7,3464.0
+188,Belleville School District,9,66.0,0.0,7,3464.0
+189,Belleville School District,10,70.0,0.0,7,3464.0
+190,Belleville School District,11,64.0,0.0,7,3464.0
+191,Belleville School District,12,47.0,0.0,7,3464.0
+192,Flint Public Schools,1,3.0,0.0,14,1635.0
+193,Flint Public Schools,2,2.0,0.0,14,1635.0
+194,Flint Public Schools,3,3.0,0.0,14,1635.0
+195,Flint Public Schools,4,0.0,0.0,14,1635.0
+196,Flint Public Schools,5,0.0,0.0,14,1635.0
+197,Flint Public Schools,6,0.0,0.0,14,1635.0
+198,Flint Public Schools,7,0.0,0.0,14,1635.0
+199,Flint Public Schools,8,0.0,0.0,14,1635.0
+200,Flint Public Schools,9,0.0,0.0,14,1635.0
+201,Flint Public Schools,10,1.0,0.0,14,1635.0
+202,Flint Public Schools,11,1.0,0.0,14,1635.0
+203,Flint Public Schools,12,0.0,0.0,14,1635.0
+204,Chico Unified School District,1,23.0,0.0,18,8486.0
+205,Chico Unified School District,2,20.0,0.0,18,8486.0
+206,Chico Unified School District,3,19.0,0.0,18,8486.0
+207,Chico Unified School District,4,5.0,21.0,18,8486.0
+208,Chico Unified School District,5,2.0,0.0,18,8486.0
+209,Chico Unified School District,6,1.0,3.0,18,8486.0
+210,Chico Unified School District,7,1.0,1.0,18,8486.0
+211,Chico Unified School District,8,5.0,14.0,18,8486.0
+212,Chico Unified School District,9,6.0,6.0,18,8486.0
+213,Chico Unified School District,10,6.0,5.0,18,8486.0
+214,Chico Unified School District,11,4.0,2.0,18,8486.0
+215,Chico Unified School District,12,4.0,0.0,18,8486.0
+216,Sarasota County,1,16.0,0.0,54,51626.0
+217,Sarasota County,2,13.0,0.0,54,51626.0
+218,Sarasota County,3,24.0,27.0,54,51626.0
+219,Sarasota County,4,33.0,50.0,54,51626.0
+220,Sarasota County,5,6.0,9.0,54,51626.0
+221,Sarasota County,6,0.0,2.0,54,51626.0
+222,Sarasota County,7,0.0,1.0,54,51626.0
+223,Sarasota County,8,2.0,2.0,54,51626.0
+224,Sarasota County,9,6.0,1.0,54,51626.0
+225,Sarasota County,10,6.0,1.0,54,51626.0
+226,Sarasota County,11,5.0,0.0,54,51626.0
+227,Sarasota County,12,4.0,0.0,54,51626.0
+228,Salt Lake City School District,1,16.0,0.0,16,1679.0
+229,Salt Lake City School District,2,17.0,0.0,16,1679.0
+230,Salt Lake City School District,3,13.0,0.0,16,1679.0
+231,Salt Lake City School District,4,3.0,67.0,16,1679.0
+232,Salt Lake City School District,5,1.0,33.0,16,1679.0
+233,Salt Lake City School District,6,1.0,0.0,16,1679.0
+234,Salt Lake City School District,7,0.0,0.0,16,1679.0
+235,Salt Lake City School District,8,0.0,0.0,16,1679.0
+236,Salt Lake City School District,9,2.0,0.0,16,1679.0
+237,Salt Lake City School District,10,14.0,26.0,16,1679.0
+238,Salt Lake City School District,11,12.0,3.0,16,1679.0
+239,Salt Lake City School District,12,9.0,3.0,16,1679.0
+240,Austin Independent School District,1,0.0,0.0,1,
+241,Austin Independent School District,2,0.0,0.0,1,
+242,Austin Independent School District,3,0.0,0.0,1,
+243,Austin Independent School District,4,0.0,0.0,1,
+244,Austin Independent School District,5,0.0,0.0,1,
+245,Austin Independent School District,6,0.0,0.0,1,
+246,Austin Independent School District,7,0.0,0.0,1,
+247,Austin Independent School District,8,0.0,0.0,1,
+248,Austin Independent School District,9,0.0,0.0,1,
+249,Austin Independent School District,10,0.0,0.0,1,
+250,Austin Independent School District,11,0.0,0.0,1,
+251,Austin Independent School District,12,0.0,0.0,1,
+252,Oroville City Elementary School District,1,17.0,0.0,6,2617.0
+253,Oroville City Elementary School District,2,18.0,0.0,6,2617.0
+254,Oroville City Elementary School District,3,19.0,27.0,6,2617.0
+255,Oroville City Elementary School District,4,1.0,7.0,6,2617.0
+256,Oroville City Elementary School District,5,0.0,0.0,6,2617.0
+257,Oroville City Elementary School District,6,0.0,0.0,6,2617.0
+258,Oroville City Elementary School District,7,1.0,0.0,6,2617.0
+259,Oroville City Elementary School District,8,6.0,0.0,6,2617.0
+260,Oroville City Elementary School District,9,11.0,0.0,6,2617.0
+261,Oroville City Elementary School District,10,21.0,0.0,6,2617.0
+262,Oroville City Elementary School District,11,19.0,0.0,6,2617.0
+263,Oroville City Elementary School District,12,19.0,0.0,6,2617.0
+264,Westfield Public School District,1,15.0,0.0,11,6280.0
+265,Westfield Public School District,2,15.0,0.0,11,6280.0
+266,Westfield Public School District,3,14.0,45.0,11,6280.0
+267,Westfield Public School District,4,0.0,25.0,11,6280.0
+268,Westfield Public School District,5,1.0,6.0,11,6280.0
+269,Westfield Public School District,6,1.0,3.0,11,6280.0
+270,Westfield Public School District,7,0.0,3.0,11,6280.0
+271,Westfield Public School District,8,1.0,6.0,11,6280.0
+272,Westfield Public School District,9,15.0,3.0,11,6280.0
+273,Westfield Public School District,10,13.0,0.0,11,6280.0
+274,Westfield Public School District,11,13.0,3.0,11,6280.0
+275,Westfield Public School District,12,14.0,0.0,11,6280.0
+276,Pinellas County Schools,1,15.0,0.0,21,7820.0
+277,Pinellas County Schools,2,15.0,0.0,21,7820.0
+278,Pinellas County Schools,3,14.0,56.0,21,7820.0
+279,Pinellas County Schools,4,1.0,35.0,21,7820.0
+280,Pinellas County Schools,5,0.0,16.0,21,7820.0
+281,Pinellas County Schools,6,0.0,7.0,21,7820.0
+282,Pinellas County Schools,7,0.0,2.0,21,7820.0
+283,Pinellas County Schools,8,8.0,9.0,21,7820.0
+284,Pinellas County Schools,9,11.0,6.0,21,7820.0
+285,Pinellas County Schools,10,11.0,4.0,21,7820.0
+286,Pinellas County Schools,11,9.0,4.0,21,7820.0
+287,Pinellas County Schools,12,8.0,2.0,21,7820.0
+288,Wichita Falls Independent School District,1,0.0,0.0,3,4568.0
+289,Wichita Falls Independent School District,2,0.0,0.0,3,4568.0
+290,Wichita Falls Independent School District,3,60.0,0.0,3,4568.0
+291,Wichita Falls Independent School District,4,0.0,0.0,3,4568.0
+292,Wichita Falls Independent School District,5,0.0,0.0,3,4568.0
+293,Wichita Falls Independent School District,6,0.0,0.0,3,4568.0
+294,Wichita Falls Independent School District,7,0.0,0.0,3,4568.0
+295,Wichita Falls Independent School District,8,53.0,50.0,3,4568.0
+296,Wichita Falls Independent School District,9,58.0,0.0,3,4568.0
+297,Wichita Falls Independent School District,10,63.0,0.0,3,4568.0
+298,Wichita Falls Independent School District,11,60.0,0.0,3,4568.0
+299,Wichita Falls Independent School District,12,54.0,0.0,3,4568.0
+300,Englewood Public School District,1,20.0,0.0,5,8462.0
+301,Englewood Public School District,2,18.0,0.0,5,8462.0
+302,Englewood Public School District,3,19.0,16.0,5,8462.0
+303,Englewood Public School District,4,4.0,31.0,5,8462.0
+304,Englewood Public School District,5,2.0,8.0,5,8462.0
+305,Englewood Public School District,6,2.0,1.0,5,8462.0
+306,Englewood Public School District,7,0.0,2.0,5,8462.0
+307,Englewood Public School District,8,0.0,0.0,5,8462.0
+308,Englewood Public School District,9,6.0,0.0,5,8462.0
+309,Englewood Public School District,10,7.0,0.0,5,8462.0
+310,Englewood Public School District,12,6.0,0.0,5,8462.0
+311,Douglas County School District,1,18.0,0.0,6,86.0
+312,Douglas County School District,2,9.0,0.0,6,86.0
+313,Douglas County School District,3,8.0,0.0,6,86.0
+314,Douglas County School District,4,0.0,0.0,6,86.0
+315,Douglas County School District,5,0.0,0.0,6,86.0
+316,Douglas County School District,6,0.0,0.0,6,86.0
+317,Douglas County School District,7,0.0,0.0,6,86.0
+318,Douglas County School District,8,0.0,0.0,6,86.0
+319,Douglas County School District,9,6.0,0.0,6,86.0
+320,Douglas County School District,10,0.0,0.0,6,86.0
+321,Douglas County School District,11,0.0,0.0,6,86.0
+322,Douglas County School District,12,0.0,0.0,6,86.0
+323,Ogden school district,1,5.0,0.0,17,2574.0
+324,Ogden school district,2,5.0,0.0,17,2574.0
+325,Ogden school district,3,7.0,0.0,17,2574.0
+326,Ogden school district,4,1.0,0.0,17,2574.0
+327,Ogden school district,5,2.0,0.0,17,2574.0
+328,Ogden school district,6,1.0,0.0,17,2574.0
+329,Ogden school district,7,0.0,0.0,17,2574.0
+330,Ogden school district,8,2.0,50.0,17,2574.0
+331,Ogden school district,9,8.0,0.0,17,2574.0
+332,Ogden school district,10,12.0,0.0,17,2574.0
+333,Ogden school district,11,10.0,0.0,17,2574.0
+334,Ogden school district,12,11.0,0.0,17,2574.0
+335,Los Angeles Unified School District,1,3.0,0.0,241,14516.0
+336,Los Angeles Unified School District,2,3.0,0.0,241,14516.0
+337,Los Angeles Unified School District,3,3.0,29.0,241,14516.0
+338,Los Angeles Unified School District,4,1.0,36.0,241,14516.0
+339,Los Angeles Unified School District,5,1.0,20.0,241,14516.0
+340,Los Angeles Unified School District,6,1.0,21.0,241,14516.0
+341,Los Angeles Unified School District,7,1.0,11.0,241,14516.0
+342,Los Angeles Unified School District,8,2.0,16.0,241,14516.0
+343,Los Angeles Unified School District,9,3.0,4.0,241,14516.0
+344,Los Angeles Unified School District,10,3.0,4.0,241,14516.0
+345,Los Angeles Unified School District,11,2.0,0.0,241,14516.0
+346,Los Angeles Unified School District,12,2.0,2.0,241,14516.0
+347,Needham School District,1,0.0,0.0,8,27.0
+348,Needham School District,2,0.0,0.0,8,27.0
+349,Needham School District,3,0.0,0.0,8,27.0
+350,Needham School District,4,0.0,0.0,8,27.0
+351,Needham School District,5,0.0,0.0,8,27.0
+352,Needham School District,6,0.0,0.0,8,27.0
+353,Needham School District,7,0.0,0.0,8,27.0
+354,Needham School District,8,0.0,0.0,8,27.0
+355,Needham School District,9,0.0,0.0,8,27.0
+356,Needham School District,10,0.0,0.0,8,27.0
+357,Needham School District,11,5.0,0.0,8,27.0
+358,Needham School District,12,7.0,0.0,8,27.0
+359,San Leandro Unified School District,1,18.0,0.0,8,1535.0
+360,San Leandro Unified School District,2,12.0,0.0,8,1535.0
+361,San Leandro Unified School District,3,10.0,0.0,8,1535.0
+362,San Leandro Unified School District,4,1.0,0.0,8,1535.0
+363,San Leandro Unified School District,5,1.0,0.0,8,1535.0
+364,San Leandro Unified School District,6,0.0,0.0,8,1535.0
+365,San Leandro Unified School District,7,1.0,0.0,8,1535.0
+366,San Leandro Unified School District,8,5.0,0.0,8,1535.0
+367,San Leandro Unified School District,9,4.0,0.0,8,1535.0
+368,San Leandro Unified School District,10,3.0,0.0,8,1535.0
+369,San Leandro Unified School District,11,3.0,0.0,8,1535.0
+370,San Leandro Unified School District,12,3.0,0.0,8,1535.0
+371,Hillsborough County,1,3.0,0.0,213,3518.0
+372,Hillsborough County,2,3.0,0.0,213,3518.0
+373,Hillsborough County,3,3.0,25.0,213,3518.0
+374,Hillsborough County,4,1.0,17.0,213,3518.0
+375,Hillsborough County,5,0.0,0.0,213,3518.0
+376,Hillsborough County,6,0.0,0.0,213,3518.0
+377,Hillsborough County,7,0.0,2.0,213,3518.0
+378,Hillsborough County,8,0.0,2.0,213,3518.0
+379,Hillsborough County,9,2.0,3.0,213,3518.0
+380,Hillsborough County,10,1.0,0.0,213,3518.0
+381,Hillsborough County,11,2.0,0.0,213,3518.0
+382,Hillsborough County,12,2.0,5.0,213,3518.0
+383,Oakland Unified School District,1,0.0,0.0,34,26.0
+384,Oakland Unified School District,2,0.0,0.0,34,26.0
+385,Oakland Unified School District,3,0.0,0.0,34,26.0
+386,Oakland Unified School District,4,0.0,0.0,34,26.0
+387,Oakland Unified School District,5,0.0,0.0,34,26.0
+388,Oakland Unified School District,6,0.0,0.0,34,26.0
+389,Oakland Unified School District,7,0.0,0.0,34,26.0
+390,Oakland Unified School District,8,0.0,0.0,34,26.0
+391,Oakland Unified School District,9,0.0,0.0,34,26.0
+392,Oakland Unified School District,10,0.0,0.0,34,26.0
+393,Oakland Unified School District,11,0.0,0.0,34,26.0
+394,Oakland Unified School District,12,0.0,4.0,34,26.0
+395,Fairfield-Suisun Unified School District,1,36.0,0.0,30,31785.0
+396,Fairfield-Suisun Unified School District,2,35.0,0.0,30,31785.0
+397,Fairfield-Suisun Unified School District,3,33.0,22.0,30,31785.0
+398,Fairfield-Suisun Unified School District,4,5.0,17.0,30,31785.0
+399,Fairfield-Suisun Unified School District,5,3.0,9.0,30,31785.0
+400,Fairfield-Suisun Unified School District,6,1.0,3.0,30,31785.0
+401,Fairfield-Suisun Unified School District,7,0.0,1.0,30,31785.0
+402,Fairfield-Suisun Unified School District,8,8.0,1.0,30,31785.0
+403,Fairfield-Suisun Unified School District,9,11.0,2.0,30,31785.0
+404,Fairfield-Suisun Unified School District,10,9.0,1.0,30,31785.0
+405,Fairfield-Suisun Unified School District,11,8.0,1.0,30,31785.0
+406,Fairfield-Suisun Unified School District,12,8.0,0.0,30,31785.0
