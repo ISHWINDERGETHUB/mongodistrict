@@ -1662,7 +1662,7 @@ def audiowise_trend():
     return json.dumps(temp)
 
 @app.route('/racebardis')   
-def Race_BAR(district):
+def Race_BAR():
     #####################USER#####################################
     googleSheetId = '1yDlLYtw2y85G2cXbxj1XoGc_73ihucet73D4IoxHxWg'
     worksheetName = 'Payment'
