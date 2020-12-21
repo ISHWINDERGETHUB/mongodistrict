@@ -1827,7 +1827,7 @@ def Race_BAR():
     oct2020f = df5f.loc[(df5f["MONTH_x"]== 10) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
     nov2020f = df5f.loc[(df5f["MONTH_x"]== 11) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
     dec2020f = df5f.loc[(df5f["MONTH_x"]== 12) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
-    temp={"data":{"user":[
+    temp={"data":{"name":district_name,"user":[
     #     {'name': 'JAN 2019',"data":jan2019},{'name': 'FEB 2019',"data":feb2019},{'name': 'MAR 2019',"data":mar2019}
     #     ,{'name': 'APR 2019',"data":apr2019},{'name': 'MAY 2019',"data":may2019},{'name': 'JUN 2019',"data":jun2019}
     #     ,{'name': 'JUL 2019',"data":jul2019},
