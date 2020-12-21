@@ -1419,7 +1419,29 @@ def realtimeusercount():
            ]
     realtime=list(collection.aggregate(query4))
     realtimeuserpractising=pd.DataFrame(realtime)
-    temp={'userpracticing':len(realtimeuserpractising)}
+    #####################family######################
+    query=[{"$match":{
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#               {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+              {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
+              ]}},
+           {'$group':
+           {'_id':'$USER_ID._id',
+               'State':{'$first':'$USER_ID.schoolId.STATE'},
+               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+               }}
+           ]
+    realtimeparent=list(collection.aggregate(query))
+    realtimeparentpractising=pd.DataFrame(realtimeparent)
+    temp={'userpracticing':len(realtimeuserpractising),'parentrpracticing':len(realtimeparentpractising)}
     return json.dumps(temp)
 
 @app.route('/rtmapcount')
