@@ -1849,5 +1849,57 @@ def Race_BAR():
         ,{'name': 'OCT 2020',"data":oct2020f},{'name': 'NOV 2020',"data":nov2020f},{'name': 'DEC 2020',"data":dec2020f}]}}
     return(json.dumps(temp))
 
+@app.route('/audcompdistribution')
+def averagecompletion():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    query4=[{"$match":{
+         '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+          {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+          {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    #       {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #       {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+          {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+    {'$group':{
+        '_id':{'userid':'$USER_ID._id',
+            'audio_id':'$PROGRAM_AUDIO_ID.AUDIO_ID',
+            'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+            'Audio_Name':'$PROGRAM_AUDIO_ID.AUDIO_NAME'
+        },
+        'Audio_Length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'},
+        'start':{'$min':'$cursorStart'},
+        'end':{'$max':'$CURSOR_END'}
+        }},
+        {'$project':{
+            '_id':0,
+            'USER_ID':'$_id.userid',
+            'AUDIO_ID':'$_id.audio_id',
+            'Program_Name':'$_id.Program_Name',
+            'Audio_Name':'$_id.Audio_Name',
+            'Audio_Length':'$Audio_Length',
+            'start':'$start',
+            'end':'$end',
+            }}]
+    usersprac=list(collection.aggregate(query4))
+    userprac_trend=pd.DataFrame(usersprac)
+    userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+    userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+    userprac_trend_1=userprac_trend[userprac_trend.completed_precentage>0]
+    d=userprac_trend_1.groupby('AUDIO_ID')['completed_precentage'].mean().reset_index()
+    d['completed_precentage']=round(d['completed_precentage'],0)
+    dd=d.groupby('completed_precentage')['AUDIO_ID'].count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+    data=[]
+    for i,j in zip(dd.completed_precentage.tolist(),dd.Audio_Count.tolist()):
+        data.append([i,j])
+    temp={'data':data}
+    return(json.dumps(temp))
+
 if __name__== "__main__":
      app.run()
