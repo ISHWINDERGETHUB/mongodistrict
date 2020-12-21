@@ -1522,5 +1522,144 @@ def realtimemaprcount():
     return json.dumps(links0)
 
 
+@app.route('/audiowisetrend')
+def audiowise_trend():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    query=[{"$match":{
+         '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+          {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+          {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    #       {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #       {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+          {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+    {'$group':{
+      '_id':{'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+          'Age_Group':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+          'AUDIO_ID':'$PROGRAM_AUDIO_ID.AUDIO_ID',
+          'AUDIO_NAME':'$PROGRAM_AUDIO_ID.AUDIO_NAME'
+      },
+      'Audio_length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'},
+        'Narrator':{'$first':'$PROGRAM_AUDIO_ID.NARRATEDBY'},
+        'Distinct_User_Practised':{'$addToSet':'$USER_ID._id'},
+        'Distinct_School_Practised':{'$addToSet':'$USER_ID.schoolId._id'},
+      'Total_Sessions':{'$sum':1},
+      'MM':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},60]},0]}}
+      }
+      },
+    {'$project':{
+    '_id':0,
+    'Program_Name':'$_id.Program_Name',
+    'Age_Group':'$_id.Age_Group',
+    'AUDIO_ID':'$_id.AUDIO_ID',
+    'Audio_Name':'$_id.AUDIO_NAME',
+    'Narrator':'$Narrator',
+    'User_Practised':{'$size':'$Distinct_User_Practised'},
+    'School_Practised':{'$size':'$Distinct_School_Practised'},
+    'Audio_Length':'$Audio_length',
+    'Total_Sessions':'$Total_Sessions',
+    'Mindful_Minutes':'$MM'
+    }},
+    {'$sort':{
+    'Mindful_Minutes':-1
+    }
+    }]
+    practice=list(collection.aggregate(query))
+    practicing_content_df=pd.DataFrame(practice)
+    collection2=db.audio_feedback
+    query2=[{"$match":{
+         '$and':[{ 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+          {'USER.IS_DISABLED':{"$ne":'Y'}},
+          {'USER.IS_BLOCKED':{"$ne":'Y'}},
+    # //       {'USER.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    # //       {'USER.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+          {'USER.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+          {'USER.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+          {'$group':{
+              '_id':'$AUDIO_ID.AUDIO_ID',
+              '_5_STAR' :  {'$sum':{'$cond':[{'$eq': ['$RATING'
+         , 5 ] }, 1, 0 ]}},
+         '_4_STAR' :  {'$sum':{'$cond':[{'$eq': ['$RATING'
+         , 4 ] }, 1, 0 ]}},
+         '_3_STAR' :  {'$sum':{'$cond':[{'$eq': ['$RATING'
+         , 3 ] }, 1, 0 ]}},
+         '_2_STAR' :  {'$sum':{'$cond':[{'$eq': ['$RATING'
+         , 2 ] }, 1, 0 ]}},
+         '_1_STAR' :  {'$sum':{'$cond':[{'$eq': ['$RATING'
+         , 0 ] }, 1, 0 ]}},
+         '_0_STAR' :  {'$sum':{'$cond':[{'$eq': ['$RATING'
+         , 0 ] }, 1, 0 ]}}
+         ,
+        'Distinct_User_Rated':{'$addToSet':'$USER._id'},
+        'Distinct_School_Rated':{'$addToSet':'$USER.schoolId._id'}}},
+        {'$project':{'_id':0,
+            'AUDIO_ID':'$_id',
+            'User_Rated':{'$size':'$Distinct_User_Rated'},
+            'School_Rated':{'$size':'$Distinct_School_Rated'},
+            '_5_Star':'$_5_STAR',
+            '_4_Star':'$_4_STAR',
+            '_3_Star':'$_3_STAR',
+            '_2_Star':'$_2_STAR',
+            '_1_Star':'$_1_STAR',
+            '_0_Star':'$_0_STAR'
+            }
+            }]
+    feedback=list(collection2.aggregate(query2))
+    feedback_df=pd.DataFrame(feedback)
+    final_df_1=practicing_content_df.merge(feedback_df,on='AUDIO_ID',how='left')
+    final_df_1.update(final_df_1[['User_Rated', 'School_Rated', '_5_Star', '_4_Star',
+                                  '_3_Star', '_2_Star', '_1_Star', '_0_Star']].fillna(0))
+    final_df_2=final_df_1[(final_df_1['User_Practised']!=0) & (final_df_1['School_Practised']!=0)].reset_index(drop=True)
+    final_df_2.loc[(final_df_2['User_Rated']!=0) &(final_df_2['School_Rated']==0) ,'School_Rated'] = 1
+    final_df_2.dropna(inplace=True)
+    col=['AUDIO_ID','User_Practised', 'School_Practised', 'Audio_Length', 'Total_Sessions',
+         'Mindful_Minutes', 'User_Rated', 'School_Rated', '_5_Star', '_4_Star',
+         '_3_Star', '_2_Star', '_1_Star', '_0_Star']
+    final_df_2[col] = final_df_2[col].apply(pd.to_numeric,axis=1)
+    elem=final_df_2[final_df_2['Program_Name']=='Exploring Originality Elementary'].reset_index(drop=True)
+    pre_k=final_df_2[final_df_2.Program_Name=='Exploring Me Pre-k-Kindergarten'].reset_index(drop=True)
+    middle=final_df_2[final_df_2.Program_Name=='Exploring Potential Middle'].reset_index(drop=True)
+    high=final_df_2[final_df_2.Program_Name=='Exploring Relevance High'].reset_index(drop=True)
+    sound=final_df_2[final_df_2.Program_Name=='Sound Practices'].reset_index(drop=True)
+    elem.sort_values('AUDIO_ID',inplace=True)
+    pre_k.sort_values('AUDIO_ID',inplace=True)
+    middle.sort_values('AUDIO_ID',inplace=True)
+    high.sort_values('AUDIO_ID',inplace=True)
+    sound.sort_values('AUDIO_ID',inplace=True)
+    temp={'elem':{
+        'audio_id':elem.AUDIO_ID.astype(str).tolist(),
+        'audio_name':elem.Audio_Name.tolist(),
+        'user':elem.User_Practised.tolist()
+        },
+          'pre_k':{
+        'audio_id':pre_k.AUDIO_ID.astype(str).tolist(),
+        'audio_name':pre_k.Audio_Name.tolist(),
+        'user':pre_k.User_Practised.tolist()},
+          'middle':{
+        'audio_id':middle.AUDIO_ID.astype(str).tolist(),
+        'audio_name':middle.Audio_Name.tolist(),
+        'user':middle.User_Practised.tolist()},
+          'high':{
+        'audio_id':high.AUDIO_ID.astype(str).tolist(),
+        'audio_name':high.Audio_Name.tolist(),
+        'user':high.User_Practised.tolist()},
+          'sound':{
+        'audio_id':sound.AUDIO_ID.astype(str).tolist(),
+        'audio_name':sound.Audio_Name.tolist(),
+        'user':sound.User_Practised.tolist()}
+         }
+    
+    return json.dumps(temp)
+
 if __name__== "__main__":
      app.run()
