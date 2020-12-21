@@ -6,6 +6,7 @@ import numpy as np
 from datetime import timedelta
 import time
 import datetime
+import dateutil
 from pandas import DataFrame
 import plotly.express as px
 from pymongo import MongoClient
