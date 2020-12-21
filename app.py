@@ -1661,5 +1661,170 @@ def audiowise_trend():
     
     return json.dumps(temp)
 
+@app.route('/racebardis')   
+def Race_BAR(district):
+    #####################USER#####################################
+    googleSheetId = '1yDlLYtw2y85G2cXbxj1XoGc_73ihucet73D4IoxHxWg'
+    worksheetName = 'Payment'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    df=pd.read_csv(URL).fillna("NO INFO.")
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    dateStr = "2019-08-01T00:00:00.000Z"
+    myDatetime = dateutil.parser.parse(dateStr)
+    collection = db.audio_track_master
+    qra=[
+        {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.DISTRICT_ID.DISTRICT_NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
+        {'USER_ID.DISTRICT_ID':{'$exists':1}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'MODIFIED_DATE':{"$gte":myDatetime}},
+        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        ]}},
+        {'$group':{'_id':{"district":'$USER_ID.DISTRICT_ID._id',"year":{"$year": "$MODIFIED_DATE"},"month":{"$month": "$MODIFIED_DATE"}},
+        'NAME_DISTRICT':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'},
+        'PRACTICE':{'$sum':1},
+        'Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
+            {"$project":{"_id":0,"DISTRICT_ID":"$_id.district","MONTH":"$_id.month","YEAR":"$_id.year","NAME_DISTRICT":1,"PRACTICE":1,
+                       "Mindful_Minutes":1 }}]
+    merge11=list(collection.aggregate(qra))
+    df1=pd.DataFrame(merge11)
+    df1["DISTRICT_ID"]=df1["DISTRICT_ID"].astype(str)
+    df1.sort_values(by=['NAME_DISTRICT'], inplace=True)
+    district_list=df1["DISTRICT_ID"].unique().tolist()
+    district_name=df1["NAME_DISTRICT"].unique().tolist()
+    dfstatic=df[df['DISTRICT_ID'].isin(district_list)]
+    df2= dfstatic.merge(right=df1,left_on=[dfstatic.NAME_DISTRICT,dfstatic.MONTH,dfstatic.YEAR],right_on=[df1.NAME_DISTRICT,df1.MONTH,df1.YEAR], indicator=True, how='left')
+    df3=df2[["NAME_DISTRICT_x","MONTH_x","YEAR_x","PRACTICE_y","Mindful_Minutes_y"]].fillna(0)
+    df4=df3.groupby(['NAME_DISTRICT_x',"YEAR_x", 'MONTH_x']).sum().groupby(level=0).cumsum().reset_index()
+    df5=df4[["MONTH_x","YEAR_x","NAME_DISTRICT_x","PRACTICE_y"]]
+    district_list1=df5["NAME_DISTRICT_x"].unique().tolist()
+    df12=[]
+    # for i in range(1,12):
+    #     for j in range(2019,2020):
+    #         for k in range(len(df5.index)):
+    #             if df5["MONTH_x"][k]==1 and df5["YEAR_x"][k]==2019:
+    #                 df12.append(df5["PRACTICE_y"][k].tolist())
+    # for i in range(len(df5.index)):
+    #     if df5["MONTH_x"][i]==1 and df5["YEAR_x"][i]==2019:
+    #         df12.append(df5["PRACTICE_y"][i].tolist())   
+    # jan2019 = df5.loc[(df5["MONTH_x"]== 1) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # feb2019 = df5.loc[(df5["MONTH_x"]== 2) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # mar2019 = df5.loc[(df5["MONTH_x"]== 3) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # apr2019 = df5.loc[(df5["MONTH_x"]== 4) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # may2019 = df5.loc[(df5["MONTH_x"]== 5) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # jun2019 = df5.loc[(df5["MONTH_x"]== 6) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # jul2019 = df5.loc[(df5["MONTH_x"]== 7) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    aug2019 = df5.loc[(df5["MONTH_x"]== 8) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    sep2019 = df5.loc[(df5["MONTH_x"]== 9) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    oct2019 = df5.loc[(df5["MONTH_x"]== 10) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    nov2019 = df5.loc[(df5["MONTH_x"]== 11) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    dec2019 = df5.loc[(df5["MONTH_x"]== 12) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    jan2020 = df5.loc[(df5["MONTH_x"]== 1) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    feb2020 = df5.loc[(df5["MONTH_x"]== 2) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    mar2020 = df5.loc[(df5["MONTH_x"]== 3) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    apr2020 = df5.loc[(df5["MONTH_x"]== 4) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    may2020 = df5.loc[(df5["MONTH_x"]== 5) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    jun2020 = df5.loc[(df5["MONTH_x"]== 6) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    jul2020 = df5.loc[(df5["MONTH_x"]== 7) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    aug2020 = df5.loc[(df5["MONTH_x"]== 8) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    sep2020 = df5.loc[(df5["MONTH_x"]== 9) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    oct2020 = df5.loc[(df5["MONTH_x"]== 10) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    nov2020 = df5.loc[(df5["MONTH_x"]== 11) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    dec2020 = df5.loc[(df5["MONTH_x"]== 12) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+
+    ################FAMILY####################
+    qraf=[
+        {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.DISTRICT_ID.DISTRICT_NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
+        {'USER_ID.DISTRICT_ID':{'$exists':1}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'MODIFIED_DATE':{"$gte":myDatetime}},
+        {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+    #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        ]}},
+        {'$group':{'_id':{"district":'$USER_ID.DISTRICT_ID._id',"year":{"$year": "$MODIFIED_DATE"},"month":{"$month": "$MODIFIED_DATE"}},
+        'NAME_DISTRICT':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'},
+        'PRACTICE':{'$sum':1},
+        'Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
+            {"$project":{"_id":0,"DISTRICT_ID":"$_id.district","MONTH":"$_id.month","YEAR":"$_id.year","NAME_DISTRICT":1,"PRACTICE":1,
+                       "Mindful_Minutes":1 }}]
+    merge11f=list(collection.aggregate(qraf))
+    df1f=pd.DataFrame(merge11f)
+    df1f["DISTRICT_ID"]=df1f["DISTRICT_ID"].astype(str)
+    df1f.sort_values(by=['NAME_DISTRICT'], inplace=True)
+    df2f= dfstatic.merge(right=df1f,left_on=[dfstatic.NAME_DISTRICT,dfstatic.MONTH,dfstatic.YEAR],right_on=[df1f.NAME_DISTRICT,df1f.MONTH,df1f.YEAR], indicator=True, how='left')
+    df3f=df2f[["NAME_DISTRICT_x","MONTH_x","YEAR_x","PRACTICE_y","Mindful_Minutes_y"]].fillna(0)
+    df4f=df3f.groupby(['NAME_DISTRICT_x',"YEAR_x", 'MONTH_x']).sum().groupby(level=0).cumsum().reset_index()
+    df5f=df4f[["MONTH_x","YEAR_x","NAME_DISTRICT_x","PRACTICE_y"]]
+    # district_list1=df5["NAME_DISTRICT_x"].unique().tolist()
+    # df12=[]
+    # for i in range(1,12):
+    #     for j in range(2019,2020):
+    #         for k in range(len(df5.index)):
+    #             if df5["MONTH_x"][k]==1 and df5["YEAR_x"][k]==2019:
+    #                 df12.append(df5["PRACTICE_y"][k].tolist())
+    # for i in range(len(df5.index)):
+    #     if df5["MONTH_x"][i]==1 and df5["YEAR_x"][i]==2019:
+    #         df12.append(df5["PRACTICE_y"][i].tolist())   
+    # jan2019 = df5.loc[(df5["MONTH_x"]== 1) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # feb2019 = df5.loc[(df5["MONTH_x"]== 2) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # mar2019 = df5.loc[(df5["MONTH_x"]== 3) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # apr2019 = df5.loc[(df5["MONTH_x"]== 4) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # may2019 = df5.loc[(df5["MONTH_x"]== 5) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # jun2019 = df5.loc[(df5["MONTH_x"]== 6) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    # jul2019 = df5.loc[(df5["MONTH_x"]== 7) & (df5["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    aug2019f = df5f.loc[(df5f["MONTH_x"]== 8) & (df5f["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    sep2019f = df5f.loc[(df5f["MONTH_x"]== 9) & (df5f["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    oct2019f = df5f.loc[(df5f["MONTH_x"]== 10) & (df5f["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    nov2019f = df5f.loc[(df5f["MONTH_x"]== 11) & (df5f["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    dec2019f = df5f.loc[(df5f["MONTH_x"]== 12) & (df5f["YEAR_x"]== 2019)]["PRACTICE_y"].tolist()
+    jan2020f = df5f.loc[(df5f["MONTH_x"]== 1) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    feb2020f = df5f.loc[(df5f["MONTH_x"]== 2) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    mar2020f = df5f.loc[(df5f["MONTH_x"]== 3) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    apr2020f = df5f.loc[(df5f["MONTH_x"]== 4) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    may2020f = df5f.loc[(df5f["MONTH_x"]== 5) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    jun2020f = df5f.loc[(df5f["MONTH_x"]== 6) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    jul2020f = df5f.loc[(df5f["MONTH_x"]== 7) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    aug2020f = df5f.loc[(df5f["MONTH_x"]== 8) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    sep2020f = df5f.loc[(df5f["MONTH_x"]== 9) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    oct2020f = df5f.loc[(df5f["MONTH_x"]== 10) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    nov2020f = df5f.loc[(df5f["MONTH_x"]== 11) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    dec2020f = df5f.loc[(df5f["MONTH_x"]== 12) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    temp={"data":{"user":[
+    #     {'name': 'JAN 2019',"data":jan2019},{'name': 'FEB 2019',"data":feb2019},{'name': 'MAR 2019',"data":mar2019}
+    #     ,{'name': 'APR 2019',"data":apr2019},{'name': 'MAY 2019',"data":may2019},{'name': 'JUN 2019',"data":jun2019}
+    #     ,{'name': 'JUL 2019',"data":jul2019},
+        {'name': 'AUG 2019',"data":aug2019},{'name': 'SEP 2019',"data":sep2019}
+        ,{'name': 'OCT 2019',"data":oct2019},{'name': 'NOV 2019',"data":nov2019},{'name': 'DEC 2019',"data":dec2019}
+        ,{'name': 'JAN 2020',"data":jan2020},{'name': 'FEB 2020',"data":feb2020},{'name': 'MAR 2020',"data":mar2020}
+        ,{'name': 'APR 2020',"data":apr2020},{'name': 'MAY 2020',"data":may2020},{'name': 'JUN 2020',"data":jun2020}
+        ,{'name': 'JUL 2020',"data":jul2020},{'name': 'AUG 2020',"data":aug2020},{'name': 'SEP 2020',"data":sep2020}
+        ,{'name': 'OCT 2020',"data":oct2020},{'name': 'NOV 2020',"data":nov2020},{'name': 'DEC 2020',"data":dec2020}],
+         "family":[
+    #     {'name': 'JAN 2019',"data":jan2019},{'name': 'FEB 2019',"data":feb2019},{'name': 'MAR 2019',"data":mar2019}
+    #     ,{'name': 'APR 2019',"data":apr2019},{'name': 'MAY 2019',"data":may2019},{'name': 'JUN 2019',"data":jun2019}
+    #     ,{'name': 'JUL 2019',"data":jul2019},
+        {'name': 'AUG 2019',"data":aug2019f},{'name': 'SEP 2019',"data":sep2019f}
+        ,{'name': 'OCT 2019',"data":oct2019f},{'name': 'NOV 2019',"data":nov2019f},{'name': 'DEC 2019',"data":dec2019f}
+        ,{'name': 'JAN 2020',"data":jan2020f},{'name': 'FEB 2020',"data":feb2020f},{'name': 'MAR 2020',"data":mar2020f}
+        ,{'name': 'APR 2020',"data":apr2020f},{'name': 'MAY 2020',"data":may2020f},{'name': 'JUN 2020',"data":jun2020f}
+        ,{'name': 'JUL 2020',"data":jul2020f},{'name': 'AUG 2020',"data":aug2020f},{'name': 'SEP 2020',"data":sep2020f}
+        ,{'name': 'OCT 2020',"data":oct2020f},{'name': 'NOV 2020',"data":nov2020f},{'name': 'DEC 2020',"data":dec2020f}]}}
+    return(json.dumps(temp))
+
 if __name__== "__main__":
      app.run()
