@@ -123,6 +123,253 @@ def mongo_spider(district):
     temp={"nodes":links0,"links":res_list,"attributes":links}
     return(json.dumps(temp))
 
+@app.route('/mongospider2/<district>')   
+def mongo_sp2(district):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    db=client.compass
+    collection = db.user_master.aggregate([
+    {"$match":{"schoolId":{"$exists":1}}},
+    {"$match":
+        {"$and":[
+        {"DISTRICT_ID._id":ObjectId(""+district+"")},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+
+    ])
+    df1= DataFrame(list(collection)).fillna(0)
+    user_list=df1["USER_ID"].tolist()
+    collection1=db.login_logs.aggregate([{"$match":{"USER_ID._id":{
+                        "$in":user_list
+
+                    }    ,"USER_ID.schoolId":{"$exists":1}}},
+    {"$group":{"_id":"$USER_ID._id",
+            "count":{"$sum":1},
+            }},
+    {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
+            ])
+    df2= DataFrame(list(collection1)).fillna(0)
+    collection2 = db.audio_track_master.aggregate([
+    {"$match":{"USER_ID._id":{
+                        "$in":user_list
+
+                    }    ,"USER_ID.schoolId":{"$exists":1}}},
+    {"$match":
+        {"$and":[
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'MODIFIED_DATE':{"$gt":datetime.datetime(2019,7,31)}},
+    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
+            "NEW":{"$addToSet":"$USER_ID._id"},
+            "count":{"$sum":1},
+            "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+            }},
+        {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}
+
+    ])
+    df3= DataFrame(list(collection2)).fillna(0)
+    #####################CLEVER#######################
+    collection3 = db.user_master.aggregate([
+    {"$match":{"schoolId":{"$exists":1}}},
+    {"$match":
+        {"$and":[{"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+
+    ])
+    dfclever= DataFrame(list(collection3)).fillna(0)
+    if dfclever.empty == True:
+        column_names1 = ["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12","role_type"]
+        final1clever = pd.DataFrame(columns = column_names1)
+    else:
+        user_list1=dfclever["USER_ID"].tolist()
+        collection4=db.login_logs.aggregate([{"$match":{"USER_ID._id":{
+                            "$in":user_list1
+
+                        }    ,"USER_ID.schoolId":{"$exists":1}}},
+        {"$group":{"_id":"$USER_ID._id",
+                "count":{"$sum":1},
+                }},
+        {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
+                ])
+        dfcleverlog= DataFrame(list(collection4)).fillna(0)
+        collection5 = db.audio_track_master.aggregate([
+        {"$match":{"USER_ID._id":{
+                            "$in":user_list1
+
+                        }    ,"USER_ID.schoolId":{"$exists":1}}},
+        {"$match":
+            {"$and":[
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'MODIFIED_DATE':{"$gt":datetime.datetime(2019,7,31)}},
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+        {"$match":
+        {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+        ,
+        {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
+                "NEW":{"$addToSet":"$USER_ID._id"},
+                "count":{"$sum":1},
+                "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+                }},
+            {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}
+
+        ])
+        dfcleverprac= DataFrame(list(collection5)).fillna(0)
+        finalclever=pd.merge(dfclever, dfcleverlog, on='USER_ID',how='left').fillna(0)
+        final1clever=pd.merge(finalclever, dfcleverprac, on='USER_ID',how='left').fillna(0)
+        final1clever["role_type"]="CLEVER"
+    ######################################################################################
+
+    #####################schoology#######################
+    collection6 = db.user_master.aggregate([
+    {"$match":{"schoolId":{"$exists":1}}},
+    {"$match":
+        {"$and":[{"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+    ])
+    dfschoology= DataFrame(list(collection6)).fillna(0)
+    if dfschoology.empty == True:
+        column_names = ["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12","role_type"]
+        final1schoology = pd.DataFrame(columns = column_names)
+    else:
+        user_list2=dfschoology["USER_ID"].tolist()
+        collection7=db.login_logs.aggregate([{"$match":{"USER_ID._id":{
+                            "$in":user_list2
+
+                        }    ,"USER_ID.schoolId":{"$exists":1}}},
+        {"$group":{"_id":"$USER_ID._id",
+                "count":{"$sum":1},
+                }},
+        {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
+                ])
+        dfschoologylog= DataFrame(list(collection7)).fillna(0)
+        collection8 = db.audio_track_master.aggregate([
+        {"$match":{"USER_ID._id":{
+                            "$in":user_list2
+
+                        }    ,"USER_ID.schoolId":{"$exists":1}}},
+        {"$match":
+            {"$and":[
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'MODIFIED_DATE':{"$gt":datetime.datetime(2019,7,31)}},
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+        {"$match":
+        {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+        ,
+        {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
+                "NEW":{"$addToSet":"$USER_ID._id"},
+                "count":{"$sum":1},
+                "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+                }},
+            {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}
+
+        ])
+        dfschoologyprac= DataFrame(list(collection8)).fillna(0)
+        finalschoology=pd.merge(dfschoology, dfschoologylog, on='USER_ID',how='left').fillna(0)
+        final1schoology=pd.merge(finalschoology, dfschoologyprac, on='USER_ID',how='left').fillna(0)
+        final1schoology["role_type"]="SCHOOLOGY"
+    ######################################################################################
+    final=pd.merge(df1, df2, on='USER_ID',how='left').fillna(0)
+    final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
+    final1["role_type"]="IE"
+    final2 = pd.concat([final1, final1clever], ignore_index=True, sort=False)
+    final3 = pd.concat([final1, final1schoology], ignore_index=True, sort=False)
+    df=final3[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12","role_type"]]
+    df['practice_count12'].fillna(0, inplace = True)
+    df['practice_count12'] = df['practice_count12'].apply(np.int64)
+    df['district_name'] = df['district_name'].str.capitalize() 
+    dfdd=df[['district_name','practice_count12']]
+    dfdd1=dfdd.groupby(['district_name'])['practice_count12'].sum().reset_index()
+    links0 = dfdd1.rename(columns={'district_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    df1=df[['email_id','practice_count12','count(last_logged_in)','role_type']]
+    df1.rename(columns = {'count(ll.last_logged_in)':'login'}, inplace = True) 
+    df1.loc[(df1['practice_count12'] > 50) , 'hex'] = '#006400' #Power
+    df1.loc[(df1['practice_count12'] > 6) & (df1['practice_count12'] <= 50), 'hex'] = '#00a651'  #ACTIVE
+    df1.loc[(df1['practice_count12'] > 0) & (df1['practice_count12'] <= 6), 'hex'] = '#fff44f'  #PASSIVE
+    df1.loc[(df1['practice_count12'] == 0) & (df1['practice_count12'] == 0), 'hex'] = '#ff8300' #DROMANT
+    if dfclever.empty == True:
+        print("HELLO")
+    else:
+        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#3498DB' #CLEVER
+    if dfschoology.empty == True:
+        print("HELLO1")
+    else:
+        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#E74C3C' #SCHOOLOGY
+    df2=df1[['email_id','hex']]
+    links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
+    dfdatas=df[['school_name','practice_count12','ID']]
+    dfdata2=dfdatas.groupby(['ID','school_name'])['practice_count12'].sum().reset_index()
+    dfdata3=dfdata2[['school_name','practice_count12']]
+    links1 = dfdata3.rename(columns={'school_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    dfdatae=df[['email_id','practice_count12']]
+    links2 = dfdatae.rename(columns={'email_id' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    links0.extend(links1)
+    links0.extend(links2)
+    dfst=df[['school_name','email_id']]
+    links3 = dfst.rename(columns={'school_name' : 'source', 'email_id' : 'target'}).to_dict('r')
+    df4=df[['district_name','school_name','ID']]
+    df5 = df4.drop_duplicates(subset='ID', keep="first")
+    df6=df5[['district_name','school_name']]
+    links4 = df6.rename(columns={'district_name' : 'source', 'school_name' : 'target'}).to_dict('r')
+    results = []
+    for n in links3:
+        for m in links4:
+            if m['target']==n['source']:
+                results.append(m)
+    res_list = [i for n, i in enumerate(results) if i not in results[n + 1:]] 
+
+    for n in links3:
+        for m in res_list:
+            if m['target']==n['source']:
+                res_list.append(n)
+    temp={"nodes":links0,"links":res_list,"attributes":links}
+
+
+    return(json.dumps(temp))
+
 @app.route('/card/<district>')
 def card(district):
     username = urllib.parse.quote_plus('admin')
