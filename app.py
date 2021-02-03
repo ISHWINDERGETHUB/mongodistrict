@@ -133,7 +133,7 @@ def mongo_sp2(district):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb46d")},
+        {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -189,7 +189,7 @@ def mongo_sp2(district):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[{"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                  {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb46d")},
+                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -254,7 +254,7 @@ def mongo_sp2(district):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[{"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                  {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb46d")},
+                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -333,11 +333,11 @@ def mongo_sp2(district):
     if dfclever.empty == True:
         print("HELLO")
     else:
-        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#000000' #CLEVER
+        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#2E2EFE' #CLEVER
     if dfschoology.empty == True:
         print("HELLO1")
     else:
-        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#E74C3C' #SCHOOLOGY
+        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#58D3F7' #SCHOOLOGY
     df2=df1[['email_id','hex']]
     links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
     dfdatas=df[['school_name','practice_count12','ID']]
