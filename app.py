@@ -316,7 +316,7 @@ def mongo_sp2(district):
     final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
     final1["role_type"]="IE"
     final2 = pd.concat([final1, final1clever], ignore_index=True, sort=False)
-    final3 = pd.concat([final1, final1schoology], ignore_index=True, sort=False)
+    final3 = pd.concat([final2, final1schoology], ignore_index=True, sort=False)
     df=final3[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12","role_type"]]
     df['practice_count12'].fillna(0, inplace = True)
     df['practice_count12'] = df['practice_count12'].apply(np.int64)
