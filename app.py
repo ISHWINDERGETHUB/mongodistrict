@@ -127,7 +127,7 @@ def mongo_spider(district):
 def mongo_sp2(district):
     mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
     client = pymongo.MongoClient(mongo_uri)
-    db=client.compass
+    db = client.compass
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
