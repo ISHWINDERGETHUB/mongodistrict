@@ -333,7 +333,7 @@ def mongo_sp2(district):
     if dfclever.empty == True:
         print("HELLO")
     else:
-        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#FF00BF' #CLEVER
+        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#000000' #CLEVER
     if dfschoology.empty == True:
         print("HELLO1")
     else:
