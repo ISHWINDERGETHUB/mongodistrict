@@ -316,7 +316,7 @@ def mongo_sp2(district):
     final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
     final1["role_type"]="IE"
     final2 = pd.concat([final1, final1clever], ignore_index=True, sort=False)
-    final3 = pd.concat([final1clever, final1schoology], ignore_index=True, sort=False)
+    final3 = pd.concat([final2, final1schoology], ignore_index=True, sort=False)
     df=final3[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12","role_type"]]
     df['practice_count12'].fillna(0, inplace = True)
     df['practice_count12'] = df['practice_count12'].apply(np.int64)
@@ -324,7 +324,7 @@ def mongo_sp2(district):
     dfdd=df[['district_name','practice_count12']]
     dfdd1=dfdd.groupby(['district_name'])['practice_count12'].sum().reset_index()
     links0 = dfdd1.rename(columns={'district_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    df1=df[['email_id','practice_count12','count(last_logged_in)','role_type']]
+    df1=df[["school_name",'email_id','practice_count12','count(last_logged_in)','role_type']]
     df1.rename(columns = {'count(ll.last_logged_in)':'login'}, inplace = True) 
     df1.loc[(df1['practice_count12'] > 50) , 'hex'] = '#006400' #Power
     df1.loc[(df1['practice_count12'] > 6) & (df1['practice_count12'] <= 50), 'hex'] = '#00a651'  #ACTIVE
@@ -333,13 +333,17 @@ def mongo_sp2(district):
     if dfclever.empty == True:
         print("HELLO")
     else:
-        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#2E2EFE' #CLEVER
+        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex1'] = '#E74C3C' #CLEVER
     if dfschoology.empty == True:
         print("HELLO1")
     else:
-        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#58D3F7' #SCHOOLOGY
+        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex1'] = '#E74C3C' #SCHOOLOGY
+    df1new=df1[df1["hex1"]=="#E74C3C"]
+    df1new2=df1new[['school_name','hex1']]
     df2=df1[['email_id','hex']]
     links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
+    linksext = df1new2.rename(columns={'school_name' : 'name', 'hex1' : 'hex'}).to_dict('r')
+    links.extend(linksext)
     dfdatas=df[['school_name','practice_count12','ID']]
     dfdata2=dfdatas.groupby(['ID','school_name'])['practice_count12'].sum().reset_index()
     dfdata3=dfdata2[['school_name','practice_count12']]
@@ -366,11 +370,6 @@ def mongo_sp2(district):
             if m['target']==n['source']:
                 res_list.append(n)
     temp={"nodes":links0,"links":res_list,"attributes":links}
-
-
-    
-
-
     return(json.dumps(temp))
 
 @app.route('/card/<district>')
