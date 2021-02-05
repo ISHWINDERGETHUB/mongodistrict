@@ -126,14 +126,15 @@ def mongo_spider(district):
 @app.route('/mongospider2/<district>')   
 def mongo_sp2(district):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
     db=client.compass
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId(""+district+"")},
+        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+         {"schoolId._id":{"$in":db.school_master.distinct( "_id",  {"IS_PORTAL":"Y"} )}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -188,8 +189,9 @@ def mongo_sp2(district):
     collection3 = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
-        {"$and":[{"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
+        {"$and":[ {"schoolId._id":{"$in":db.school_master.distinct( "_id",  {"IS_PORTAL":"Y"} )}},
+            {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                  {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -253,8 +255,9 @@ def mongo_sp2(district):
     collection6 = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
-        {"$and":[{"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
+        {"$and":[ {"schoolId._id":{"$in":db.school_master.distinct( "_id",  {"IS_PORTAL":"Y"} )}},
+            {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                  {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -324,7 +327,7 @@ def mongo_sp2(district):
     dfdd=df[['district_name','practice_count12']]
     dfdd1=dfdd.groupby(['district_name'])['practice_count12'].sum().reset_index()
     links0 = dfdd1.rename(columns={'district_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    df1=df[["school_name",'email_id','practice_count12','count(last_logged_in)','role_type']]
+    df1=df[['email_id','practice_count12','count(last_logged_in)','role_type']]
     df1.rename(columns = {'count(ll.last_logged_in)':'login'}, inplace = True) 
     df1.loc[(df1['practice_count12'] > 50) , 'hex'] = '#006400' #Power
     df1.loc[(df1['practice_count12'] > 6) & (df1['practice_count12'] <= 50), 'hex'] = '#00a651'  #ACTIVE
@@ -333,17 +336,13 @@ def mongo_sp2(district):
     if dfclever.empty == True:
         print("HELLO")
     else:
-        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex1'] = '#E74C3C' #CLEVER
+        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#000000' #CLEVER
     if dfschoology.empty == True:
         print("HELLO1")
     else:
-        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex1'] = '#E74C3C' #SCHOOLOGY
-    df1new=df1[df1["hex1"]=="#E74C3C"]
-    df1new2=df1new[['school_name','hex1']]
+        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#E74C3C' #SCHOOLOGY
     df2=df1[['email_id','hex']]
     links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
-    linksext = df1new2.rename(columns={'school_name' : 'name', 'hex1' : 'hex'}).to_dict('r')
-    links.extend(linksext)
     dfdatas=df[['school_name','practice_count12','ID']]
     dfdata2=dfdatas.groupby(['ID','school_name'])['practice_count12'].sum().reset_index()
     dfdata3=dfdata2[['school_name','practice_count12']]
