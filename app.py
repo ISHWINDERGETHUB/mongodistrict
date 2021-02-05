@@ -336,11 +336,11 @@ def mongo_sp2(district):
     if dfclever.empty == True:
         print("HELLO")
     else:
-        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#000000' #CLEVER
+        df1.loc[(df1['role_type'] == "CLEVER") & (df1['role_type'] == "CLEVER"), 'hex'] = '#0023FF' #CLEVER
     if dfschoology.empty == True:
         print("HELLO1")
     else:
-        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#E74C3C' #SCHOOLOGY
+        df1.loc[(df1['role_type'] == "SCHOOLOGY") & (df1['role_type'] == "SCHOOLOGY"), 'hex'] = '#00FFEC' #SCHOOLOGY
     df2=df1[['email_id','hex']]
     links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
     dfdatas=df[['school_name','practice_count12','ID']]
