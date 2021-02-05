@@ -133,7 +133,7 @@ def mongo_sp2(district):
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
-        {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+        {"DISTRICT_ID._id":ObjectId(""+district+"")},
          {"schoolId._id":{"$in":db.school_master.distinct( "_id",  {"IS_PORTAL":"Y"} )}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
@@ -189,9 +189,9 @@ def mongo_sp2(district):
     collection3 = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
-        {"$and":[ {"schoolId._id":{"$in":db.school_master.distinct( "_id",  {"IS_PORTAL":"Y"} )}},
+        {"$and":[ 
             {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                  {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -255,9 +255,9 @@ def mongo_sp2(district):
     collection6 = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
-        {"$and":[ {"schoolId._id":{"$in":db.school_master.distinct( "_id",  {"IS_PORTAL":"Y"} )}},
+        {"$and":[
             {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                  {"DISTRICT_ID._id":ObjectId("5f2609807a1c0000950bb45a")},
+                  {"DISTRICT_ID._id":ObjectId(""+district+"")},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
