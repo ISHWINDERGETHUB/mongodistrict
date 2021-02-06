@@ -123,6 +123,77 @@ def mongo_spider(district):
     temp={"nodes":links0,"links":res_list,"attributes":links}
     return(json.dumps(temp))
 
+@app.route('/tuneinspider')   
+def tunein_spider():
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    client = pymongo.MongoClient(mongo_uri)
+    db = client.compass
+    dfdb = DataFrame(list(db.tune_in_master.aggregate([
+       {"$match":{
+                 '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}}
+                  ]}}
+
+                      ,{'$project':{
+                          '_id':1,
+                          'IS_OPTED_OUT':1,
+                          'EMAIL':1,
+                          'CREATED_DATE':1,
+                          'Teacher':'$USER_ID.EMAIL_ID',
+                          'school':'$USER_ID.schoolId.NAME',
+                          'ID':"$USER_ID.schoolId._id"
+                          }
+                          }
+        ])))
+    dfdb["TUNE_ID"]="TUNE IN SPIDER"
+    dfdb['practice_count12']=0
+    tune=dfdb[["TUNE_ID",'practice_count12']]
+    tune1=tune.groupby(['TUNE_ID'])['practice_count12'].sum().reset_index()
+    links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    school=dfdb[['school','practice_count12','ID']]
+    school1=school.groupby(['ID','school'])['practice_count12'].sum().reset_index()
+    school2=school1[['school','practice_count12']]
+    links1 = school2.rename(columns={'school' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    teacher=dfdb[['Teacher','practice_count12']]
+    teacher1=teacher.groupby(['Teacher'])['practice_count12'].sum().reset_index()
+    links2 = teacher1.rename(columns={'Teacher' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    parent=dfdb[['EMAIL','practice_count12']]
+    links3 = teacher1.rename(columns={'EMAIL' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    links0.extend(links1)
+    links0.extend(links2)
+    links0.extend(links3)
+    teacherst=dfdb[['school','Teacher']]
+    teacherst1 = teacherst.drop_duplicates(subset='Teacher', keep="first")
+    links4 = teacherst1.rename(columns={'school' : 'source', 'Teacher' : 'target'}).to_dict('r')
+    schoolst=dfdb[['TUNE_ID','school','ID']]
+    schoolst1 = schoolst.drop_duplicates(subset='ID', keep="first")
+    schoolst2=schoolst1[['TUNE_ID','school']]
+    links5 = schoolst2.rename(columns={'TUNE_ID' : 'source', 'school' : 'target'}).to_dict('r')
+    parentst=dfdb[['Teacher','EMAIL']]
+    links6 = parentst.rename(columns={'Teacher' : 'source', 'EMAIL' : 'target'}).to_dict('r')
+    results = []
+    for n in links4:
+        for m in links5:
+            if m['target']==n['source']:
+                results.append(m)
+    res_list = [i for n, i in enumerate(results) if i not in results[n + 1:]] 
+    for n in links4:
+        for m in res_list:
+            if m['target']==n['source']:
+                res_list.append(n)
+    res_list.extend(links6)
+    temp={"nodes":links0,"links":res_list}
+    return(json.dumps(temp))
+
 @app.route('/mongospider2/<district>')   
 def mongo_sp2(district):
     username = urllib.parse.quote_plus('admin')
