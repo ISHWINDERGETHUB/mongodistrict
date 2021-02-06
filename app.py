@@ -134,7 +134,7 @@ def tunein_spider(district):
                  '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                          {"USER_ID.DISTRICT_ID._id":ObjectId(""+district+"")},
+                          {"USER_ID.schoolId.COUNTRY":"Mexico"},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
