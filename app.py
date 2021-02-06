@@ -125,9 +125,10 @@ def mongo_spider(district):
 
 @app.route('/tuneinspider')   
 def tunein_spider():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
-    client = pymongo.MongoClient(mongo_uri)
-    db = client.compass
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    db=client.compass
     dfdb = DataFrame(list(db.tune_in_master.aggregate([
        {"$match":{
                  '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
