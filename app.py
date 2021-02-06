@@ -123,8 +123,8 @@ def mongo_spider(district):
     temp={"nodes":links0,"links":res_list,"attributes":links}
     return(json.dumps(temp))
 
-@app.route('/tuneinspider')   
-def tunein_spider():
+@app.route('/tuneinspider/<district>')   
+def tunein_spider(district):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
     client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
@@ -134,6 +134,7 @@ def tunein_spider():
                  '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                          {"USER_ID.DISTRICT_ID._id":ObjectId(""+district+"")},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
