@@ -191,7 +191,7 @@ def tunein_spider():
         for m in res_list:
             if m['target']==n['source']:
                 res_list.append(n)
-    res_list.extend(links6)
+#     res_list.extend(links6)
     temp={"nodes":links0,"links":res_list}
     return(json.dumps(temp))
 
