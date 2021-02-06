@@ -191,12 +191,14 @@ def tunein_spider():
         for m in res_list:
             if m['target']==n['source']:
                 res_list.append(n)
+    res_list.extend(links6)
+    res_list1 = [i for n, i in enumerate(res_list) if i not in res_list[n + 1:]] 
 #     for n in links6:
 #         for m in res_list:
 #             if m['target']==n['source']:
 #                 res_list.append(n)
 #     res_list.extend(links6)
-    temp={"nodes":links0,"links":res_list}
+    temp={"nodes":links0,"links":res_list1}
     return(json.dumps(temp))
 
 @app.route('/mongospider2/<district>')   
