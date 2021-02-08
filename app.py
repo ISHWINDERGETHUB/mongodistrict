@@ -2090,6 +2090,8 @@ def Race_BAR():
     oct2020 = df5.loc[(df5["MONTH_x"]== 10) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
     nov2020 = df5.loc[(df5["MONTH_x"]== 11) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
     dec2020 = df5.loc[(df5["MONTH_x"]== 12) & (df5["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    jan2021 = df5.loc[(df5["MONTH_x"]== 1) & (df5["YEAR_x"]== 2021)]["PRACTICE_y"].tolist()
+    feb2021 = df5.loc[(df5["MONTH_x"]== 2) & (df5["YEAR_x"]== 2021)]["PRACTICE_y"].tolist()
 
     ################FAMILY####################
     qraf=[
@@ -2154,6 +2156,8 @@ def Race_BAR():
     oct2020f = df5f.loc[(df5f["MONTH_x"]== 10) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
     nov2020f = df5f.loc[(df5f["MONTH_x"]== 11) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
     dec2020f = df5f.loc[(df5f["MONTH_x"]== 12) & (df5f["YEAR_x"]== 2020)]["PRACTICE_y"].tolist()
+    jan2021f = df5f.loc[(df5f["MONTH_x"]== 1) & (df5f["YEAR_x"]== 2021)]["PRACTICE_y"].tolist()
+    feb2021f = df5f.loc[(df5f["MONTH_x"]== 2) & (df5f["YEAR_x"]== 2021)]["PRACTICE_y"].tolist()
     temp={"data":{"name":district_name,"user":[
     #     {'name': 'JAN 2019',"data":jan2019},{'name': 'FEB 2019',"data":feb2019},{'name': 'MAR 2019',"data":mar2019}
     #     ,{'name': 'APR 2019',"data":apr2019},{'name': 'MAY 2019',"data":may2019},{'name': 'JUN 2019',"data":jun2019}
@@ -2163,7 +2167,8 @@ def Race_BAR():
         ,{'name': 'JAN 2020',"data":jan2020},{'name': 'FEB 2020',"data":feb2020},{'name': 'MAR 2020',"data":mar2020}
         ,{'name': 'APR 2020',"data":apr2020},{'name': 'MAY 2020',"data":may2020},{'name': 'JUN 2020',"data":jun2020}
         ,{'name': 'JUL 2020',"data":jul2020},{'name': 'AUG 2020',"data":aug2020},{'name': 'SEP 2020',"data":sep2020}
-        ,{'name': 'OCT 2020',"data":oct2020},{'name': 'NOV 2020',"data":nov2020},{'name': 'DEC 2020',"data":dec2020}],
+        ,{'name': 'OCT 2020',"data":oct2020},{'name': 'NOV 2020',"data":nov2020},{'name': 'DEC 2020',"data":dec2020},
+         {'name': 'JAN 2021',"data":jan2021},{'name': 'FEB 2021',"data":feb2021}],
          "family":[
     #     {'name': 'JAN 2019',"data":jan2019},{'name': 'FEB 2019',"data":feb2019},{'name': 'MAR 2019',"data":mar2019}
     #     ,{'name': 'APR 2019',"data":apr2019},{'name': 'MAY 2019',"data":may2019},{'name': 'JUN 2019',"data":jun2019}
@@ -2173,7 +2178,8 @@ def Race_BAR():
         ,{'name': 'JAN 2020',"data":jan2020f},{'name': 'FEB 2020',"data":feb2020f},{'name': 'MAR 2020',"data":mar2020f}
         ,{'name': 'APR 2020',"data":apr2020f},{'name': 'MAY 2020',"data":may2020f},{'name': 'JUN 2020',"data":jun2020f}
         ,{'name': 'JUL 2020',"data":jul2020f},{'name': 'AUG 2020',"data":aug2020f},{'name': 'SEP 2020',"data":sep2020f}
-        ,{'name': 'OCT 2020',"data":oct2020f},{'name': 'NOV 2020',"data":nov2020f},{'name': 'DEC 2020',"data":dec2020f}]}}
+        ,{'name': 'OCT 2020',"data":oct2020f},{'name': 'NOV 2020',"data":nov2020f},{'name': 'DEC 2020',"data":dec2020f},
+         {'name': 'JAN 2021',"data":jan2021f},{'name': 'FEB 2021',"data":feb2021f}]}}
     return(json.dumps(temp))
 
 @app.route('/audcompdistribution')
