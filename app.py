@@ -173,6 +173,10 @@ def tunein_spider(district):
     links0.extend(links1)
     links0.extend(links2)
     links0.extend(links3)
+    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "Y") , 'hex'] = '#05D324' #Y
+    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "N") , 'hex'] = '#EC3D09' #N
+    dfcolor=dfdb[['EMAIL','hex']]
+    linkcolor = dfcolor.rename(columns={'EMAIL' : 'name', 'hex' : 'hex'}).to_dict('r')
     teacherst=dfdb[['school','Teacher']]
     teacherst1 = teacherst.drop_duplicates(subset='Teacher', keep="first")
     links4 = teacherst1.rename(columns={'school' : 'source', 'Teacher' : 'target'}).to_dict('r')
@@ -199,7 +203,7 @@ def tunein_spider(district):
 #             if m['target']==n['source']:
 #                 res_list.append(n)
 #     res_list.extend(links6)
-    temp={"nodes":links0,"links":res_list1}
+    temp={"nodes":links0,"links":res_list1,"attributes":linkcolor}
     return(json.dumps(temp))
 
 @app.route('/mongospider2/<district>')   
