@@ -158,11 +158,11 @@ def tunein_spider(district):
                           }
                           }
         ]))).fillna("NO INFO")
-    user_id=dfti["USER_ID"].tolist()
+    email_id=dfti["EMAIL"].tolist()
     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
        {"$match":{
                  '$and':[
-                         { 'USER_ID._id':{"$in": user_id}},
+                         { 'INVITEE_EMAIL':{"$in": email_id}},
                      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -209,8 +209,8 @@ def tunein_spider(district):
     links0.extend(links1)
     links0.extend(links2)
     links0.extend(links3)
-    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "Y") , 'hex'] = '#05D324' #Y
-    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "N") , 'hex'] = '#EC3D09' #N
+    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "Y") , 'hex'] = '#EC3D09' #Y
+    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "N") , 'hex'] = '#05D324' #N
     dfcolor=dfdb[['EMAIL','hex']]
     linkcolor = dfcolor.rename(columns={'EMAIL' : 'name', 'hex' : 'hex'}).to_dict('r')
     teacherst=dfdb[['school','Teacher']]
