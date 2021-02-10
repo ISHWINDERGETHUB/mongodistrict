@@ -129,12 +129,12 @@ def tunein_spider(district):
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
     client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
     db=client.compass
-    dfdb = DataFrame(list(db.tune_in_master.aggregate([
+    dfti = DataFrame(list(db.tune_in_master.aggregate([
        {"$match":{
                  '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                          {"USER_ID.schoolId.STATE":"California"},
+    #                      {"USER_ID.DISTRICT_ID._id":ObjectId(""+district+"")},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
@@ -152,24 +152,55 @@ def tunein_spider(district):
                           'CREATED_DATE':1,
                           'Teacher':'$USER_ID.EMAIL_ID',
                           'school':'$USER_ID.schoolId.NAME',
-                          'ID':"$USER_ID.schoolId._id"
+                          'ID':"$USER_ID.schoolId._id",
+                          'STATE':"$USER_ID.schoolId.STATE"
                           }
                           }
-        ])))
-    dfdb["TUNE_ID"]="TUNE IN SPIDER"
+        ]))).fillna("NO INFO")
+    dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
+       {"$match":{
+                 '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                      {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                     {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+
+
+                      ]}},
+                  {'$group':{
+                      '_id': "$INVITEE_EMAIL" , 
+                      'Practice_Count':{'$sum':1}
+                      }},
+
+                      {'$project':{
+                          '_id':0,
+                          'EMAIL':'$_id',
+                          'practice_count1':'$Practice_Count'}
+                          }
+                          ]))).fillna("NO INFO")
+    dfti["TUNE_ID"]="TUNE IN SPIDER"
+    dfdb=pd.merge(dfti, dfatd, on='EMAIL',how='left').fillna(0)
     dfdb['practice_count12']=0
-    tune=dfdb[["TUNE_ID",'practice_count12']]
-    tune1=tune.groupby(['TUNE_ID'])['practice_count12'].sum().reset_index()
-    links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    school=dfdb[['school','practice_count12','ID']]
-    school1=school.groupby(['ID','school'])['practice_count12'].sum().reset_index()
-    school2=school1[['school','practice_count12']]
-    links1 = school2.rename(columns={'school' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    tune=dfdb[["TUNE_ID",'practice_count1']]
+    tune1=tune.groupby(['TUNE_ID'])['practice_count1'].sum().reset_index()
+    links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
+    school=dfdb[['school','practice_count1','ID']]
+    school1=school.groupby(['ID','school'])['practice_count1'].sum().reset_index()
+    school2=school1[['school','practice_count1']]
+    links1 = school2.rename(columns={'school' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
     teacher=dfdb[['Teacher','practice_count12']]
     teacher1=teacher.groupby(['Teacher'])['practice_count12'].sum().reset_index()
     links2 = teacher1.rename(columns={'Teacher' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    parent=dfdb[['EMAIL','practice_count12']]
-    links3 = teacher1.rename(columns={'EMAIL' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+    parent=dfdb[['EMAIL','practice_count1']]
+    links3 = teacher1.rename(columns={'EMAIL' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
     links0.extend(links1)
     links0.extend(links2)
     links0.extend(links3)
