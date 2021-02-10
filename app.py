@@ -152,15 +152,18 @@ def tunein_spider(district):
                           'CREATED_DATE':1,
                           'Teacher':'$USER_ID.EMAIL_ID',
                           'school':'$USER_ID.schoolId.NAME',
+                          'USER_ID':"$USER_ID._id",
                           'ID':"$USER_ID.schoolId._id",
                           'STATE':"$USER_ID.schoolId.STATE"
                           }
                           }
         ]))).fillna("NO INFO")
     email_id=dfti["EMAIL"].tolist()
+    user_id=dfti["USER_ID"].tolist()
     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
        {"$match":{
                  '$and':[{'INVITEE_EMAIL':{"$in":email_id}},
+                         { 'USER_ID._id':{"$in": user_id}},
                      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
