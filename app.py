@@ -204,7 +204,7 @@ def tunein_spider(district):
 #             if m['target']==n['source']:
 #                 res_list.append(n)
 #     res_list.extend(links6)
-    temp={"nodes":links0,"links":res_list1,"attributes":linkcolor}
+    temp={"nodes":links0,"attributes":linkcolor,"links":res_list1,}
     return(json.dumps(temp))
 
 @app.route('/mongospider2/<district>')   
