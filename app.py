@@ -157,9 +157,11 @@ def tunein_spider(district):
                           }
                           }
         ]))).fillna("NO INFO")
+    email_id=dfti["EMAIL"].tolist()
     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
        {"$match":{
-                 '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                 '$and':[{'INVITEE_EMAIL':{"$in":email_id}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
