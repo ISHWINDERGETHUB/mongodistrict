@@ -157,9 +157,11 @@ def tunein_spider(district):
                           }
                           }
         ]))).fillna("NO INFO")
+    email_id=dfti["EMAIL"].tolist()
     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
        {"$match":{
-                 '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                 '$and':[ {'INVITEE_EMAIL':{"$in":email_id}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -199,8 +201,8 @@ def tunein_spider(district):
     teacher=dfdb[['Teacher','practice_count12']]
     teacher1=teacher.groupby(['Teacher'])['practice_count12'].sum().reset_index()
     links2 = teacher1.rename(columns={'Teacher' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    parent=dfdb[['EMAIL','practice_count1']]
-    links3 = teacher1.rename(columns={'EMAIL' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
+    parent=dfdb[['EMAIL','practice_count12']]
+    links3 = teacher1.rename(columns={'EMAIL' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
     links0.extend(links1)
     links0.extend(links2)
     links0.extend(links3)
