@@ -191,9 +191,9 @@ def tunein_spider(district):
     dfti["TUNE_ID"]="TUNE IN SPIDER"
     dfdb=pd.merge(dfti, dfatd, on='EMAIL',how='left').fillna(0)
     dfdb['practice_count12']=0
-    tune=dfdb[["TUNE_ID",'practice_count1']]
-    tune1=tune.groupby(['TUNE_ID'])['practice_count1'].sum().reset_index()
-    links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
+    tune=dfdb[["TUNE_ID",'practice_count12']]
+    tune1=tune.groupby(['TUNE_ID'])['practice_count12'].sum().reset_index()
+    links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
     school=dfdb[['school','practice_count12','ID']]
     school1=school.groupby(['ID','school'])['practice_count12'].sum().reset_index()
     school2=school1[['school','practice_count12']]
