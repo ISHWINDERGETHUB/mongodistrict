@@ -161,7 +161,7 @@ def tunein_spider(district):
     user_id=dfti["USER_ID"].tolist()
     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
        {"$match":{
-                 '$and':[{'INVITEE_EMAIL':{"$in":email_id}},
+                 '$and':[
                          { 'USER_ID._id':{"$in": user_id}},
                      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
