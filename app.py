@@ -158,7 +158,6 @@ def tunein_spider(district):
                           }
                           }
         ]))).fillna("NO INFO")
-    email_id=dfti["EMAIL"].tolist()
     user_id=dfti["USER_ID"].tolist()
     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
        {"$match":{
