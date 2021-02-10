@@ -129,7 +129,7 @@ def tunein_spider(district):
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
     client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
     db=client.compass
-    dfti = DataFrame(list(db.tune_in_master.aggregate([
+    dfdb = DataFrame(list(db.tune_in_master.aggregate([
        {"$match":{
                  '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -188,9 +188,9 @@ def tunein_spider(district):
 #                           'practice_count1':'$Practice_Count'}
 #                           }
 #                           ]))).fillna("NO INFO")
-    dfti["TUNE_ID"]="TUNE IN SPIDER"
+    dfdb["TUNE_ID"]="TUNE IN SPIDER"
 #     dfdb=pd.merge(dfti, dfatd, on='EMAIL',how='left').fillna(0)
-    dfdb=dfti
+   
     dfdb['practice_count12']=0
     tune=dfdb[["TUNE_ID",'practice_count12']]
     tune1=tune.groupby(['TUNE_ID'])['practice_count12'].sum().reset_index()
