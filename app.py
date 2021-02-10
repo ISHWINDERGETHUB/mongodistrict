@@ -192,10 +192,10 @@ def tunein_spider(district):
     tune=dfdb[["TUNE_ID",'practice_count1']]
     tune1=tune.groupby(['TUNE_ID'])['practice_count1'].sum().reset_index()
     links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
-    school=dfdb[['school','practice_count1','ID']]
-    school1=school.groupby(['ID','school'])['practice_count1'].sum().reset_index()
+    school=dfdb[['school','practice_count12','ID']]
+    school1=school.groupby(['ID','school'])['practice_count12'].sum().reset_index()
     school2=school1[['school','practice_count1']]
-    links1 = school2.rename(columns={'school' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
+    links1 = school2.rename(columns={'school' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
     teacher=dfdb[['Teacher','practice_count12']]
     teacher1=teacher.groupby(['Teacher'])['practice_count12'].sum().reset_index()
     links2 = teacher1.rename(columns={'Teacher' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
