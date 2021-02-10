@@ -158,38 +158,39 @@ def tunein_spider(district):
                           }
         ]))).fillna("NO INFO")
     email_id=dfti["EMAIL"].tolist()
-    dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
-       {"$match":{
-                 '$and':[ {'INVITEE_EMAIL':{"$in":email_id}},
-                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
-                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                      {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                     {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+#     dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
+#        {"$match":{
+#                  '$and':[ {'INVITEE_EMAIL':{"$in":email_id}},
+#                      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#                   {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+#                   {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+#                   {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+#                   {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+#                   {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#                       {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+#                        {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#                      {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
 
 
-                      ]}},
-                  {'$group':{
-                      '_id': "$INVITEE_EMAIL" , 
-                      'Practice_Count':{'$sum':1}
-                      }},
+#                       ]}},
+#                   {'$group':{
+#                       '_id': "$INVITEE_EMAIL" , 
+#                       'Practice_Count':{'$sum':1}
+#                       }},
 
-                      {'$project':{
-                          '_id':0,
-                          'EMAIL':'$_id',
-                          'practice_count1':'$Practice_Count'}
-                          }
-                          ]))).fillna("NO INFO")
+#                       {'$project':{
+#                           '_id':0,
+#                           'EMAIL':'$_id',
+#                           'practice_count1':'$Practice_Count'}
+#                           }
+#                           ]))).fillna("NO INFO")
     dfti["TUNE_ID"]="TUNE IN SPIDER"
-    dfdb=pd.merge(dfti, dfatd, on='EMAIL',how='left').fillna(0)
+#     dfdb=pd.merge(dfti, dfatd, on='EMAIL',how='left').fillna(0)
+    dfdb=dfti
     dfdb['practice_count12']=0
     tune=dfdb[["TUNE_ID",'practice_count12']]
     tune1=tune.groupby(['TUNE_ID'])['practice_count12'].sum().reset_index()
