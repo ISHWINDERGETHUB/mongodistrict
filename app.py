@@ -123,6 +123,44 @@ def mongo_spider(district):
     temp={"nodes":links0,"links":res_list,"attributes":links}
     return(json.dumps(temp))
 
+@app.route('/calander/<gt>/<lt>')  
+def new(gt,lt):    
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    db=client.compass
+    datestr = ""+gt+"T00:00:00.000Z"
+    gt = dateutil.parser.parse(datestr)
+    datestr1 = ""+lt+"T00:00:00.000Z"
+    lt = dateutil.parser.parse(datestr1)
+    collection2 =db.audio_track_master.aggregate([
+    {"$match":
+        {"$and":[
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {"MODIFIED_DATE":{"$gte":gt,"$lte":lt}},
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+    ,
+    {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
+            "NEW":{"$addToSet":"$USER_ID._id"},
+            "count":{"$sum":1},
+            'Mindful_Minutes':{'$sum':{'$round':
+                           [{'$divide':[{'$subtract':
+                               ['$CURSOR_END','$cursorStart']},60]},0]}}, 
+            "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+            }},
+        {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count","Mindful_Minutes":1}}
+
+    ])
+    df3= DataFrame(list(collection2)).fillna(0)
+    temp={"data":df3["practice_count12"].tolist()}
+    return json.dumps(temp)
+
+
 @app.route('/tuneinspider/<district>')   
 def tunein_spider(district):
     username = urllib.parse.quote_plus('admin')
