@@ -53,6 +53,9 @@ def mongo_spider(district):
     {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
             ])
     df2= DataFrame(list(collection1)).fillna(0)
+    if df2.empty == True:
+        column_names = ["USER_ID","count(last_logged_in)"]
+        df2 = pd.DataFrame(columns = column_names)
     collection2 = db.audio_track_master.aggregate([
     {"$match":{"USER_ID._id":{
                         "$in":user_list
@@ -78,6 +81,9 @@ def mongo_spider(district):
             
     ])
     df3= DataFrame(list(collection2)).fillna(0)
+    if df3.empty == True:
+        column_names = ["USER_ID","practice_count12"]
+        df3 = pd.DataFrame(columns = column_names)
     final=pd.merge(df1, df2, on='USER_ID',how='left').fillna(0)
     final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
     df=final1[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12"]]
@@ -565,10 +571,13 @@ def card(district):
        {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
               ])
     df2= DataFrame(list(collection1)).fillna(0)
+    if df2.empty == True:
+        column_names = ["USER_ID","count(last_logged_in)"]
+        df2 = pd.DataFrame(columns = column_names)
     collection2 = db.audio_track_master.aggregate([
     {"$match":{"USER_ID._id":{
                         "$in":user_list
-
+                            
                     }    ,"USER_ID.schoolId":{"$exists":1}}},
     {"$match":
         {"$and":[
@@ -582,13 +591,17 @@ def card(district):
     {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
     ,
     {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
-             "NEW":{"$addToSet":"$USER_ID._id"},
-             "count":{"$sum":1},
-              "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
-              }},
-        {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}         
+            "NEW":{"$addToSet":"$USER_ID._id"},
+            "count":{"$sum":1},
+            "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+            }},
+        {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}
+            
     ])
     df3= DataFrame(list(collection2)).fillna(0)
+    if df3.empty == True:
+        column_names = ["USER_ID","practice_count12"]
+        df3 = pd.DataFrame(columns = column_names)
     final=pd.merge(df1, df2, on='USER_ID',how='left').fillna(0)
     final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
     df=final1[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12"]]
