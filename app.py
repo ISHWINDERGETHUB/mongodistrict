@@ -2065,7 +2065,6 @@ def realtimelausdmaprcount():
         links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name'}).to_dict('r')
      return json.dumps(links0)
 
-
 @app.route('/audiowisetrend')
 def audiowise_trend():
     username = urllib.parse.quote_plus('admin')
