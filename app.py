@@ -1962,6 +1962,109 @@ def realtimemaprcount():
         links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'value','State':'name'}).to_dict('r')
     return json.dumps(links0)
 
+@app.route('/rtlausdmapcount')
+def realtimelausdmaprcount():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    query4=[{"$match":{
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+              {'USER_ID.schoolId.STATE':"California"},
+              {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
+              ]}},
+           {'$group':
+           {'_id':'$USER_ID._id',
+               'State':{'$first':'$USER_ID.schoolId.CITY'},
+               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+               }}
+           ]
+    realtime=list(collection.aggregate(query4))
+    realtimeuserpractising=pd.DataFrame(realtime)
+    if realtimeuserpractising.empty:
+        df = pd.DataFrame(columns=['State', 'STATE_SHOT','text','_id'])
+        for i in range(1):
+            df.loc[i] = ['none'] +['none'] +['NO USER PRACTICING RIGHT NOW']+ [0]
+            df1=df[["State","_id","STATE_SHOT",'text']]
+            links0 =df1.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name','text':'text'}).to_dict('r')
+    else:
+        us_state_shot = {
+           'Santa Barbara':'us-ca-083',
+        'Ventura':'us-ca-111',
+        'San Bernardino':'us-ca-071',
+        'Yuba':'us-ca-115',
+        'Sutter':'us-ca-101',
+        'Kings':'us-ca-031',
+        'Monterey':'us-ca-053',
+        'Nevada':'us-ca-057',
+        'Orange':'us-ca-059',
+        'Riverside':'us-ca-065',
+        'San Diego':'us-ca-073',
+        'Marin':'us-ca-041',
+        'San Francisco':'us-ca-075',
+        'Solano':'us-ca-095',
+        'Sonoma':'us-ca-097',
+        'Napa':'us-ca-055',
+        'Contra Costa':'us-ca-013',
+        'Calaveras':'us-ca-009',
+        'San Joaquin':'us-ca-077',
+        'Lassen':'us-ca-035',
+        'Sierra':'us-ca-091',
+        'Sacramento':'us-ca-067',
+        'El Dorado':'us-ca-017',
+        'Stanislaus':'us-ca-099',
+        'Placer':'us-ca-061',
+        'Mariposa':'us-ca-043',
+        'Plumas':'us-ca-063',
+        'Modoc':'us-ca-049',
+        'Shasta':'us-ca-089',
+        'Tuolumne':'us-ca-109',
+        'Madera':'us-ca-039',
+        'Alpine':'us-ca-003',
+        'San Benito':'us-ca-069',
+        'Merced':'us-ca-047',
+        'San Luis Obispo':'us-ca-079',
+        'Colusa':'us-ca-011',
+        'Butte':'us-ca-007',
+        'San Mateo':'us-ca-081',
+        'Santa Cruz':'us-ca-087',
+        'Santa Clara':'us-ca-085',
+        'Kern':'us-ca-029',
+        'Amador':'us-ca-005',
+        'Yolo':'us-ca-113',
+        'Lake':'us-ca-033',
+        'Mendocino':'us-ca-045',
+        'Tehama':'us-ca-103',
+        'Humboldt':'us-ca-023',
+        'Siskiyou':'us-ca-093',
+        'Inyo':'us-ca-027',
+        'Alameda':'us-ca-001',
+        'Los Angeles':'us-ca-037',
+        'Imperial':'us-ca-025',
+        'Glenn':'us-ca-021',
+        'Tulare':'us-ca-107',
+        'Fresno':'us-ca-019',
+        'Del Norte':'us-ca-015',
+        'Trinity':'us-ca-105',
+        'Mono':'us-ca-051',
+
+        }
+        realtimeuserpractising["STATE_SHOT"] = realtimeuserpractising["State"].map(us_state_shot) 
+        df1=realtimeuserpractising.groupby(["State","STATE_SHOT"]).count().reset_index()
+        df2=df1[["State","_id","STATE_SHOT"]]
+        links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name'}).to_dict('r')
+     return json.dumps(links0)
+
 
 @app.route('/audiowisetrend')
 def audiowise_trend():
