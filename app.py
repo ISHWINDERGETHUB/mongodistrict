@@ -2063,7 +2063,7 @@ def realtimelausdmaprcount():
         df1=realtimeuserpractising.groupby(["State","STATE_SHOT"]).count().reset_index()
         df2=df1[["State","_id","STATE_SHOT"]]
         links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name'}).to_dict('r')
-     return json.dumps(links0)
+    return json.dumps(links0)
 
 @app.route('/audiowisetrend')
 def audiowise_trend():
