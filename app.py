@@ -16,155 +16,155 @@ from flask_cors import CORS
 app= Flask(__name__)
 CORS(app)
 
-@app.route('/mongo/<district>')   
-def mongo_spider(district):
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
-    db=client.compass
-    collection = db.user_master.aggregate([
-    {"$match":{"schoolId":{"$exists":1}}},
-    {"$match":
-        {"$and":[
-            {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
-        {"DISTRICT_ID._id":ObjectId(""+district+"")},
-        {'IS_DISABLED':{"$ne":'Y'}},
-    {'IS_BLOCKED':{"$ne":'Y'}}, 
-     {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-    {"$match":
-    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
-    ,
-    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",
-                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
+# @app.route('/mongo/<district>')   
+# def mongo_spider(district):
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+#     client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.user_master.aggregate([
+#     {"$match":{"schoolId":{"$exists":1}}},
+#     {"$match":
+#         {"$and":[
+#             {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" } )}},
+#         {"DISTRICT_ID._id":ObjectId(""+district+"")},
+#         {'IS_DISABLED':{"$ne":'Y'}},
+#     {'IS_BLOCKED':{"$ne":'Y'}}, 
+#      {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#     {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+#     {"$match":
+#     {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+#     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+#     ,
+#     {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",
+#                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
             
-    ])
-    df1= DataFrame(list(collection)).fillna(0)
-    user_list=df1["USER_ID"].tolist()
-    collection1=db.login_logs.aggregate([{"$match":{"USER_ID._id":{
-                        "$in":user_list
+#     ])
+#     df1= DataFrame(list(collection)).fillna(0)
+#     user_list=df1["USER_ID"].tolist()
+#     collection1=db.login_logs.aggregate([{"$match":{"USER_ID._id":{
+#                         "$in":user_list
                             
-                    }    ,"USER_ID.schoolId":{"$exists":1}}},
-    {"$group":{"_id":"$USER_ID._id",
-            "count":{"$sum":1},
-            }},
-    {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
-            ])
-    df2= DataFrame(list(collection1)).fillna(0)
-    if df2.empty == True:
-        column_names = ["USER_ID","count(last_logged_in)"]
-        df2 = pd.DataFrame(columns = column_names)
-    collection2 = db.audio_track_master.aggregate([
-    {"$match":{"USER_ID._id":{
-                        "$in":user_list
+#                     }    ,"USER_ID.schoolId":{"$exists":1}}},
+#     {"$group":{"_id":"$USER_ID._id",
+#             "count":{"$sum":1},
+#             }},
+#     {"$project":{"_id":0,"USER_ID":"$_id","count(last_logged_in)":"$count"}}
+#             ])
+#     df2= DataFrame(list(collection1)).fillna(0)
+#     if df2.empty == True:
+#         column_names = ["USER_ID","count(last_logged_in)"]
+#         df2 = pd.DataFrame(columns = column_names)
+#     collection2 = db.audio_track_master.aggregate([
+#     {"$match":{"USER_ID._id":{
+#                         "$in":user_list
                             
-                    }    ,"USER_ID.schoolId":{"$exists":1}}},
-    {"$match":
-        {"$and":[
-        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'MODIFIED_DATE':{"$gt":datetime.datetime(2019,7,31)}},
-    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-    {"$match":
-    {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
-    ,
-    {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
-            "NEW":{"$addToSet":"$USER_ID._id"},
-            "count":{"$sum":1},
-            "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
-            }},
-        {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}
+#                     }    ,"USER_ID.schoolId":{"$exists":1}}},
+#     {"$match":
+#         {"$and":[
+#         {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+#     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#     {'MODIFIED_DATE':{"$gt":datetime.datetime(2019,7,31)}},
+#     {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+#     {"$match":
+#     {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+#     {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+#     ,
+#     {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
+#             "NEW":{"$addToSet":"$USER_ID._id"},
+#             "count":{"$sum":1},
+#             "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+#             }},
+#         {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count"}}
             
-    ])
-    df3= DataFrame(list(collection2)).fillna(0)
-    if df3.empty == True:
-        column_names = ["USER_ID","practice_count12"]
-        df3 = pd.DataFrame(columns = column_names)
-    final=pd.merge(df1, df2, on='USER_ID',how='left').fillna(0)
-    final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
-    df=final1[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12"]]
-    df['practice_count12'].fillna(0, inplace = True)
-    df['practice_count12'] = df['practice_count12'].apply(np.int64)
-    df['district_name'] = df['district_name'].str.capitalize() 
-    dfdd=df[['district_name','practice_count12']]
-    dfdd1=dfdd.groupby(['district_name'])['practice_count12'].sum().reset_index()
-    links0 = dfdd1.rename(columns={'district_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    df1=df[['email_id','practice_count12','count(last_logged_in)']]
-    df1.rename(columns = {'count(ll.last_logged_in)':'login'}, inplace = True) 
-    df1.loc[(df1['practice_count12'] > 50) , 'hex'] = '#006400' #Power
-    df1.loc[(df1['practice_count12'] > 6) & (df1['practice_count12'] <= 50), 'hex'] = '#00a651'  #ACTIVE
-    df1.loc[(df1['practice_count12'] > 0) & (df1['practice_count12'] <= 6), 'hex'] = '#fff44f'  #PASSIVE
-    df1.loc[(df1['practice_count12'] == 0) & (df1['practice_count12'] == 0), 'hex'] = '#ff8300' #DROMANT
-    df2=df1[['email_id','hex']]
-    links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
-    dfdatas=df[['school_name','practice_count12','ID']]
-    dfdata2=dfdatas.groupby(['ID','school_name'])['practice_count12'].sum().reset_index()
-    dfdata3=dfdata2[['school_name','practice_count12']]
-    links1 = dfdata3.rename(columns={'school_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    dfdatae=df[['email_id','practice_count12']]
-    links2 = dfdatae.rename(columns={'email_id' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    links0.extend(links1)
-    links0.extend(links2)
-    dfst=df[['school_name','email_id']]
-    links3 = dfst.rename(columns={'school_name' : 'source', 'email_id' : 'target'}).to_dict('r')
-    df4=df[['district_name','school_name','ID']]
-    df5 = df4.drop_duplicates(subset='ID', keep="first")
-    df6=df5[['district_name','school_name']]
-    links4 = df6.rename(columns={'district_name' : 'source', 'school_name' : 'target'}).to_dict('r')
-    results = []
-    for n in links3:
-        for m in links4:
-            if m['target']==n['source']:
-                results.append(m)
-    res_list = [i for n, i in enumerate(results) if i not in results[n + 1:]] 
+#     ])
+#     df3= DataFrame(list(collection2)).fillna(0)
+#     if df3.empty == True:
+#         column_names = ["USER_ID","practice_count12"]
+#         df3 = pd.DataFrame(columns = column_names)
+#     final=pd.merge(df1, df2, on='USER_ID',how='left').fillna(0)
+#     final1=pd.merge(final, df3, on='USER_ID',how='left').fillna(0)
+#     df=final1[["ID","USER_ID","school_name","email_id","district_name","count(last_logged_in)","practice_count12"]]
+#     df['practice_count12'].fillna(0, inplace = True)
+#     df['practice_count12'] = df['practice_count12'].apply(np.int64)
+#     df['district_name'] = df['district_name'].str.capitalize() 
+#     dfdd=df[['district_name','practice_count12']]
+#     dfdd1=dfdd.groupby(['district_name'])['practice_count12'].sum().reset_index()
+#     links0 = dfdd1.rename(columns={'district_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+#     df1=df[['email_id','practice_count12','count(last_logged_in)']]
+#     df1.rename(columns = {'count(ll.last_logged_in)':'login'}, inplace = True) 
+#     df1.loc[(df1['practice_count12'] > 50) , 'hex'] = '#006400' #Power
+#     df1.loc[(df1['practice_count12'] > 6) & (df1['practice_count12'] <= 50), 'hex'] = '#00a651'  #ACTIVE
+#     df1.loc[(df1['practice_count12'] > 0) & (df1['practice_count12'] <= 6), 'hex'] = '#fff44f'  #PASSIVE
+#     df1.loc[(df1['practice_count12'] == 0) & (df1['practice_count12'] == 0), 'hex'] = '#ff8300' #DROMANT
+#     df2=df1[['email_id','hex']]
+#     links = df2.rename(columns={'email_id' : 'name', 'hex' : 'hex'}).to_dict('r')
+#     dfdatas=df[['school_name','practice_count12','ID']]
+#     dfdata2=dfdatas.groupby(['ID','school_name'])['practice_count12'].sum().reset_index()
+#     dfdata3=dfdata2[['school_name','practice_count12']]
+#     links1 = dfdata3.rename(columns={'school_name' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+#     dfdatae=df[['email_id','practice_count12']]
+#     links2 = dfdatae.rename(columns={'email_id' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
+#     links0.extend(links1)
+#     links0.extend(links2)
+#     dfst=df[['school_name','email_id']]
+#     links3 = dfst.rename(columns={'school_name' : 'source', 'email_id' : 'target'}).to_dict('r')
+#     df4=df[['district_name','school_name','ID']]
+#     df5 = df4.drop_duplicates(subset='ID', keep="first")
+#     df6=df5[['district_name','school_name']]
+#     links4 = df6.rename(columns={'district_name' : 'source', 'school_name' : 'target'}).to_dict('r')
+#     results = []
+#     for n in links3:
+#         for m in links4:
+#             if m['target']==n['source']:
+#                 results.append(m)
+#     res_list = [i for n, i in enumerate(results) if i not in results[n + 1:]] 
 
-    for n in links3:
-        for m in res_list:
-            if m['target']==n['source']:
-                res_list.append(n)
-    temp={"nodes":links0,"links":res_list,"attributes":links}
-    return(json.dumps(temp))
+#     for n in links3:
+#         for m in res_list:
+#             if m['target']==n['source']:
+#                 res_list.append(n)
+#     temp={"nodes":links0,"links":res_list,"attributes":links}
+#     return(json.dumps(temp))
 
-@app.route('/calander/<gt>/<lt>')  
-def new(gt,lt):    
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
-    db=client.compass
-    datestr = ""+gt+"T00:00:00.000Z"
-    gt = dateutil.parser.parse(datestr)
-    datestr1 = ""+lt+"T00:00:00.000Z"
-    lt = dateutil.parser.parse(datestr1)
-    collection2 =db.audio_track_master.aggregate([
-    {"$match":
-        {"$and":[
-        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-        {"MODIFIED_DATE":{"$gte":gt,"$lte":lt}},
-    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-    {"$match":
-    {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
-    ,
-    {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
-            "NEW":{"$addToSet":"$USER_ID._id"},
-            "count":{"$sum":1},
-            'Mindful_Minutes':{'$sum':{'$round':
-                           [{'$divide':[{'$subtract':
-                               ['$CURSOR_END','$cursorStart']},60]},0]}}, 
-            "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
-            }},
-        {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count","Mindful_Minutes":1}}
+# @app.route('/calander/<gt>/<lt>')  
+# def new(gt,lt):    
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+#     client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+#     db=client.compass
+#     datestr = ""+gt+"T00:00:00.000Z"
+#     gt = dateutil.parser.parse(datestr)
+#     datestr1 = ""+lt+"T00:00:00.000Z"
+#     lt = dateutil.parser.parse(datestr1)
+#     collection2 =db.audio_track_master.aggregate([
+#     {"$match":
+#         {"$and":[
+#         {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#         {"MODIFIED_DATE":{"$gte":gt,"$lte":lt}},
+#     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+#     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#     {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+#     {"$match":
+#     {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+#     {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+#     ,
+#     {"$group":{"_id":{"USER_ID":"$USER_ID._id"},
+#             "NEW":{"$addToSet":"$USER_ID._id"},
+#             "count":{"$sum":1},
+#             'Mindful_Minutes':{'$sum':{'$round':
+#                            [{'$divide':[{'$subtract':
+#                                ['$CURSOR_END','$cursorStart']},60]},0]}}, 
+#             "USER_NAME": { "$first": "$USER_ID.USER_NAME" }
+#             }},
+#         {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","practice_count12":"$count","Mindful_Minutes":1}}
 
-    ])
-    df3= DataFrame(list(collection2)).fillna(0)
-    temp={"data":df3["practice_count12"].tolist()}
-    return json.dumps(temp)
+#     ])
+#     df3= DataFrame(list(collection2)).fillna(0)
+#     temp={"data":df3["practice_count12"].tolist()}
+#     return json.dumps(temp)
 
 
 @app.route('/yearlymicrodistrict/<start>/<end>')   
@@ -1865,260 +1865,260 @@ def test_portal_api(inputid):
         finaldata={"data":data2,"total_school":totschnew,"user_count":usercount,"family_count":familycount,"mindful_minutes":mmm}
     return json.dumps(finaldata)
 
-@app.route('/rtusercount')
-def realtimeusercount():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
-    db=client.compass
-    collection = db.audio_track_master
-    query4=[{"$match":{
-             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-              {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
-              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
-              ]}},
-           {'$group':
-           {'_id':'$USER_ID._id',
-               'State':{'$first':'$USER_ID.schoolId.STATE'},
-               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
-               }}
-           ]
-    realtime=list(collection.aggregate(query4))
-    realtimeuserpractising=pd.DataFrame(realtime)
-    #####################family######################
-    query=[{"$match":{
-             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+# @app.route('/rtusercount')
+# def realtimeusercount():
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.audio_track_master
+#     query4=[{"$match":{
+#              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
 #               {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-              {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
-              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
-              ]}},
-           {'$group':
-           {'_id':'$USER_ID._id',
-               'State':{'$first':'$USER_ID.schoolId.STATE'},
-               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
-               }}
-           ]
-    realtimeparent=list(collection.aggregate(query))
-    realtimeparentpractising=pd.DataFrame(realtimeparent)
-    temp={'userpracticing':len(realtimeuserpractising),'parentrpracticing':len(realtimeparentpractising)}
-    return json.dumps(temp)
+#               {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#               {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+#               {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+#               {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
+#               ]}},
+#            {'$group':
+#            {'_id':'$USER_ID._id',
+#                'State':{'$first':'$USER_ID.schoolId.STATE'},
+#                'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+#                }}
+#            ]
+#     realtime=list(collection.aggregate(query4))
+#     realtimeuserpractising=pd.DataFrame(realtime)
+#     #####################family######################
+#     query=[{"$match":{
+#              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+# #               {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+#               {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+#               {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+#               {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+#               {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
+#               ]}},
+#            {'$group':
+#            {'_id':'$USER_ID._id',
+#                'State':{'$first':'$USER_ID.schoolId.STATE'},
+#                'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+#                }}
+#            ]
+#     realtimeparent=list(collection.aggregate(query))
+#     realtimeparentpractising=pd.DataFrame(realtimeparent)
+#     temp={'userpracticing':len(realtimeuserpractising),'parentrpracticing':len(realtimeparentpractising)}
+#     return json.dumps(temp)
 
-@app.route('/rtmapcount')
-def realtimemaprcount():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
-    db=client.compass
-    collection = db.audio_track_master
-    query4=[{"$match":{
-             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-              {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
-              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
-              ]}},
-           {'$group':
-           {'_id':'$USER_ID._id',
-               'State':{'$first':'$USER_ID.schoolId.STATE'},
-               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
-               }}
-           ]
-    realtime=list(collection.aggregate(query4))
-    realtimeuserpractising=pd.DataFrame(realtime)
-    if realtimeuserpractising.empty:
-        df = pd.DataFrame(columns=['State', 'STATE_SHOT','text','_id'])
-        for i in range(1):
-            df.loc[i] = ['none'] +['none'] +['NO USER PRACTICING RIGHT NOW']+ [0]
-            df1=df[["State","_id","STATE_SHOT",'text']]
-            links0 =df1.rename(columns={'STATE_SHOT' : 'code', '_id' : 'value','State':'name','text':'text'}).to_dict('r')
-    else:
-        us_state_shot = {
-            'Alabama': 'AL',
-            'Alaska': 'AK',
-            'American Samoa': 'AS',
-            'Arizona': 'AZ',
-            'Arkansas': 'AR',
-            'California': 'CA',
-            'Colorado': 'CO',
-            'Connecticut': 'CT',
-            'Delaware': 'DE',
-            'District of Columbia': 'DC',
-            'Florida': 'FL',
-            'Georgia': 'GA',
-            'Guam': 'GU',
-            'Hawaii': 'HI',
-            'Idaho': 'ID',
-            'Illinois': 'IL',
-            'Indiana': 'IN',
-            'Iowa': 'IA',
-            'Kansas': 'KS',
-            'Kentucky': 'KY',
-            'Louisiana': 'LA',
-            'Maine': 'ME',
-            'Maryland': 'MD',
-            'Massachusetts': 'MA',
-            'Michigan': 'MI',
-            'Minnesota': 'MN',
-            'Mississippi': 'MS',
-            'Missouri': 'MO',
-            'Montana': 'MT',
-            'Nebraska': 'NE',
-            'Nevada': 'NV',
-            'New Hampshire': 'NH',
-            'New Jersey': 'NJ',
-            'New Mexico': 'NM',
-            'New York': 'NY',
-            'North Carolina': 'NC',
-            'North Dakota': 'ND',
-            'Northern Mariana Islands':'MP',
-            'Ohio': 'OH',
-            'Oklahoma': 'OK',
-            'Oregon': 'OR',
-            'Pennsylvania': 'PA',
-            'Puerto Rico': 'PR',
-            'Rhode Island': 'RI',
-            'South Carolina': 'SC',
-            'South Dakota': 'SD',
-            'Tennessee': 'TN',
-            'Texas': 'TX',
-            'Utah': 'UT',
-            'Vermont': 'VT',
-            'Virgin Islands': 'VI',
-            'Virginia': 'VA',
-            'Washington': 'WA',
-            'West Virginia': 'WV',
-            'Wisconsin': 'WI',
-            'Wyoming': 'WY'
-        }
-        realtimeuserpractising["STATE_SHOT"] = realtimeuserpractising["State"].map(us_state_shot) 
-        df1=realtimeuserpractising.groupby(["State","STATE_SHOT"]).count().reset_index()
-        df2=df1[["State","_id","STATE_SHOT"]]
-        links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'value','State':'name'}).to_dict('r')
-    return json.dumps(links0)
+# @app.route('/rtmapcount')
+# def realtimemaprcount():
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.audio_track_master
+#     query4=[{"$match":{
+#              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#               {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+#               {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#               {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+#               {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+#               {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
+#               ]}},
+#            {'$group':
+#            {'_id':'$USER_ID._id',
+#                'State':{'$first':'$USER_ID.schoolId.STATE'},
+#                'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+#                }}
+#            ]
+#     realtime=list(collection.aggregate(query4))
+#     realtimeuserpractising=pd.DataFrame(realtime)
+#     if realtimeuserpractising.empty:
+#         df = pd.DataFrame(columns=['State', 'STATE_SHOT','text','_id'])
+#         for i in range(1):
+#             df.loc[i] = ['none'] +['none'] +['NO USER PRACTICING RIGHT NOW']+ [0]
+#             df1=df[["State","_id","STATE_SHOT",'text']]
+#             links0 =df1.rename(columns={'STATE_SHOT' : 'code', '_id' : 'value','State':'name','text':'text'}).to_dict('r')
+#     else:
+#         us_state_shot = {
+#             'Alabama': 'AL',
+#             'Alaska': 'AK',
+#             'American Samoa': 'AS',
+#             'Arizona': 'AZ',
+#             'Arkansas': 'AR',
+#             'California': 'CA',
+#             'Colorado': 'CO',
+#             'Connecticut': 'CT',
+#             'Delaware': 'DE',
+#             'District of Columbia': 'DC',
+#             'Florida': 'FL',
+#             'Georgia': 'GA',
+#             'Guam': 'GU',
+#             'Hawaii': 'HI',
+#             'Idaho': 'ID',
+#             'Illinois': 'IL',
+#             'Indiana': 'IN',
+#             'Iowa': 'IA',
+#             'Kansas': 'KS',
+#             'Kentucky': 'KY',
+#             'Louisiana': 'LA',
+#             'Maine': 'ME',
+#             'Maryland': 'MD',
+#             'Massachusetts': 'MA',
+#             'Michigan': 'MI',
+#             'Minnesota': 'MN',
+#             'Mississippi': 'MS',
+#             'Missouri': 'MO',
+#             'Montana': 'MT',
+#             'Nebraska': 'NE',
+#             'Nevada': 'NV',
+#             'New Hampshire': 'NH',
+#             'New Jersey': 'NJ',
+#             'New Mexico': 'NM',
+#             'New York': 'NY',
+#             'North Carolina': 'NC',
+#             'North Dakota': 'ND',
+#             'Northern Mariana Islands':'MP',
+#             'Ohio': 'OH',
+#             'Oklahoma': 'OK',
+#             'Oregon': 'OR',
+#             'Pennsylvania': 'PA',
+#             'Puerto Rico': 'PR',
+#             'Rhode Island': 'RI',
+#             'South Carolina': 'SC',
+#             'South Dakota': 'SD',
+#             'Tennessee': 'TN',
+#             'Texas': 'TX',
+#             'Utah': 'UT',
+#             'Vermont': 'VT',
+#             'Virgin Islands': 'VI',
+#             'Virginia': 'VA',
+#             'Washington': 'WA',
+#             'West Virginia': 'WV',
+#             'Wisconsin': 'WI',
+#             'Wyoming': 'WY'
+#         }
+#         realtimeuserpractising["STATE_SHOT"] = realtimeuserpractising["State"].map(us_state_shot) 
+#         df1=realtimeuserpractising.groupby(["State","STATE_SHOT"]).count().reset_index()
+#         df2=df1[["State","_id","STATE_SHOT"]]
+#         links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'value','State':'name'}).to_dict('r')
+#     return json.dumps(links0)
 
-@app.route('/rtlausdmapcount')
-def realtimelausdmaprcount():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
-    db=client.compass
-    collection = db.audio_track_master
-    query4=[{"$match":{
-             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-              {'USER_ID.schoolId.STATE':"California"},
-              {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
-              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-              {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
-              ]}},
-           {'$group':
-           {'_id':'$USER_ID._id',
-               'State':{'$first':'$USER_ID.schoolId.CITY'},
-               'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
-               }}
-           ]
-    realtime=list(collection.aggregate(query4))
-    realtimeuserpractising=pd.DataFrame(realtime)
-    if realtimeuserpractising.empty:
-        df = pd.DataFrame(columns=['State', 'STATE_SHOT','text','_id'])
-        for i in range(1):
-            df.loc[i] = ['none'] +['none'] +['NO USER PRACTICING RIGHT NOW']+ [0]
-            df1=df[["State","_id","STATE_SHOT",'text']]
-            links0 =df1.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name','text':'text'}).to_dict('r')
-    else:
-        us_state_shot = {
-           'Santa Barbara':'us-ca-083',
-        'Ventura':'us-ca-111',
-        'San Bernardino':'us-ca-071',
-        'Yuba':'us-ca-115',
-        'Sutter':'us-ca-101',
-        'Kings':'us-ca-031',
-        'Monterey':'us-ca-053',
-        'Nevada':'us-ca-057',
-        'Orange':'us-ca-059',
-        'Riverside':'us-ca-065',
-        'San Diego':'us-ca-073',
-        'Marin':'us-ca-041',
-        'San Francisco':'us-ca-075',
-        'Solano':'us-ca-095',
-        'Sonoma':'us-ca-097',
-        'Napa':'us-ca-055',
-        'Contra Costa':'us-ca-013',
-        'Calaveras':'us-ca-009',
-        'San Joaquin':'us-ca-077',
-        'Lassen':'us-ca-035',
-        'Sierra':'us-ca-091',
-        'Sacramento':'us-ca-067',
-        'El Dorado':'us-ca-017',
-        'Stanislaus':'us-ca-099',
-        'Placer':'us-ca-061',
-        'Mariposa':'us-ca-043',
-        'Plumas':'us-ca-063',
-        'Modoc':'us-ca-049',
-        'Shasta':'us-ca-089',
-        'Tuolumne':'us-ca-109',
-        'Madera':'us-ca-039',
-        'Alpine':'us-ca-003',
-        'San Benito':'us-ca-069',
-        'Merced':'us-ca-047',
-        'San Luis Obispo':'us-ca-079',
-        'Colusa':'us-ca-011',
-        'Butte':'us-ca-007',
-        'San Mateo':'us-ca-081',
-        'Santa Cruz':'us-ca-087',
-        'Santa Clara':'us-ca-085',
-        'Kern':'us-ca-029',
-        'Amador':'us-ca-005',
-        'Yolo':'us-ca-113',
-        'Lake':'us-ca-033',
-        'Mendocino':'us-ca-045',
-        'Tehama':'us-ca-103',
-        'Humboldt':'us-ca-023',
-        'Siskiyou':'us-ca-093',
-        'Inyo':'us-ca-027',
-        'Alameda':'us-ca-001',
-        'Los Angeles':'us-ca-037',
-        'Imperial':'us-ca-025',
-        'Glenn':'us-ca-021',
-        'Tulare':'us-ca-107',
-        'Fresno':'us-ca-019',
-        'Del Norte':'us-ca-015',
-        'Trinity':'us-ca-105',
-        'Mono':'us-ca-051',
+# @app.route('/rtlausdmapcount')
+# def realtimelausdmaprcount():
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.audio_track_master
+#     query4=[{"$match":{
+#              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#               {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+#               {'USER_ID.schoolId.STATE':"California"},
+#               {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#               {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+#               {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+#               {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=60)}}
+#               ]}},
+#            {'$group':
+#            {'_id':'$USER_ID._id',
+#                'State':{'$first':'$USER_ID.schoolId.CITY'},
+#                'Country':{'$first':'$USER_ID.schoolId.COUNTRY'}
+#                }}
+#            ]
+#     realtime=list(collection.aggregate(query4))
+#     realtimeuserpractising=pd.DataFrame(realtime)
+#     if realtimeuserpractising.empty:
+#         df = pd.DataFrame(columns=['State', 'STATE_SHOT','text','_id'])
+#         for i in range(1):
+#             df.loc[i] = ['none'] +['none'] +['NO USER PRACTICING RIGHT NOW']+ [0]
+#             df1=df[["State","_id","STATE_SHOT",'text']]
+#             links0 =df1.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name','text':'text'}).to_dict('r')
+#     else:
+#         us_state_shot = {
+#            'Santa Barbara':'us-ca-083',
+#         'Ventura':'us-ca-111',
+#         'San Bernardino':'us-ca-071',
+#         'Yuba':'us-ca-115',
+#         'Sutter':'us-ca-101',
+#         'Kings':'us-ca-031',
+#         'Monterey':'us-ca-053',
+#         'Nevada':'us-ca-057',
+#         'Orange':'us-ca-059',
+#         'Riverside':'us-ca-065',
+#         'San Diego':'us-ca-073',
+#         'Marin':'us-ca-041',
+#         'San Francisco':'us-ca-075',
+#         'Solano':'us-ca-095',
+#         'Sonoma':'us-ca-097',
+#         'Napa':'us-ca-055',
+#         'Contra Costa':'us-ca-013',
+#         'Calaveras':'us-ca-009',
+#         'San Joaquin':'us-ca-077',
+#         'Lassen':'us-ca-035',
+#         'Sierra':'us-ca-091',
+#         'Sacramento':'us-ca-067',
+#         'El Dorado':'us-ca-017',
+#         'Stanislaus':'us-ca-099',
+#         'Placer':'us-ca-061',
+#         'Mariposa':'us-ca-043',
+#         'Plumas':'us-ca-063',
+#         'Modoc':'us-ca-049',
+#         'Shasta':'us-ca-089',
+#         'Tuolumne':'us-ca-109',
+#         'Madera':'us-ca-039',
+#         'Alpine':'us-ca-003',
+#         'San Benito':'us-ca-069',
+#         'Merced':'us-ca-047',
+#         'San Luis Obispo':'us-ca-079',
+#         'Colusa':'us-ca-011',
+#         'Butte':'us-ca-007',
+#         'San Mateo':'us-ca-081',
+#         'Santa Cruz':'us-ca-087',
+#         'Santa Clara':'us-ca-085',
+#         'Kern':'us-ca-029',
+#         'Amador':'us-ca-005',
+#         'Yolo':'us-ca-113',
+#         'Lake':'us-ca-033',
+#         'Mendocino':'us-ca-045',
+#         'Tehama':'us-ca-103',
+#         'Humboldt':'us-ca-023',
+#         'Siskiyou':'us-ca-093',
+#         'Inyo':'us-ca-027',
+#         'Alameda':'us-ca-001',
+#         'Los Angeles':'us-ca-037',
+#         'Imperial':'us-ca-025',
+#         'Glenn':'us-ca-021',
+#         'Tulare':'us-ca-107',
+#         'Fresno':'us-ca-019',
+#         'Del Norte':'us-ca-015',
+#         'Trinity':'us-ca-105',
+#         'Mono':'us-ca-051',
 
-        }
-        realtimeuserpractising["STATE_SHOT"] = realtimeuserpractising["State"].map(us_state_shot) 
-        df1=realtimeuserpractising.groupby(["State","STATE_SHOT"]).count().reset_index()
-        df2=df1[["State","_id","STATE_SHOT"]]
-        links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name'}).to_dict('r')
-    return json.dumps(links0)
+#         }
+#         realtimeuserpractising["STATE_SHOT"] = realtimeuserpractising["State"].map(us_state_shot) 
+#         df1=realtimeuserpractising.groupby(["State","STATE_SHOT"]).count().reset_index()
+#         df2=df1[["State","_id","STATE_SHOT"]]
+#         links0 =df2.rename(columns={'STATE_SHOT' : 'code', '_id' : 'z','State':'name'}).to_dict('r')
+#     return json.dumps(links0)
 
 @app.route('/audiowisetrend')
 def audiowise_trend():
