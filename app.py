@@ -167,123 +167,178 @@ def new(gt,lt):
     return json.dumps(temp)
 
 
-@app.route('/tuneinspider/<district>')   
-def tunein_spider(district):
+@app.route('/yearlymicrodistrict/<start>/<end>')   
+def tunein_spider(start,end):
+     dateStr1 = ""+start+"T00:00:00.000Z"
+    myDatetime1 = dateutil.parser.parse(dateStr1)
+    dateStr2 = ""+end+"T00:00:00.000Z"
+    myDatetime2 = dateutil.parser.parse(dateStr2)
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
+    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
     db=client.compass
-    dfti = DataFrame(list(db.tune_in_master.aggregate([
-       {"$match":{
-                 '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                          {"USER_ID.DISTRICT_ID._id":ObjectId(""+district+"")},
-                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
 
-                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
-                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}}
-                  ]}}
+    collection1 = db.school_master.aggregate([
+        {"$match":
+        {"$and":[
+    {'CATEGORY':{"$in":['Belleville School District',
+                        'Adams 12 Five Star Schools',
+    'Adams County School District 14',
+    'Apple Valley Unified School District',
+    'Aurora Public Schools',
+    'Berkeley Public Schools',
+    'Bishop Unified School District',
+    'Bismarck Public Schools',
+    'Boston Public Schools',
+    'Canyons School District',
+    'Chicago Public Schools',
+    'Colton Joint Unified School District',
+    'Dennis-Yarmouth Regional School District',
+    'Denver Public Schools',
+    'Durham Public Schools',
+    'FITCHBURG PUBLIC SCHOOLS',
+    'Fairfax County Public Schools',
+    'Falmouth Public Schools',
+    'Glenbard District 87',
+    'Granite School District',
+    'Greenburgh North Castle Union Free School District',
+    'Hartford Public Schools',
+    'Helena Public Schools',
+    'HidalgoIndependent School district',
+    'Hopedale Public Schools',
+    'Houston Independent School District',
+    'KIPP Public Schools',
+    'Kearsarge Regional School District',
+    'Lamar Consolidated Independent School District',
+    'Lincolnshire Schools',
+    'Littleton Public Schools',
+    'Middleton-Cross Plains Area School District',
+    'Mill Valley School District',
+    'Millard School District',
+    'Muscatine Community School District',
+    'Northside Independent School District',
+    'Paterson School District',
+    'Rich School District',
+    'San Francisco Unified School District',
+    'San Marcos Unified School District',
+    'San Marino Unified School District',
+    'School District of Palm Beach County',
+    'School District of the Chathams',
+    'Sevier School District',
+    'South Summit School District',
+    'Sudbury Public Schools',
+    'Tooele County School District',
+    'Washoe County School District',
+    'West Contra Costa Unified School District',
+    'Westford Public Schools',
+    'White River School District',
+    'Upland Unified School District',
+    'Ann Arbor Public Schools',
+    'Manatee County School District',
+    'Wasatch County School District',
+    'Fulton County School System',
+    'Miami-Dade County Public Schools',
+    'San Jose Unified School District',
+    'Boulder Valley School District',
+    'Griffin-Spalding County School System',
+    'Austin Independent School District',
+    ]}}]}},
+    {"$project":{"ID":"$_id","school_name":"$NAME","district_name":"$CATEGORY"}}
 
-                      ,{'$project':{
-                          '_id':1,
-                          'IS_OPTED_OUT':1,
-                          'EMAIL':1,
-                          'CREATED_DATE':1,
-                          'Teacher':'$USER_ID.EMAIL_ID',
-                          'school':'$USER_ID.schoolId.NAME',
-                          'USER_ID':"$USER_ID._id",
-                          'ID':"$USER_ID.schoolId._id",
-                          'STATE':"$USER_ID.schoolId.STATE"
-                          }
-                          }
-        ]))).fillna("NO INFO")
-    email_id=dfti["EMAIL"].tolist()
-    dfatd = DataFrame(list(db.tune_in_audio_track_detail.aggregate([
-       {"$match":{
-                 '$and':[
-                         { 'INVITEE_EMAIL':{"$in": email_id}},
-                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
-                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                      {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                     {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+    ])
+    df67= DataFrame(list(collection1)).fillna(0)
+    school_list=df67["ID"].tolist()
+    collection = db.user_master.aggregate([
+    {"$match":
+        {"$and":[
+        {"schoolId._id":{"$in":school_list}},
+             {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":
+    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}},
+    {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","STATE":"$schoolId.STATE","USER_NAME":"$USER_NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME"}}
 
+    ])
+    df1= DataFrame(list(collection)).fillna(0)
+    collection2 = db.user_master.aggregate([
+    {"$match":
+        {"$and":[
+        {"schoolId._id":{"$in":school_list}},
+            {'IS_DISABLED':{"$ne":'Y'}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+             {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+        {"$match":{"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}},
+    {"$project":{"USER_IDf":"$_id","ID":"$schoolId._id"}}
 
-                      ]}},
-                  {'$group':{
-                      '_id': "$INVITEE_EMAIL" , 
-                      'Practice_Count':{'$sum':1}
-                      }},
+    ])
+    df12= DataFrame(list(collection2)).fillna(0)
+    user_list=df1["USER_ID"].tolist()
 
-                      {'$project':{
-                          '_id':0,
-                          'EMAIL':'$_id',
-                          'practice_count1':'$Practice_Count'}
-                          }
-                          ]))).fillna(0)
-    dfti["TUNE_ID"]="TUNE IN SPIDER"
-    dfdb=pd.merge(dfti, dfatd, on='EMAIL',how='left').fillna(0)
-    dfdb['practice_count12']=0
-    tune=dfdb[["TUNE_ID",'practice_count1']]
-    tune1=tune.groupby(['TUNE_ID'])['practice_count1'].sum().reset_index()
-    links0 = tune1.rename(columns={'TUNE_ID' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
-    school=dfdb[['school','practice_count1','ID']]
-    school1=school.groupby(['ID','school'])['practice_count1'].sum().reset_index()
-    school2=school1[['school','practice_count1']]
-    links1 = school2.rename(columns={'school' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
-    teacher=dfdb[['Teacher','practice_count12']]
-    teacher1=teacher.groupby(['Teacher'])['practice_count12'].sum().reset_index()
-    teacher2=dfdb[['Teacher','practice_count12']]
-    links2 = teacher2.rename(columns={'Teacher' : 'name', 'practice_count12' : 'Practice Count'}).to_dict('r')
-    parent=dfdb[['EMAIL','practice_count1']]
-    links3 = parent.rename(columns={'EMAIL' : 'name', 'practice_count1' : 'Practice Count'}).to_dict('r')
-    links0.extend(links1)
-    links0.extend(links2)
-    links0.extend(links3)
-    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "Y") , 'hex'] = '#EC3D09' #Y
-    dfdb.loc[(dfdb['IS_OPTED_OUT'] == "N") , 'hex'] = '#05D324' #N
-    dfcolor=dfdb[['EMAIL','hex']]
-    linkcolor = dfcolor.rename(columns={'EMAIL' : 'name', 'hex' : 'hex'}).to_dict('r')
-    teacherst=dfdb[['school','Teacher']]
-    teacherst1 = teacherst.drop_duplicates(subset='Teacher', keep="first")
-    links4 = teacherst1.rename(columns={'school' : 'source', 'Teacher' : 'target'}).to_dict('r')
-    schoolst=dfdb[['TUNE_ID','school','ID']]
-    schoolst1 = schoolst.drop_duplicates(subset='ID', keep="first")
-    schoolst2=schoolst1[['TUNE_ID','school']]
-    links5 = schoolst2.rename(columns={'TUNE_ID' : 'source', 'school' : 'target'}).to_dict('r')
-    parentst=dfdb[['Teacher','EMAIL']]
-    links6 = parentst.rename(columns={'Teacher' : 'source', 'EMAIL' : 'target'}).to_dict('r')
-    results = []
-    for n in links4:
-        for m in links5:
-            if m['target']==n['source']:
-                results.append(m)
-    res_list = [i for n, i in enumerate(results) if i not in results[n + 1:]] 
-    for n in links4:
-        for m in res_list:
-            if m['target']==n['source']:
-                res_list.append(n)
-    res_list.extend(links6)
-    res_list1 = [i for n, i in enumerate(res_list) if i not in res_list[n + 1:]] 
-#     for n in links6:
-#         for m in res_list:
-#             if m['target']==n['source']:
-#                 res_list.append(n)
-#     res_list.extend(links6)
-    temp={"nodes":links0,"links":res_list1,"attributes":linkcolor}
+    collection3d = db.audio_track_master
+    query6d=[{"$match":{
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'test','$options':'i'}}},
+              {'MODIFIED_DATE':{'$gte':myDatetime1,"$lte":myDatetime2}}       
+              ]}},
+              {'$group':{
+                  '_id':'$USER_ID.schoolId._id',
+                  'Last_Prac_Date':{'$max':'$MODIFIED_DATE'},
+                  'Active_User':{'$addToSet':'$USER_ID._id'},
+                  'Practice_Sessions':{'$sum':1},
+                  'Mindful_Minutes':{'$sum':{'$round':
+                      [{'$divide':[{'$subtract':
+                          ['$CURSOR_END','$cursorStart']},60]},0]}}  
+                  }},
+             {'$project':{'_id':0,
+                 'SCHOOL_ID':'$_id',
+                 'Active_User':{'$size':'$Active_User'},
+                 'Last_Practice_Date':'$Last_Prac_Date',
+                 'Practice_Sessions':'$Practice_Sessions',
+                 'Mindful_Minutes':'$Mindful_Minutes'
+                 }
+                 }]
+    school_prac_active_csy=list(collection3d.aggregate(query6d))
+    school_prac_active_csy_df=pd.DataFrame(school_prac_active_csy)
+
+    df34= pd.merge(school_prac_active_csy_df, df67,left_on='SCHOOL_ID', right_on='ID', how='right').fillna(0)
+
+    df34=df34.groupby(["district_name"])["Active_User","Practice_Sessions","Mindful_Minutes"].sum().reset_index()
+
+    final2 = pd.merge(df1, df67, on="ID", how='right').fillna(0)
+
+    final23 = pd.merge(df12, df67, on="ID", how='right').fillna(0)
+
+    df243=final23.groupby(["district_name"])["USER_IDf"].count().reset_index()
+
+    df2=final2.groupby(["district_name_y","school_name_y"])["USER_ID"].count().reset_index()
+
+    df3=df2.groupby('district_name_y').agg({'school_name_y':'count', 'USER_ID': 'sum'}).reset_index()
+
+    final345 = pd.merge(df3, df243,left_on='district_name_y', right_on='district_name', how='left').fillna(0)
+
+    final_to_final=final345[["district_name_y","school_name_y","USER_ID","USER_IDf"]]
+
+    final_to_final.columns=["DISTRICT_NAME","SCHOOL_COUNT","USER_COUNT","PARENT"]
+    final24524 = pd.merge(final_to_final, df34,left_on='DISTRICT_NAME', right_on='district_name', how='left').fillna(0)
+    finalSTATE=final2[["district_name_y","STATE","USER_ID"]]
+    finalstate=finalSTATE.groupby(["district_name_y","STATE"])["USER_ID"].count().reset_index()
+    finall = pd.merge(final24524, finalstate,left_on='DISTRICT_NAME', right_on='district_name_y', how='right').fillna(0)
+    finallL=finall[["DISTRICT_NAME","SCHOOL_COUNT","USER_COUNT","PARENT","Active_User","Practice_Sessions","Mindful_Minutes","STATE"]]
+    finallL.columns=["DISTRICT NAME","SCHOOL COUNT","USER COUNT","PARENT COUNT","ACTIVE USERS","PRACTICE SESSIONS","MINDFUL MINUTES","STATE"]
+    temp=finallL.to_dict("records")
     return(json.dumps(temp))
 
 @app.route('/mongospider2/<district>')   
