@@ -2513,7 +2513,7 @@ def tunein_spider(start,end):
 #     return(json.dumps(temp))
 @app.route('/predict/<select_league>/<ht>/<at>', methods=['GET'])
 def PredictScore(select_league,ht,at,):
-    folder=select_league+'/'
+    folder='datasets/'+select_league+'/'
     raw_data_1 = pd.read_csv(folder +'season-0809.csv')
     raw_data_2 = pd.read_csv(folder +'season-0910.csv')
     raw_data_3 = pd.read_csv(folder +'season-1011.csv')
@@ -2528,7 +2528,7 @@ def PredictScore(select_league,ht,at,):
     raw_data_12 = pd.read_csv(folder +'season-1920.csv')
     raw_data_13 = pd.read_csv(folder +'season-2021.csv')
     raw_data_14 = pd.read_csv(folder +'season-2122.csv')
-    os.chdir(select_league+'/')
+    os.chdir('datasets/'+select_league+'/')
     extension = 'csv'
     all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
     #combine all files in the list
