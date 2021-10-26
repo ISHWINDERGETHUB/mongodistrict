@@ -2528,7 +2528,7 @@ def PredictScore(select_league,ht,at,):
     raw_data_12 = pd.read_csv(folder +'season-1920.csv')
     raw_data_13 = pd.read_csv(folder +'season-2021.csv')
     raw_data_14 = pd.read_csv(folder +'season-2122.csv')
-    os.chdir('/datasets/'+select_league+'/')
+    os.chdir('datasets/'+select_league+'/')
     extension = 'csv'
     all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
     #combine all files in the list
