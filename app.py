@@ -2513,7 +2513,7 @@ def tunein_spider(start,end):
 #     return(json.dumps(temp))
 @app.route('/predict/<select_league>/<ht>/<at>', methods=['GET'])
 def PredictScore(select_league,ht,at,):
-    folder='/datasets/'+select_league+'/'
+    folder='datasets/'+select_league+'/'
     raw_data_1 = pd.read_csv(folder +'season-0809.csv')
     raw_data_2 = pd.read_csv(folder +'season-0910.csv')
     raw_data_3 = pd.read_csv(folder +'season-1011.csv')
