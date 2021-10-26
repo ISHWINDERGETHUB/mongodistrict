@@ -17,7 +17,7 @@ pymongo ="*"
 urllib3 ="*"
 bson ="*"
 plotly ="*"
-glob="*"
+glob2="*"
 scipy="*"
 
 [dev-packages]
