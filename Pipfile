@@ -20,7 +20,6 @@ plotly ="*"
 glob2="*"
 scipy="*"
 selenium="*"
-os="*"
 
 [dev-packages]
 
