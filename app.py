@@ -2519,11 +2519,14 @@ def averagecompletion():
     import time
     import os
      
-#     chrome_options = webdriver.ChromeOptions()
-#     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 #     chrome_options.add_argument("--headless")
 #     chrome_options.add_argument("--disable-dev-shm-usage")
 #     chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
             
      ## Opening LinkedIn Account ###
     #request user input for LinkedIn credentials
@@ -2541,8 +2544,8 @@ def averagecompletion():
 #     print("Please enter your password: ")
 #     password_string = str(input())     
 
-#     browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-    browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
+    browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+#     browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
 
 
 
