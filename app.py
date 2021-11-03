@@ -2518,15 +2518,15 @@ def averagecompletion():
     from selenium import webdriver
     import time
     import os
+     
 
     CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
-    
+    GOOGLE_CHROME_BIN = "/app/.apt/usr/bin/google-chrome"
     chrome_options = webdriver.ChromeOptions()
-    
-    chrome_options.binary_location = '.apt/usr/bin/google-chrome-stable'
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('headless')
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
     
 
     ### Opening LinkedIn Account ###
@@ -2539,7 +2539,7 @@ def averagecompletion():
     password_string = "ishwinderp7777"
 
     #create browser-specific web navigation simulator (chrome)
-    browser =  webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+    browser =  webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     #open LinkedIn and log in with given details
     browser.get('https://www.linkedin.com/login')
