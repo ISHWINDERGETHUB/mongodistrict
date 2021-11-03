@@ -2524,16 +2524,18 @@ def averagecompletion():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
-    browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-
- ### Opening LinkedIn Account ###
+            
+     ### Opening LinkedIn Account ###
     #request user input for LinkedIn credentials
-    print("Please enter your email address: ")
+#     print("Please enter your email address: ")
 #     username_string = str(input())
     username_string ="ishwinder.singh2642@gmail.com"
-    print("Please enter your password: ")
+#     print("Please enter your password: ")
 #     password_string = str(input())
     password_string = "ishwinderp7777"
+    browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
+
 
     #open LinkedIn and log in with given details
     browser.get('https://www.linkedin.com/login')
@@ -2545,7 +2547,7 @@ def averagecompletion():
 
     #navigate to recent activity page
     browser.get('https://www.linkedin.com/in/')
-    print(browser.current_url)
+#     print(browser.current_url)
 
     link=['https://www.linkedin.com/in/ACwAAAAGHEIBNFLJCsTrRO5MRNJq_XJQmG6SY6k','https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHJtTBf4AydSwAAAXzkFUJ4nGTeCV5A-RVnHs_lfIC0JQ-sxkT3R1_c-BKgjB4rpNRQJ47BCeKfIjJTZ31Udsmm7TQ8Kfquy9GNierR28L845VX__1OEENEkjzNl89q6-G5YUE=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fcaroline-jhon-20900a1a1%2F',
          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHXN7pw7hSkawAAAXzkH7JYw3hdHG9WVVYjvqMbN7L0vixIA9HYMusokk0NA7zozly-7ek1rZOBv06-6Qz-UcrBSHBxYhr_QxAOQUVGCL175LAyQldNgkjhc92iTXoXoscVyv0=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-sharma-830072200%2F',
@@ -2553,6 +2555,7 @@ def averagecompletion():
          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHMrhOwL2p_fwAAAXzkIVg4dF8KnoKR4mwFyUKgNIYmBZsitktzF0jZliBIeHjN2BvkaY9aY9G_AwepH0hAtNiSq69R7j_lwVsBR4rekeLWKE-g45aNBRH4GIL2ro13IcBIDZ4=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fhelan-precilla-129854172%2F']
     for i in link: 
         browser.get(""+i+"")
+        print(browser.current_url)
         return (browser.current_url)
 
 
