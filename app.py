@@ -2514,7 +2514,6 @@ def tunein_spider(start,end):
 
 @app.route('/profileurl')
 def averagecompletion():
-    from bs4 import BeautifulSoup
     import pandas as pd
     from selenium import webdriver
     import time
