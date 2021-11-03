@@ -2532,9 +2532,11 @@ def averagecompletion():
     ### Opening LinkedIn Account ###
     #request user input for LinkedIn credentials
     print("Please enter your email address: ")
-    username_string = str(input())
+#     username_string = str(input())
+    username_string ="ishwinder.singh2642@gmail.com"
     print("Please enter your password: ")
-    password_string = str(input())
+#     password_string = str(input())
+    password_string = "ishwinderp7777"
 
     #create browser-specific web navigation simulator (chrome)
     browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
