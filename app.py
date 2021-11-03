@@ -2546,7 +2546,7 @@ def averagecompletion():
 
 
     #open LinkedIn and log in with given details
-    browser.get('https://www.linkedin.com/login')
+    browser.get('https://www.linkedin.com/uas/login')
     elementID = browser.find_element_by_id('username')
     elementID.send_keys(username_string)
     elementID = browser.find_element_by_id('password')
