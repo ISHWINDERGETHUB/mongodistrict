@@ -2514,20 +2514,21 @@ def tunein_spider(start,end):
 
 @app.route('/profileurl')
 def averagecompletion():
+    from bs4 import BeautifulSoup
+    import pandas as pd
     from selenium import webdriver
-    from selenium.common.exceptions import NoSuchElementException, WebDriverException
-    from selenium.webdriver.chrome.options import Options
+    import time
     import os
 
-    CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
-    GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
-
-
-    options = Options()
-    options.binary_location = GOOGLE_CHROME_BIN
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    options.headless = True
+    CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
+    
+    chrome_options = webdriver.ChromeOptions()
+    
+    chrome_options.binary_location = '.apt/usr/bin/google-chrome-stable'
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('headless')
+    
 
     ### Opening LinkedIn Account ###
     #request user input for LinkedIn credentials
@@ -2539,7 +2540,7 @@ def averagecompletion():
     password_string = "ishwinderp7777"
 
     #create browser-specific web navigation simulator (chrome)
-    browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
+    browser =  webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 
     #open LinkedIn and log in with given details
     browser.get('https://www.linkedin.com/login')
