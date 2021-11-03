@@ -2511,6 +2511,55 @@ def tunein_spider(start,end):
 #         data.append([i,j])
 #     temp={'data':data}
 #     return(json.dumps(temp))
+
+@app.route('/profileurl')
+def averagecompletion():
+    from selenium import webdriver
+    from selenium.common.exceptions import NoSuchElementException, WebDriverException
+    from selenium.webdriver.chrome.options import Options
+    import os
+
+    CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+    GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN', '/usr/bin/google-chrome')
+
+
+    options = Options()
+    options.binary_location = GOOGLE_CHROME_BIN
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+    options.headless = True
+
+    ### Opening LinkedIn Account ###
+    #request user input for LinkedIn credentials
+    print("Please enter your email address: ")
+    username_string = str(input())
+    print("Please enter your password: ")
+    password_string = str(input())
+
+    #create browser-specific web navigation simulator (chrome)
+    browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH , chrome_options=options)
+
+    #open LinkedIn and log in with given details
+    browser.get('https://www.linkedin.com/login')
+    elementID = browser.find_element_by_id('username')
+    elementID.send_keys(username_string)
+    elementID = browser.find_element_by_id('password')
+    elementID.send_keys(password_string)
+    elementID.submit()
+
+    #navigate to recent activity page
+    browser.get('https://www.linkedin.com/in/')
+    print(browser.current_url)
+
+    link=['https://www.linkedin.com/in/ACwAAAAGHEIBNFLJCsTrRO5MRNJq_XJQmG6SY6k','https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHJtTBf4AydSwAAAXzkFUJ4nGTeCV5A-RVnHs_lfIC0JQ-sxkT3R1_c-BKgjB4rpNRQJ47BCeKfIjJTZ31Udsmm7TQ8Kfquy9GNierR28L845VX__1OEENEkjzNl89q6-G5YUE=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fcaroline-jhon-20900a1a1%2F',
+         'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHXN7pw7hSkawAAAXzkH7JYw3hdHG9WVVYjvqMbN7L0vixIA9HYMusokk0NA7zozly-7ek1rZOBv06-6Qz-UcrBSHBxYhr_QxAOQUVGCL175LAyQldNgkjhc92iTXoXoscVyv0=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-sharma-830072200%2F',
+         'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQF9sZxmzaRelgAAAXzkIN8giodGLIA366kCc8dhB4T0tWbh_N6MiqGxafQX6PqJ9zZ6KGNVkFGBrjiFtQ1oG39AEPFddrQ1q17A1eVQGj4cHUB0Ddd5SLXL3wXsaoOjOulQyHo=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-leo-7b95a0117%2F',
+         'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHMrhOwL2p_fwAAAXzkIVg4dF8KnoKR4mwFyUKgNIYmBZsitktzF0jZliBIeHjN2BvkaY9aY9G_AwepH0hAtNiSq69R7j_lwVsBR4rekeLWKE-g45aNBRH4GIL2ro13IcBIDZ4=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fhelan-precilla-129854172%2F']
+    for i in link: 
+        browser.get(""+i+"")
+        return (browser.current_url)
+
+
 @app.route('/predict/<select_league>/<ht>/<at>', methods=['GET'])
 def PredictScore(select_league,ht,at,):
     folder='datasets/'+select_league+'/'
