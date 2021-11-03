@@ -2526,13 +2526,21 @@ def averagecompletion():
     chrome_options.add_argument("--no-sandbox")
             
      ### Opening LinkedIn Account ###
+#     #request user input for LinkedIn credentials
+# #     print("Please enter your email address: ")
+# #     username_string = str(input())
+#     username_string ="ishwinder.singh2642@gmail.com"
+# #     print("Please enter your password: ")
+# #     password_string = str(input())
+#     password_string = "ishwinderp7777"
+            
+    ### Opening LinkedIn Account ###
     #request user input for LinkedIn credentials
-#     print("Please enter your email address: ")
-#     username_string = str(input())
-    username_string ="ishwinder.singh2642@gmail.com"
-#     print("Please enter your password: ")
-#     password_string = str(input())
-    password_string = "ishwinderp7777"
+    print("Please enter your email address: ")
+    username_string = str(input())
+    print("Please enter your password: ")
+    password_string = str(input())     
+
     browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 
@@ -2543,6 +2551,13 @@ def averagecompletion():
     elementID.send_keys(username_string)
     elementID = browser.find_element_by_id('password')
     elementID.send_keys(password_string)
+    elementID.submit()
+    
+
+    print("Please enter your pin: ")
+    pin_string = str(input()) 
+    elementID = browser.find_element_by_id('pin')
+    elementID.send_keys(pin_string)
     elementID.submit()
 
     #navigate to recent activity page
