@@ -2512,70 +2512,70 @@ def averagecompletion():
     temp={'data':data}
     return(json.dumps(temp))
 
-@app.route('/profileurl')
-def averagecompletion():
-    import pandas as pd
-    from selenium import webdriver
-    import time
-    import os
+# @app.route('/profileurl')
+# def averagecompletion():
+#     import pandas as pd
+#     from selenium import webdriver
+#     import time
+#     import os
      
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-#     chrome_options.add_argument("--headless")
-#     chrome_options.add_argument("--disable-dev-shm-usage")
-#     chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
+#     chrome_options = webdriver.ChromeOptions()
+#     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+# #     chrome_options.add_argument("--headless")
+# #     chrome_options.add_argument("--disable-dev-shm-usage")
+# #     chrome_options.add_argument("--no-sandbox")
+#     chrome_options.add_argument('--no-sandbox')
+#     chrome_options.add_argument('--headless')
+#     chrome_options.add_argument('--disable-gpu')
             
-     ## Opening LinkedIn Account ###
-    #request user input for LinkedIn credentials
-#     print("Please enter your email address: ")
-#     username_string = str(input())
-    username_string ="ishwinder.singh2642@gmail.com"
-#     print("Please enter your password: ")
-#     password_string = str(input())
-    password_string = "ishwinderp7777"
-            
-#     ### Opening LinkedIn Account ###
+#      ## Opening LinkedIn Account ###
 #     #request user input for LinkedIn credentials
-#     print("Please enter your email address: ")
-#     username_string = str(input())
-#     print("Please enter your password: ")
-#     password_string = str(input())     
+# #     print("Please enter your email address: ")
+# #     username_string = str(input())
+#     username_string ="ishwinder.singh2642@gmail.com"
+# #     print("Please enter your password: ")
+# #     password_string = str(input())
+#     password_string = "ishwinderp7777"
+            
+# #     ### Opening LinkedIn Account ###
+# #     #request user input for LinkedIn credentials
+# #     print("Please enter your email address: ")
+# #     username_string = str(input())
+# #     print("Please enter your password: ")
+# #     password_string = str(input())     
 
-    browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-#     browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
+#     browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+# #     browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
 
 
 
-    #open LinkedIn and log in with given details
-    browser.get('https://www.linkedin.com/uas/login')
-    elementID = browser.find_element_by_id('username')
-    elementID.send_keys(username_string)
-    elementID = browser.find_element_by_id('password')
-    elementID.send_keys(password_string)
-    elementID.submit()
+#     #open LinkedIn and log in with given details
+#     browser.get('https://www.linkedin.com/uas/login')
+#     elementID = browser.find_element_by_id('username')
+#     elementID.send_keys(username_string)
+#     elementID = browser.find_element_by_id('password')
+#     elementID.send_keys(password_string)
+#     elementID.submit()
     
 
-#     print("Please enter your pin: ")
-#     pin_string = str(input()) 
-#     elementID = browser.find_element_by_id('pin')
-#     elementID.send_keys(pin_string)
-#     elementID.submit()
+# #     print("Please enter your pin: ")
+# #     pin_string = str(input()) 
+# #     elementID = browser.find_element_by_id('pin')
+# #     elementID.send_keys(pin_string)
+# #     elementID.submit()
 
-    #navigate to recent activity page
-    browser.get('https://www.linkedin.com/in/')
-#     print(browser.current_url)
+#     #navigate to recent activity page
+#     browser.get('https://www.linkedin.com/in/')
+# #     print(browser.current_url)
 
-    link=['https://www.linkedin.com/in/ACwAAAAGHEIBNFLJCsTrRO5MRNJq_XJQmG6SY6k','https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHJtTBf4AydSwAAAXzkFUJ4nGTeCV5A-RVnHs_lfIC0JQ-sxkT3R1_c-BKgjB4rpNRQJ47BCeKfIjJTZ31Udsmm7TQ8Kfquy9GNierR28L845VX__1OEENEkjzNl89q6-G5YUE=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fcaroline-jhon-20900a1a1%2F',
-         'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHXN7pw7hSkawAAAXzkH7JYw3hdHG9WVVYjvqMbN7L0vixIA9HYMusokk0NA7zozly-7ek1rZOBv06-6Qz-UcrBSHBxYhr_QxAOQUVGCL175LAyQldNgkjhc92iTXoXoscVyv0=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-sharma-830072200%2F',
-         'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQF9sZxmzaRelgAAAXzkIN8giodGLIA366kCc8dhB4T0tWbh_N6MiqGxafQX6PqJ9zZ6KGNVkFGBrjiFtQ1oG39AEPFddrQ1q17A1eVQGj4cHUB0Ddd5SLXL3wXsaoOjOulQyHo=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-leo-7b95a0117%2F',
-         'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHMrhOwL2p_fwAAAXzkIVg4dF8KnoKR4mwFyUKgNIYmBZsitktzF0jZliBIeHjN2BvkaY9aY9G_AwepH0hAtNiSq69R7j_lwVsBR4rekeLWKE-g45aNBRH4GIL2ro13IcBIDZ4=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fhelan-precilla-129854172%2F']
-    for i in link: 
-        browser.get(""+i+"")
-        print(browser.current_url)
-        return (browser.current_url)
+#     link=['https://www.linkedin.com/in/ACwAAAAGHEIBNFLJCsTrRO5MRNJq_XJQmG6SY6k','https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHJtTBf4AydSwAAAXzkFUJ4nGTeCV5A-RVnHs_lfIC0JQ-sxkT3R1_c-BKgjB4rpNRQJ47BCeKfIjJTZ31Udsmm7TQ8Kfquy9GNierR28L845VX__1OEENEkjzNl89q6-G5YUE=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fcaroline-jhon-20900a1a1%2F',
+#          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHXN7pw7hSkawAAAXzkH7JYw3hdHG9WVVYjvqMbN7L0vixIA9HYMusokk0NA7zozly-7ek1rZOBv06-6Qz-UcrBSHBxYhr_QxAOQUVGCL175LAyQldNgkjhc92iTXoXoscVyv0=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-sharma-830072200%2F',
+#          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQF9sZxmzaRelgAAAXzkIN8giodGLIA366kCc8dhB4T0tWbh_N6MiqGxafQX6PqJ9zZ6KGNVkFGBrjiFtQ1oG39AEPFddrQ1q17A1eVQGj4cHUB0Ddd5SLXL3wXsaoOjOulQyHo=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fjhon-leo-7b95a0117%2F',
+#          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQHMrhOwL2p_fwAAAXzkIVg4dF8KnoKR4mwFyUKgNIYmBZsitktzF0jZliBIeHjN2BvkaY9aY9G_AwepH0hAtNiSq69R7j_lwVsBR4rekeLWKE-g45aNBRH4GIL2ro13IcBIDZ4=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fhelan-precilla-129854172%2F']
+#     for i in link: 
+#         browser.get(""+i+"")
+#         print(browser.current_url)
+#         return (browser.current_url)
 
 
 @app.route('/predict/<select_league>/<ht>/<at>', methods=['GET'])
