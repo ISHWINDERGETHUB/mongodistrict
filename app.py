@@ -2715,7 +2715,7 @@ def redtape(id):
     url = 'https://redtape.com/men/men-jackets/'+str(id)
     source_code = requests.get(url)
     plain_text = source_code.text
-    soup = BeautifulSoup(plain_text, "lxml")
+    soup = BeautifulSoup(plain_text, "html.parser")
     elems = [elem for elem in soup.findAll('a') if 'Product not found!' in str(elem.text)]
     if len(elems) == 0:
         return jsonify("jacket avilable")
