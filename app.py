@@ -12,6 +12,8 @@ import plotly.express as px
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import dateutil.parser
+from bs4 import BeautifulSoup
+import requests
 from flask import Flask,json, request, jsonify
 from flask_cors import CORS
 import os
@@ -2707,6 +2709,19 @@ def PredictScore(select_league,ht,at,):
                       }
     
     return json.dumps(temp)
+
+@app.route('/redtape/<id>')
+def redtape(id):
+    url = 'https://redtape.com/men/men-jackets/'+str(id)
+    source_code = requests.get(url)
+    plain_text = source_code.text
+    soup = BeautifulSoup(plain_text, "lxml")
+    elems = [elem for elem in soup.findAll('a') if 'Product not found!' in str(elem.text)]
+    if len(elems) == 0:
+        return jsonify("jacket avilable")
+    else:
+        return jsonify("jacket not avilable")
+    
 
 if __name__== "__main__":
      app.run()
