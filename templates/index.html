@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Disease Prediction</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="./static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="./static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  
+</head>
+
+<body>
+
+
+
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center orange-text">Disease Prediction</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Predict the disease with the symptoms
+        <br>
+        </h5>
+      </div>
+
+     
+      
+      <div class="row">
+    <form action='/search' method="post" class="col s12">
+      <div class="row">
+         <button class="add_form_field btn-large waves-effect waves-light orange"> Add New Field &nbsp; 
+        <span style="font-size:16px; font-weight:bold;">+ </span>
+      </button>
+        <div class="container1">
+        <div class="input-field col s4">
+            <label for="s1"><b>Symptom-1</b></label>
+            <br>
+          <input id="s1" name="Symptom1" placeholder="Fever"  type="text" class="validate">
+        </div>
+        <div class="input-field col s4">
+
+          <label for="s2"><b> Symptom-2</b></label>
+            <br>
+          <input id="s2" name="Symptom2" placeholder="Itching"  type="text" class="validate">
+        </div>
+
+        <div class="input-field col s4">
+            <label for="s3"><b>Symptom-3</b></label>
+            <br>
+          <input id="s3" name="Symptom3" placeholder="Dizziness" type="text" class="validate">
+        </div>
+      </div>
+
+      <div class="row center">
+          <button type="submit" class="btn-large waves-effect waves-light orange">Predict</button>
+      </div>
+    </form>
+      </div>
+    </div>
+
+      <br>
+        {{pred}}
+      <br>
+
+    </div>
+  </div>
+    <br><br>
+  </div>
+  </div>>
+
+
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="./static/js/materialize.js"></script>
+  <script src="./static/js/init.js"></script>
+  <script src="./static/js/script.js"></script>
+
+  </body>
+</html>
