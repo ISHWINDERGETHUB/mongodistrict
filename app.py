@@ -2762,15 +2762,20 @@ def search():
             data=request.form.to_dict()
             print(data)
             mylist=data.values()
-            pattern = '|'.join(mylist)
-            disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
-            prediction=' or '.join(disease)
-            return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
+            if len(mylist) == 0:
+                prediction="Empty Fields"
+                return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
+            else:
+                pattern = '|'.join(mylist)
+                disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
+                prediction=' or '.join(disease)
+                return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
         except:
-            return jsonify("No data found")
+            prediction="No Data"
+            return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
     else:
         prediction="No Data"
-        return render_template('index.html', pred="The probable diagnosis says it could be {}".format(prediction))
+        return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
     
 @app.route('/search2',methods=['POST','GET'])
 def search2():
@@ -2781,7 +2786,6 @@ def search2():
             mylist=data["Disease"]
             data=df.filter(like=mylist, axis=0)
             symptoms=data.values.tolist()[0]
-            print(symptoms)
             val = 0
             try:
                 while True:
@@ -2792,37 +2796,41 @@ def search2():
             print(prediction)
             return render_template('disease.html', pred='The probable diagnosis says it could be {}'.format(prediction))  
         except:
-            return jsonify("No data found")
+            prediction="No Data"
+            return render_template('disease.html', pred="The probable diagnosis says it could be {}".format(prediction))
     else:
         prediction="No Data"
         return render_template('disease.html', pred="The probable diagnosis says it could be {}".format(prediction))
     
 @app.route('/search3',methods=['POST','GET'])
 def search3():
-    print("mylist")
     df=pd.DataFrame.from_dict(d,orient='index').fillna(0)
     if "Disease1" in request.form.to_dict():
-        print("mylist")
         try:  
             data=request.form.to_dict()
             mylist=data.values()
-            symptoms1=df.loc[df.index.isin(mylist)]
-            original_list=symptoms1.values.tolist()
-            def common_list_of_lists(lst):
-                temp = set(lst[0]).intersection(*lst)
-                return list(temp)
-            symptoms=common_list_of_lists(original_list) 
-            val = 0
-            try:
-                while True:
-                    symptoms.remove(val)
-            except ValueError:
-                pass
-            prediction=' or '.join(symptoms)
-            print(prediction)
-            return render_template('diseasecommon.html', pred='Common symptoms are {}'.format(prediction))  
+            mylist=data.values()
+            if len(mylist) == 0:
+                prediction="Empty Fields"
+                return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
+            else:
+                symptoms1=df.loc[df.index.isin(mylist)]
+                original_list=symptoms1.values.tolist()
+                def common_list_of_lists(lst):
+                    temp = set(lst[0]).intersection(*lst)
+                    return list(temp)
+                symptoms=common_list_of_lists(original_list) 
+                val = 0
+                try:
+                    while True:
+                        symptoms.remove(val)
+                except ValueError:
+                    pass
+                prediction=' or '.join(symptoms)
+                return render_template('diseasecommon.html', pred='Common symptoms are {}'.format(prediction))  
         except:
-            return jsonify("No data found")
+            prediction="No Data"
+            return render_template('diseasecommon.html', pred="Common symptoms are {}".format(prediction))
     else:
         prediction="No Data"
         return render_template('diseasecommon.html', pred="Common symptoms are {}".format(prediction))
