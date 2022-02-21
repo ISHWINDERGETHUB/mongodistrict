@@ -2760,12 +2760,12 @@ def search():
         print("hj")
         try:
             data=request.form.to_dict()
-            print(data)
-            mylist=data.values()
-            if len(mylist) == 0:
+            print(data["Symptom1"])
+            if data["Symptom1"] == '':
                 prediction="Empty Fields"
                 return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
             else:
+                mylist=data.values()
                 pattern = '|'.join(mylist)
                 disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
                 prediction=' or '.join(disease)
@@ -2808,12 +2808,12 @@ def search3():
     if "Disease1" in request.form.to_dict():
         try:  
             data=request.form.to_dict()
-            mylist=data.values()
-            mylist=data.values()
-            if len(mylist) == 0:
+            
+            if data["Symptom1"] == '':
                 prediction="Empty Fields"
                 return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
             else:
+                mylist=data.values()
                 symptoms1=df.loc[df.index.isin(mylist)]
                 original_list=symptoms1.values.tolist()
                 def common_list_of_lists(lst):
