@@ -2765,7 +2765,7 @@ def search():
             pattern = '|'.join(mylist)
             disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
             prediction=' or '.join(disease)
-            return render_template('index.html', pred='The probable diagnosis says it could be {}'.format(prediction))  
+            return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
         except:
             return jsonify("No data found")
     else:
@@ -2799,14 +2799,19 @@ def search2():
     
 @app.route('/search3',methods=['POST','GET'])
 def search3():
+    print("mylist")
     df=pd.DataFrame.from_dict(d,orient='index').fillna(0)
-    if "Disease" in request.form.to_dict():
+    if "Disease1" in request.form.to_dict():
+        print("mylist")
         try:  
             data=request.form.to_dict()
-            mylist=data["Disease"]
-            data=df.filter(like=mylist, axis=0)
-            symptoms=data.values.tolist()[0]
-            print(symptoms)
+            mylist=data.values()
+            symptoms1=df.loc[df.index.isin(mylist)]
+            original_list=symptoms1.values.tolist()
+            def common_list_of_lists(lst):
+                temp = set(lst[0]).intersection(*lst)
+                return list(temp)
+            symptoms=common_list_of_lists(original_list) 
             val = 0
             try:
                 while True:
@@ -2815,12 +2820,12 @@ def search3():
                 pass
             prediction=' or '.join(symptoms)
             print(prediction)
-            return render_template('diseasecommon.html', pred='The probable diagnosis says it could be {}'.format(prediction))  
+            return render_template('diseasecommon.html', pred='Common symptoms are {}'.format(prediction))  
         except:
             return jsonify("No data found")
     else:
         prediction="No Data"
-        return render_template('diseasecommon.html', pred="The probable diagnosis says it could be {}".format(prediction))
+        return render_template('diseasecommon.html', pred="Common symptoms are {}".format(prediction))
     
 
 if __name__== "__main__":
