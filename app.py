@@ -2808,8 +2808,7 @@ def search3():
     if "Disease1" in request.form.to_dict():
         try:  
             data=request.form.to_dict()
-            
-            if data["Symptom1"] == '':
+            if data["Disease1"] == '':
                 prediction="Empty Fields"
                 return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
             else:
