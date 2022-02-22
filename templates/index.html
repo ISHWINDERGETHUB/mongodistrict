@@ -60,11 +60,13 @@
     </form>
       </div>
     </div>
-
-      <br>
-        {{pred}}
-      <br>
-
+      {% if 'probable' in pred %}
+      <button class="add_form_field btn-large waves-effect waves-light orange mr-2">{{pred}} &ensp;
+        {% else %}
+        {% for i in pred %}
+        <button class="add_form_field btn-large waves-effect waves-light orange mr-2" style='margin-right:16px; margin-bottom: 10px;'>{{i}} 
+  {% endfor %}
+  {% endif %}
     </div>
   </div>
     <br><br>

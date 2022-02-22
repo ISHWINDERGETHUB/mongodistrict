@@ -2768,8 +2768,8 @@ def search():
                 mylist=data.values()
                 pattern = '|'.join(mylist)
                 disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
-                prediction=' or '.join(disease)
-                return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
+                prediction=','.join(disease)
+                return render_template('index.html', pred=disease)  
         except:
             prediction="No Data"
             return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
