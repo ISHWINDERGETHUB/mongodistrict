@@ -3445,7 +3445,7 @@ def search():
             data=request.form.to_dict()
             print(data["Symptom1"])
             if data["Symptom1"] == '':
-                prediction="Empty Fields"
+                prediction="No Data"
                 return render_template('index.html', pred="{}".format(prediction))
             else:
                 mylist=[]
@@ -3501,7 +3501,7 @@ def search3():
         try:  
             data=request.form.to_dict()
             if data["Disease1"] == '':
-                prediction="Empty Fields"
+                prediction="No Data"
                 return render_template('index.html', pred="{}".format(prediction))
             else:
                 mylist=[]
