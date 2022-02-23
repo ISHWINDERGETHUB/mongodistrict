@@ -2781,10 +2781,10 @@ def search():
                 return render_template('index.html', pred=disease)  
         except:
             prediction="No Data"
-            return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
+            return render_template('index.html', pred='{}'.format(prediction))  
     else:
         prediction="No Data"
-        return render_template('index.html', pred='The probable diagnosis says symptoms are {}'.format(prediction))  
+        return render_template('index.html', pred='{}'.format(prediction))  
     
 @app.route('/search2',methods=['POST','GET'])
 def search2():
@@ -2801,15 +2801,14 @@ def search2():
                     symptoms.remove(val)
             except ValueError:
                 pass
-            prediction=','.join(symptoms)
-            print(prediction)
+            prediction=symptoms
             return render_template('disease.html', pred=prediction)  
         except:
             prediction="No Data"
-            return render_template('disease.html', pred="The probable diagnosis says it could be {}".format(prediction))
+            return render_template('disease.html', pred=" {}".format(prediction))
     else:
         prediction="No Data"
-        return render_template('disease.html', pred="The probable diagnosis says it could be {}".format(prediction))
+        return render_template('disease.html', pred="{}".format(prediction))
     
 @app.route('/search3',methods=['POST','GET'])
 def search3():
@@ -2841,10 +2840,10 @@ def search3():
                 return render_template('diseasecommon.html', pred=prediction)  
         except:
             prediction="No Data"
-            return render_template('diseasecommon.html', pred="Common symptoms are {}".format(prediction))
+            return render_template('diseasecommon.html', pred="{}".format(prediction))
     else:
         prediction="No Data"
-        return render_template('diseasecommon.html', pred="Common symptoms are {}".format(prediction))
+        return render_template('diseasecommon.html', pred="{}".format(prediction))
     
 
 if __name__== "__main__":
