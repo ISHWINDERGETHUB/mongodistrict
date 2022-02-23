@@ -2765,10 +2765,19 @@ def search():
                 prediction="Empty Fields"
                 return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
             else:
-                mylist=data.values()
-                pattern = '|'.join(mylist)
-                disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
-                prediction=','.join(disease)
+                mylist=[]
+                for i in data.values():
+                    mylist.append(i)
+                mylist=' '.join(mylist).split()
+                # pattern = '|'.join(mylist)
+                # disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
+                # prediction=','.join(disease)
+                disease=[]
+                for i,j in zip(df.values,df.index):
+                    if(all(x in i for x in mylist)):
+                        disease.append(j)
+                    else:
+                        pass
                 return render_template('index.html', pred=disease)  
         except:
             prediction="No Data"
@@ -2792,9 +2801,9 @@ def search2():
                     symptoms.remove(val)
             except ValueError:
                 pass
-            prediction=' or '.join(symptoms)
+            prediction=','.join(symptoms)
             print(prediction)
-            return render_template('disease.html', pred='The probable diagnosis says it could be {}'.format(prediction))  
+            return render_template('disease.html', pred=prediction)  
         except:
             prediction="No Data"
             return render_template('disease.html', pred="The probable diagnosis says it could be {}".format(prediction))
@@ -2812,7 +2821,10 @@ def search3():
                 prediction="Empty Fields"
                 return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
             else:
-                mylist=data.values()
+                mylist=[]
+                for i in data.values():
+                    mylist.append(i)
+                mylist=' '.join(mylist).split()
                 symptoms1=df.loc[df.index.isin(mylist)]
                 original_list=symptoms1.values.tolist()
                 def common_list_of_lists(lst):
@@ -2825,8 +2837,8 @@ def search3():
                         symptoms.remove(val)
                 except ValueError:
                     pass
-                prediction=' or '.join(symptoms)
-                return render_template('diseasecommon.html', pred='Common symptoms are {}'.format(prediction))  
+                prediction=symptoms
+                return render_template('diseasecommon.html', pred=prediction)  
         except:
             prediction="No Data"
             return render_template('diseasecommon.html', pred="Common symptoms are {}".format(prediction))
@@ -2836,4 +2848,4 @@ def search3():
     
 
 if __name__== "__main__":
-     app.run()
+     app.run(debug=True)
