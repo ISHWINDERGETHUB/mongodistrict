@@ -2763,7 +2763,7 @@ def search():
             print(data["Symptom1"])
             if data["Symptom1"] == '':
                 prediction="Empty Fields"
-                return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
+                return render_template('index.html', pred="{}".format(prediction))
             else:
                 mylist=[]
                 for i in data.values():
@@ -2819,7 +2819,7 @@ def search3():
             data=request.form.to_dict()
             if data["Disease1"] == '':
                 prediction="Empty Fields"
-                return render_template('index.html', pred="The probable diagnosis says symptoms are  {}".format(prediction))
+                return render_template('index.html', pred="{}".format(prediction))
             else:
                 mylist=[]
                 for i in data.values():
