@@ -2852,7 +2852,7 @@ d = {
       "Hyperphosphatemia",
       "Low Serum Pth"
    ],
-   "Cah (Congenital Adrenal Hyperplasia)":[
+   "Cah-Congenital Adrenal Hyperplasia":[
       "Hypoglycemia",
       "Asymptomatic",
       "Cyanosis",
@@ -2955,7 +2955,7 @@ d = {
       "Seizure",
       "Hyporeflexia"
    ],
-   "Ivh (Intra Ventricular Hemorrhage)":[
+   "Ivh-Intra Ventricular Hemorrhage-":[
       "Asymptomatic",
       "Hypotension",
       "Apnea",
@@ -2964,7 +2964,7 @@ d = {
       "Seizure",
       "Hypotonia"
    ],
-   "Hie (Hypoxic Ischemic Encephalopathy)":[
+   "Hie-Hypoxic Ischemic Encephalopathy":[
       "Pallor",
       "Cyanosis",
       "Apnea",
@@ -2997,30 +2997,30 @@ d = {
       "Diminished Breath Sounds",
       "Absence Of Abdomen Balging During Inspiration"
    ],
-   "Rds (Respiratory Distress Syndrome)":[
+   "Rds-Respiratory Distress Syndrome":[
       "Tachypnea",
       "Grunting",
       "Cyanosis",
       "Respiratory Distress"
    ],
-   "Bpd (Brunchopulmonary Dysplasia)":[
+   "Bpd-Brunchopulmonary Dysplasia":[
       "Persistent Respiratory Distress",
       "Persistent Cyanosis"
    ],
-   "Ttn (Transient Tachypnea Of The Neonate)":[
+   "Ttn-Transient Tachypnea Of The Neonate":[
       "Early Tachypnea After Birth",
       "Grunting",
       "Respiratory Distress",
       "Cyanosis",
       "Recovery In 12 To 24 Hours"
    ],
-   "Mas (Meconium Aspiration Syndrome)":[
+   "Mas-Meconium Aspiration Syndrome":[
       "Tachypnea",
       "Grunting",
       "Cyanosis",
       "Respiratory Distress"
    ],
-   "Cdh (Congenital Diaphragmatic Hernia)":[
+   "Cdh-Congenital Diaphragmatic Hernia":[
       "Asymptomatic",
       "Respiratory Distress",
       "Scaphoid Abdomen",
@@ -3043,7 +3043,7 @@ d = {
       "Pallor",
       "Bloody Discharge From Trachea"
    ],
-   "Pphn (Persistent Pulmonary Hypertension Of The Newborn) ":[
+   "Pphn-Persistent Pulmonary Hypertension Of The Newborn":[
       "Early Severe Cyanosis",
       "Poor Response To Oxygen Therapy Respiratory Distress",
       "Organ Involvement"
@@ -3067,7 +3067,7 @@ d = {
       "Tense Abdomen",
       "Generally Ill"
    ],
-   "Nec (Necrotizing Enterocolitis)":[
+   "Nec-Necrotizing Enterocolitis":[
       "Present After First Week Of Life",
       "Temperature Instability",
       "Abdomen Distension",
@@ -3119,7 +3119,7 @@ d = {
       "No Covering",
       "Located To The Right Of The Umbilical Site"
    ],
-   "Rh Incompatibility (Hemolytic Disease Of The Fetus And Newborn)":[
+   "Rh Incompatibility-Hemolytic Disease Of The Fetus And Newborn":[
       "Pallor",
       "Heart Failure",
       "Hydrops",
@@ -3276,14 +3276,14 @@ d = {
       "Chorioretinitis Orretinopathy",
       "Cataracts"
    ],
-   "Tga (Transposition Of Great Arteries)":[
+   "Tga-Transposition Of Great Arteries":[
       "Present In The First Week Of Life",
       "Severe Cyanosis",
       "Tachypnea Without Respiratory Distress",
       "Prominent Second Heart Sound",
       "Normal Peripheral Pulses"
    ],
-   "Tof (Tetralogy Of Fallot)":[
+   "Tof-Tetralogy Of Fallot":[
       "Systolic Ejection Murmur Along The Left Sternal Border",
       "Single Second Heart Sound",
       "Cyanosis Associated With Pulmonary Stenosis Degree"
@@ -3314,7 +3314,7 @@ d = {
       "First Heart Sound Splitting",
       "Cardiomegaly"
    ],
-   "Tapvr (Total Anomalous|pulmonary Venous Return)":[
+   "Tapvr-Total Anomalous|pulmonary Venous Return":[
       "Asymptomatic",
       "Recurrent Pneumonias",
       "Cyanosis",
@@ -3325,7 +3325,7 @@ d = {
       "Tachypnea",
       "Bounding Pulses"
    ],
-   "Hlhs (Hypoplastic Left Heart Syndrome)":[
+   "Hlhs-Hypoplastic Left Heart Syndrome":[
       "Cyanosis",
       "Tachypnea",
       "Single Second Heart Sound",
@@ -3348,22 +3348,22 @@ d = {
       "Multiorgan Failure Following Ductal Closure",
       "Oxygen Saturation Differentials Between The Upper And Lower Extremities"
    ],
-   "Vsd (Ventricular Septal Defects)":[
+   "Vsd-Ventricular Septal Defects":[
       "Asymptomatic",
       "Late Presentation",
       "Holosystolic Murmur Along The Left Sternal Border",
       "Normal Saturation"
    ],
-   "Asd (Atrial Septal Defect)":[
+   "Asd-Atrial Septal Defect":[
       "Asymptomatic",
       "Wide And Fixed Second Hear Sound Splitting"
    ],
-   "Avsd (Atrioventricular Septal Defect)":[
+   "Avsd-Atrioventricular Septal Defect":[
       "Holosystolic Murmur At The Apex",
       "Tachypnea",
       "Normal Saturation"
    ],
-   "Pda (Patent Ductus Arteriosus)":[
+   "Pda-Patent Ductus Arteriosus":[
       "Asymptomatic",
       "Hyper Dynamic Precordium",
       "Bounding Pulses",
@@ -3373,7 +3373,7 @@ d = {
       "Hepatomegaly",
       "Renal Failure"
    ],
-   "Neonatal Abstinence Syndrome (Nas)":[
+   "Nas-Neonatal Abstinence Syndrome":[
       "Tremor",
       "Poor Feeding",
       "High Pitched Cry",
@@ -3507,14 +3507,19 @@ def search3():
                 mylist=[]
                 for i in data.values():
                     mylist.append(i)
-                mylist=[singer.capitalize() for singer in mylist]
-                mylist=' '.join(mylist).split()
-                symptoms1=df.loc[df.index.isin(mylist)]
+                mylist=list(filter(None, mylist))
+                pattern = '|'.join([f'(?i){animal}' for animal in mylist])
+                print(pattern)
+                symptoms1=df[df.index.str.contains(pattern)]
+                print(symptoms1)
+                # symptoms1=df.loc[df.index.isin(mylist)]
                 original_list=symptoms1.values.tolist()
+                # print(original_list)
                 def common_list_of_lists(lst):
                     temp = set(lst[0]).intersection(*lst)
                     return list(temp)
-                symptoms=common_list_of_lists(original_list) 
+                symptoms=common_list_of_lists(original_list)  
+                print(symptoms)
                 val = 0
                 try:
                     while True:
