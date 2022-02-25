@@ -3412,7 +3412,7 @@ d = {
     "lethargy",
     "Seizure"
     ],
-    "Metabolic Disorder-Organic acidemia: [
+    "Metabolic Disorder-Organic acidemia": [
     "Presence after first week of life",
     "hyperammonemia",
     "Poor feeding",
@@ -3421,7 +3421,7 @@ d = {
     "Seizure",
     "Acidosis"
     ],
-    "Metabolic Disorder-aminoacidopathies:[
+    "Metabolic Disorder-aminoacidopathies":[
     "Presence after first week of life",
     "Poor feeding",
     "Vomiting",
