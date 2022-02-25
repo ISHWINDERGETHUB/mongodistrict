@@ -3403,7 +3403,31 @@ d = {
       "Episthotonus",
       "Hypotonia",
       "Acidosis"
-   ]
+   ],
+    "Metabolic Disorders-Urea cycle defect":[
+    "Presence after first week of life",
+    "hyperammonemia",
+    "Poor feeding",
+    "vomiting",
+    "lethargy",
+    "Seizure"
+    ],
+    "Metabolic Disorder-Organic acidemia: [
+    "Presence after first week of life",
+    "hyperammonemia",
+    "Poor feeding",
+    "Vomiting",
+    "Lethargy",
+    "Seizure",
+    "Acidosis"
+    ],
+    "Metabolic Disorder-aminoacidopathies:[
+    "Presence after first week of life",
+    "Poor feeding",
+    "Vomiting",
+    "lethargy",
+    "Seizure"
+    ]
 }
 
 
