@@ -13,6 +13,40 @@
 </head>
 
 <body>
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<nav id="navbar" class="">
+  <div class="nav-wrapper">
+    <!-- Navbar Logo -->
+    <div class="logo">
+      <!-- Logo Placeholder for Inlustration -->
+      <a href="#home"><i class="fa fa-angellist"></i> Logo</a>
+    </div>
+
+    <!-- Navbar Links -->
+    <ul id="menu">
+     <li><a href="{{url_for("home")}}">Services</a></li>
+     <li><a href="{{url_for("home2")}}">About</a></li>
+     <li><a href="{{url_for("home3")}}">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- Menu Icon -->
+<div class="menuIcon">
+  <span class="icon icon-bars"></span>
+  <span class="icon icon-bars overlay"></span>
+</div>
+
+
+<div class="overlay-menu">
+  <ul id="menu">
+     <li><a href="{{url_for("home")}}">Services</a></li>
+     <li><a href="{{url_for("home2")}}">About</a></li>
+     <li><a href="{{url_for("home3")}}">Contact</a></li>
+    </ul>
+</div>
+
 
 
 
