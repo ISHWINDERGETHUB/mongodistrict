@@ -18,6 +18,7 @@ from flask import Flask,json, request, jsonify,render_template
 from flask_cors import CORS
 import os
 import glob
+import re
 from scipy import stats
 app= Flask(__name__)
 CORS(app)
@@ -3407,7 +3408,7 @@ d = {
     "Metabolic Disorders-Urea cycle defect":[
     "Presence after first week of life",
     "hyperammonemia",
-    "Poor feeding",
+    "Poor Feeding",
     "vomiting",
     "lethargy",
     "Seizure"
@@ -3415,7 +3416,7 @@ d = {
     "Metabolic Disorder-Organic acidemia": [
     "Presence after first week of life",
     "hyperammonemia",
-    "Poor feeding",
+    "Poor Feeding",
     "Vomiting",
     "Lethargy",
     "Seizure",
@@ -3423,7 +3424,7 @@ d = {
     ],
     "Metabolic Disorder-aminoacidopathies":[
     "Presence after first week of life",
-    "Poor feeding",
+    "Poor Feeding",
     "Vomiting",
     "lethargy",
     "Seizure"
@@ -3447,7 +3448,7 @@ def home3():
 @app.route('/search',methods=['POST','GET'])
 def search():
     
-    df=pd.DataFrame.from_dict(d,orient='index').fillna(0)
+    df=pd.DataFrame.from_dict(d,orient='index').fillna("")
     if "disease" in request.args:
         try:
             list=request.args.get('disease')
@@ -3464,10 +3465,8 @@ def search():
         except:
             return jsonify("No data found")
     if "Symptom1" in request.form.to_dict():
-        print("hj")
         try:
             data=request.form.to_dict()
-            print(data["Symptom1"])
             if data["Symptom1"] == '':
                 prediction="No Data"
                 return render_template('index.html', pred="{}".format(prediction))
@@ -3475,18 +3474,25 @@ def search():
                 mylist=[]
                 for i in data.values():
                     mylist.append(i)
-                mylist=' '.join(mylist).split()
-                mylist=[singer.capitalize() for singer in mylist]
+                # mylist=' '.join(mylist)
+                while("" in mylist) :
+                    mylist.remove("")
+                # mylist=[singer.capitalize() for singer in mylist]
                 # pattern = '|'.join(mylist)
                 # disease=df.index[df.apply(lambda row: row.astype(str).str.contains(pattern).any(), axis=1)].tolist()
                 # prediction=','.join(disease)
                 disease=[]
                 for i,j in zip(df.values,df.index):
-                    if(all(x in i for x in mylist)):
+                    # if(any(x in i for x in mylist)):
+                    if(all(any(re.search(d,b,re.IGNORECASE) for b in i) for d in mylist)) == True:
                         disease.append(j)
                     else:
-                        pass
-                return render_template('index.html', pred=disease)  
+                        pass 
+                if len(disease) == 0:
+                    prediction="No Data"
+                    return render_template('index.html', pred='{}'.format(prediction))  
+                else:   
+                    return render_template('index.html', pred=disease)  
         except:
             prediction="No Data"
             return render_template('index.html', pred='{}'.format(prediction))  
