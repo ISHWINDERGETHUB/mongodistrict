@@ -13,7 +13,6 @@
 </head>
 
 <body>
-
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <nav id="navbar" class="">
   <div class="nav-wrapper">
@@ -25,6 +24,7 @@
 
     <!-- Navbar Links -->
     <ul id="menu">
+      <li><a href="{{url_for("home4")}}">Home</a></li>
      <li><a href="{{url_for("home")}}">Disease</a></li>
      <li><a href="{{url_for("home2")}}">Symptoms</a></li>
      <li><a href="{{url_for("home3")}}">Common Symptoms</a></li>
@@ -48,12 +48,15 @@
     </ul>
 </div>
 
+
+
+
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <br><br>
-      <h1 class="header center orange-text">Common Symptoms Prediction</h1>
+      <h1 class="header center orange-text">Disease Prediction</h1>
       <div class="row center">
-        <h5 class="header col s12 light">Predict the common symptoms with the disease
+        <h5 class="header col s12 light">Predict the disease with the symptoms
         <br>
         </h5>
       </div>
@@ -61,28 +64,28 @@
      
       
       <div class="row">
-    <form action='/search3' method="post" class="col s12">
+    <form action='/search' method="post" class="col s12">
       <div class="row">
          <button class="add_form_field btn-large waves-effect waves-light orange"> Add New Field &nbsp; 
         <span style="font-size:16px; font-weight:bold;">+ </span>
       </button>
         <div class="container1">
         <div class="input-field col s4">
-            <label for="s1"><b>Disease-1</b></label>
+            <label for="s1"><b>Symptom-1</b></label>
             <br>
-          <input id="s1" name="Disease1" placeholder="Hypocalcemia"  type="text" class="validate">
+          <input id="s1" name="Symptom1" placeholder="Fever"  type="text" class="validate">
         </div>
         <div class="input-field col s4">
 
-          <label for="s2"><b> Disease-2</b></label>
+          <label for="s2"><b> Symptom-2</b></label>
             <br>
-          <input id="s2" name="Disease2" placeholder="Hypercalcemia"  type="text" class="validate">
+          <input id="s2" name="Symptom2" placeholder="Itching"  type="text" class="validate">
         </div>
 
         <div class="input-field col s4">
-            <label for="s3"><b>Disease-3</b></label>
+            <label for="s3"><b>Symptom-3</b></label>
             <br>
-          <input id="s3" name="Disease3" placeholder="Hypoglycemia" type="text" class="validate">
+          <input id="s3" name="Symptom3" placeholder="Dizziness" type="text" class="validate">
         </div>
       </div>
 
@@ -92,14 +95,13 @@
     </form>
       </div>
     </div>
-    {% if 'No' in pred %}
-    <button class="add_form_field btn-large waves-effect waves-light orange mr-2">{{pred}} &ensp;
-      {% else %}
-      {% for i in pred %}
-      <button class="add_form_field btn-large waves-effect waves-light orange mr-2" style='margin-right:16px; margin-bottom: 10px;'>{{i}} 
-    {% endfor %}
-    {% endif %}
-
+       {% if 'No' in pred %}
+      <button class="add_form_field btn-large waves-effect waves-light orange mr-2">{{pred}} &ensp;
+        {% else %}
+        {% for i in pred %}
+        <button class="add_form_field btn-large waves-effect waves-light orange mr-2" style='margin-right:16px; margin-bottom: 10px;'>{{i}} 
+  {% endfor %}
+  {% endif %}
     </div>
   </div>
     <br><br>
@@ -114,7 +116,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./static/js/materialize.js"></script>
   <script src="./static/js/init.js"></script>
-  <script src="./static/js/script1.js"></script>
+  <script src="./static/js/script.js"></script>
 
   </body>
 </html>

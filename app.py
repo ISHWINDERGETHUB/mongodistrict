@@ -3436,6 +3436,10 @@ d = {
 def home():
     return render_template('index.html')
 
+@app.route('/symptoms')
+def home4():
+    return render_template('index1.html')
+
 @app.route('/disease')
 def home2():
     return render_template('disease.html')
@@ -3469,7 +3473,7 @@ def search():
             data=request.form.to_dict()
             if data["Symptom1"] == '':
                 prediction="No Data"
-                return render_template('index.html', pred="{}".format(prediction))
+                return render_template('index1.html', pred="{}".format(prediction))
             else:
                 mylist=[]
                 for i in data.values():
@@ -3490,15 +3494,15 @@ def search():
                         pass 
                 if len(disease) == 0:
                     prediction="No Data"
-                    return render_template('index.html', pred='{}'.format(prediction))  
+                    return render_template('index1.html', pred='{}'.format(prediction))  
                 else:   
-                    return render_template('index.html', pred=disease)  
+                    return render_template('index1.html', pred=disease)  
         except:
             prediction="No Data"
-            return render_template('index.html', pred='{}'.format(prediction))  
+            return render_template('index1.html', pred='{}'.format(prediction))  
     else:
         prediction="No Data"
-        return render_template('index.html', pred='{}'.format(prediction))  
+        return render_template('index1.html', pred='{}'.format(prediction))  
     
 @app.route('/search2',methods=['POST','GET'])
 def search2():
