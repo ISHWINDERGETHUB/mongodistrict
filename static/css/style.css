@@ -102,6 +102,7 @@ a {
   color: rgb(13, 26, 38);
   display: block;
   font-size: 0.7em;
+  font-weight: bold;
   height: 50px;
   letter-spacing: 1px;
   margin: 0 20px;
@@ -335,4 +336,15 @@ a {
   color: rgb(28, 121, 184);
   -webkit-transition: color 0.3s ease;
   transition: color 0.3s ease;
+}
+
+h5{
+  color:#2f5396;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+h6{
+  font-size: 18px;
+  font-weight: bold;
 }
